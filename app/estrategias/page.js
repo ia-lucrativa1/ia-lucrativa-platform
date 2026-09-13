@@ -189,7 +189,10 @@ export default function Estrategias() {
       <main style={styles.loadingPage}>
         <div style={styles.loadingBox}>
           <div style={styles.loadingLogo}>IA LUCRATIVA</div>
-          <div style={styles.loadingText}>Verificando acesso...</div>
+
+          <div style={styles.loadingText}>
+            Verificando acesso...
+          </div>
         </div>
       </main>
     );
@@ -197,34 +200,31 @@ export default function Estrategias() {
 
   return (
     <main style={styles.page}>
-      <header style={styles.header}>
-        <div>
-          <div style={styles.brand}>IA LUCRATIVA</div>
-          <div style={styles.subtitle}>Estratégias para o digital</div>
-        </div>
-
-        <a href="/dashboard" style={styles.backButton}>
-          ← Dashboard
-        </a>
-      </header>
-
+      {/* HERO */}
       <section style={styles.hero}>
-        <span style={styles.badge}>📈 ESTRATÉGIAS IA LUCRATIVA</span>
+        <span style={styles.badge}>
+          📈 ESTRATÉGIAS IA LUCRATIVA
+        </span>
 
         <h1 style={styles.title}>
           Transforme conhecimento
           <br />
-          em <span style={styles.highlight}>ação.</span>
+          em{" "}
+          <span style={styles.highlight}>
+            ação.
+          </span>
         </h1>
 
         <p style={styles.description}>
-          Estratégias práticas para começar do zero, criar conteúdo,
-          encontrar clientes e desenvolver oportunidades usando inteligência
-          artificial.
+          Estratégias práticas para começar do zero,
+          criar conteúdo, encontrar clientes e desenvolver
+          oportunidades usando inteligência artificial.
         </p>
 
         <div style={styles.searchBox}>
-          <span>🔎</span>
+          <span style={styles.searchIcon}>
+            🔎
+          </span>
 
           <input
             type="text"
@@ -236,7 +236,9 @@ export default function Estrategias() {
         </div>
       </section>
 
+      {/* CONTEÚDO */}
       <section style={styles.container}>
+        {/* CATEGORIAS */}
         <div style={styles.categories}>
           {categorias.map((item) => (
             <button
@@ -244,7 +246,9 @@ export default function Estrategias() {
               onClick={() => setCategoria(item)}
               style={{
                 ...styles.categoryButton,
-                ...(categoria === item ? styles.categoryActive : {}),
+                ...(categoria === item
+                  ? styles.categoryActive
+                  : {}),
               }}
             >
               {item}
@@ -252,9 +256,13 @@ export default function Estrategias() {
           ))}
         </div>
 
+        {/* CABEÇALHO */}
         <div style={styles.sectionHeader}>
           <div>
-            <h2 style={styles.sectionTitle}>Estratégias disponíveis</h2>
+            <h2 style={styles.sectionTitle}>
+              Estratégias disponíveis
+            </h2>
+
             <p style={styles.sectionDescription}>
               Escolha uma estratégia e coloque em prática.
             </p>
@@ -265,26 +273,48 @@ export default function Estrategias() {
           </span>
         </div>
 
+        {/* GRID */}
         <div style={styles.grid}>
           {filtradas.map((item) => (
-            <article key={item.id} style={styles.card}>
+            <article
+              key={item.id}
+              style={styles.card}
+            >
               <div style={styles.cardHeader}>
-                <div style={styles.icon}>{item.icon}</div>
+                <div style={styles.icon}>
+                  {item.icon}
+                </div>
 
-                <span style={styles.tag}>{item.categoria}</span>
+                <span style={styles.tag}>
+                  {item.categoria}
+                </span>
               </div>
 
-              <h3 style={styles.cardTitle}>{item.titulo}</h3>
+              <h3 style={styles.cardTitle}>
+                {item.titulo}
+              </h3>
 
-              <p style={styles.cardDescription}>{item.descricao}</p>
+              <p style={styles.cardDescription}>
+                {item.descricao}
+              </p>
 
               <div style={styles.steps}>
-                <strong style={styles.stepsTitle}>PASSO A PASSO</strong>
+                <strong style={styles.stepsTitle}>
+                  PASSO A PASSO
+                </strong>
 
                 {item.passos.map((passo, index) => (
-                  <div key={index} style={styles.step}>
-                    <span style={styles.stepNumber}>{index + 1}</span>
-                    <span style={styles.stepText}>{passo}</span>
+                  <div
+                    key={index}
+                    style={styles.step}
+                  >
+                    <span style={styles.stepNumber}>
+                      {index + 1}
+                    </span>
+
+                    <span style={styles.stepText}>
+                      {passo}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -296,12 +326,17 @@ export default function Estrategias() {
           ))}
         </div>
 
+        {/* ESTADO VAZIO */}
         {filtradas.length === 0 && (
           <div style={styles.empty}>
-            <div style={styles.emptyIcon}>🔍</div>
+            <div style={styles.emptyIcon}>
+              🔍
+            </div>
+
             <h3 style={styles.emptyTitle}>
               Nenhuma estratégia encontrada
             </h3>
+
             <p style={styles.emptyText}>
               Experimente pesquisar outro termo.
             </p>
@@ -309,28 +344,40 @@ export default function Estrategias() {
         )}
       </section>
 
+      {/* MOTIVAÇÃO */}
       <section style={styles.motivation}>
-        <div style={styles.motivationIcon}>⚡</div>
+        <div style={styles.motivationIcon}>
+          ⚡
+        </div>
 
         <div>
           <h3 style={styles.motivationTitle}>
-            Conhecimento só gera resultado quando colocado em prática.
+            Conhecimento só gera resultado quando
+            colocado em prática.
           </h3>
 
           <p style={styles.motivationText}>
-            Escolha uma estratégia, siga os passos e transforme pequenas ações
-            em novas oportunidades no digital.
+            Escolha uma estratégia, siga os passos e
+            transforme pequenas ações em novas
+            oportunidades no digital.
           </p>
         </div>
       </section>
 
+      {/* RODAPÉ */}
       <footer style={styles.footer}>
-        <div style={styles.footerBrand}>IA LUCRATIVA</div>
-        <div style={styles.footerText}>
-          Estratégias, ferramentas e inteligência artificial para criar novas
-          oportunidades.
+        <div style={styles.footerBrand}>
+          IA LUCRATIVA
         </div>
-        <div style={styles.instagram}>@ia.lucrativa1</div>
+
+        <div style={styles.footerText}>
+          Estratégias, ferramentas e inteligência
+          artificial para criar novas oportunidades.
+        </div>
+
+        <div style={styles.instagram}>
+          @ia.lucrativa1
+        </div>
       </footer>
     </main>
   );
@@ -355,6 +402,7 @@ const styles = {
     fontSize: "22px",
     fontWeight: "900",
     letterSpacing: "1px",
+    color: "#00ffaa",
   },
 
   loadingText: {
@@ -366,45 +414,10 @@ const styles = {
   page: {
     minHeight: "100vh",
     background:
-      "radial-gradient(circle at top, #151515 0%, #080808 35%, #050505 100%)",
+      "radial-gradient(circle at top, #111814 0%, #080808 35%, #050505 100%)",
     color: "#ffffff",
     fontFamily: "Arial, sans-serif",
     paddingBottom: "60px",
-  },
-
-  header: {
-    width: "100%",
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: "24px 20px",
-    boxSizing: "border-box",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: "20px",
-  },
-
-  brand: {
-    fontSize: "20px",
-    fontWeight: "900",
-    letterSpacing: "1px",
-  },
-
-  subtitle: {
-    marginTop: "5px",
-    color: "#888888",
-    fontSize: "13px",
-  },
-
-  backButton: {
-    color: "#ffffff",
-    textDecoration: "none",
-    border: "1px solid #292929",
-    background: "#111111",
-    padding: "10px 15px",
-    borderRadius: "10px",
-    fontSize: "13px",
-    fontWeight: "700",
   },
 
   hero: {
@@ -418,9 +431,9 @@ const styles = {
     display: "inline-block",
     padding: "9px 14px",
     borderRadius: "999px",
-    border: "1px solid #292929",
-    background: "#101010",
-    color: "#bdbdbd",
+    border: "1px solid #1f3f35",
+    background: "#07130f",
+    color: "#00ffaa",
     fontSize: "11px",
     fontWeight: "800",
     letterSpacing: "1px",
@@ -435,9 +448,7 @@ const styles = {
   },
 
   highlight: {
-    background: "linear-gradient(90deg, #ffffff, #777777)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
+    color: "#00ffaa",
   },
 
   description: {
@@ -459,6 +470,12 @@ const styles = {
     border: "1px solid #292929",
     background: "#0d0d0d",
     boxSizing: "border-box",
+    boxShadow:
+      "0 0 25px rgba(0, 255, 170, 0.04)",
+  },
+
+  searchIcon: {
+    fontSize: "16px",
   },
 
   input: {
@@ -496,9 +513,9 @@ const styles = {
   },
 
   categoryActive: {
-    background: "#ffffff",
+    background: "#00ffaa",
     color: "#050505",
-    borderColor: "#ffffff",
+    borderColor: "#00ffaa",
   },
 
   sectionHeader: {
@@ -522,14 +539,19 @@ const styles = {
   },
 
   counter: {
-    color: "#888888",
-    fontSize: "13px",
+    color: "#00ffaa",
+    fontSize: "12px",
     whiteSpace: "nowrap",
+    background: "#07130f",
+    border: "1px solid #1f3f35",
+    borderRadius: "50px",
+    padding: "7px 10px",
   },
 
   grid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(300px, 1fr))",
     gap: "18px",
   },
 
@@ -553,8 +575,8 @@ const styles = {
     width: "48px",
     height: "48px",
     borderRadius: "14px",
-    background: "#151515",
-    border: "1px solid #292929",
+    background: "#07130f",
+    border: "1px solid #1f3f35",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -563,8 +585,9 @@ const styles = {
 
   tag: {
     fontSize: "10px",
-    color: "#9a9a9a",
-    border: "1px solid #292929",
+    color: "#00ffaa",
+    background: "#07130f",
+    border: "1px solid #1f3f35",
     borderRadius: "999px",
     padding: "7px 10px",
     fontWeight: "800",
@@ -595,7 +618,7 @@ const styles = {
     marginBottom: "14px",
     fontSize: "10px",
     letterSpacing: "1px",
-    color: "#777777",
+    color: "#00ffaa",
   },
 
   step: {
@@ -610,7 +633,7 @@ const styles = {
     width: "23px",
     height: "23px",
     borderRadius: "50%",
-    background: "#ffffff",
+    background: "#00ffaa",
     color: "#050505",
     display: "flex",
     alignItems: "center",
@@ -631,8 +654,8 @@ const styles = {
     marginTop: "12px",
     padding: "13px",
     borderRadius: "10px",
-    border: "1px solid #ffffff",
-    background: "#ffffff",
+    border: "1px solid #00ffaa",
+    background: "#00ffaa",
     color: "#050505",
     fontSize: "13px",
     fontWeight: "900",
@@ -667,7 +690,7 @@ const styles = {
     margin: "45px auto 0",
     padding: "24px",
     borderRadius: "18px",
-    border: "1px solid #292929",
+    border: "1px solid #1f3f35",
     background: "#0d0d0d",
     display: "flex",
     alignItems: "center",
@@ -680,7 +703,7 @@ const styles = {
     height: "50px",
     flexShrink: 0,
     borderRadius: "14px",
-    background: "#ffffff",
+    background: "#00ffaa",
     color: "#050505",
     display: "flex",
     alignItems: "center",
@@ -713,6 +736,7 @@ const styles = {
     fontSize: "17px",
     fontWeight: "900",
     letterSpacing: "1px",
+    color: "#ffffff",
   },
 
   footerText: {
@@ -723,7 +747,7 @@ const styles = {
 
   instagram: {
     marginTop: "12px",
-    color: "#999999",
+    color: "#00ffaa",
     fontSize: "12px",
     fontWeight: "700",
   },
