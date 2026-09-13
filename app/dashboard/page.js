@@ -1,123 +1,113 @@
+"use client";
+
+import { useState } from "react";
+
 export default function Dashboard() {
-  const ferramentas = [
-    {
-      titulo: "IA Automática",
-      descricao: "Converse com a IA LUCRATIVA e transforme ideias em ações.",
-      link: "/ia",
-      destaque: true,
-    },
-    {
-      titulo: "Ideias de Negócios",
-      descricao: "Encontre oportunidades de negócios usando IA.",
-      link: "/ferramentas",
-    },
-    {
-      titulo: "Criador de Conteúdo",
-      descricao: "Crie ideias, posts, legendas e estratégias.",
-      link: "/ferramentas",
-    },
-    {
-      titulo: "Estratégias de Vendas",
-      descricao: "Crie ofertas e estratégias para vender no digital.",
-      link: "/ferramentas",
-    },
-  ];
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <main style={styles.page}>
       <header style={styles.header}>
-        <div>
-          <div style={styles.logo}>IA LUCRATIVA</div>
-          <p style={styles.welcome}>Painel do usuário</p>
+        <div style={styles.logoArea}>
+          <div style={styles.logo}>IA</div>
+          <div>
+            <h2 style={styles.brand}>IA LUCRATIVA</h2>
+            <p style={styles.subtitle}>Sua inteligência para crescer.</p>
+          </div>
         </div>
 
-        <a href="/" style={styles.logout}>
-          Sair
-        </a>
+        <button
+          style={styles.menuButton}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
       </header>
 
-      <section style={styles.hero}>
-        <span style={styles.tag}>🚀 PLATAFORMA IA LUCRATIVA</span>
+      {menuOpen && (
+        <div style={styles.menu}>
+          <p>Dashboard</p>
+          <p>Ferramentas de IA</p>
+          <p>Prompts</p>
+          <p>Estratégias</p>
+          <p>Minha conta</p>
+          <p>Sair</p>
+        </div>
+      )}
 
-        <h1>
-          Transforme suas ideias em
-          <span style={styles.highlight}> oportunidades.</span>
+      <section style={styles.hero}>
+        <span style={styles.badge}>🤖 PLATAFORMA IA LUCRATIVA</span>
+
+        <h1 style={styles.heroTitle}>
+          Transforme IA em
+          <br />
+          <span style={styles.highlight}>oportunidades.</span>
         </h1>
 
-        <p>
-          Tenha ferramentas de inteligência artificial para criar conteúdo,
-          encontrar oportunidades, vender e desenvolver seu negócio digital.
+        <p style={styles.heroText}>
+          Tenha acesso a ferramentas, estratégias e recursos de
+          inteligência artificial para criar, vender e crescer no digital.
         </p>
 
-        <a href="/ia" style={styles.mainButton}>
-          🤖 Usar IA Automática
-        </a>
+        <button style={styles.primaryButton}>
+          🚀 Explorar plataforma
+        </button>
       </section>
 
       <section style={styles.stats}>
         <div style={styles.stat}>
-          <strong>0</strong>
-          <span>Projetos criados</span>
+          <strong style={styles.statNumber}>01</strong>
+          <span>Ferramentas</span>
         </div>
 
         <div style={styles.stat}>
-          <strong>0</strong>
-          <span>Consultas à IA</span>
+          <strong style={styles.statNumber}>02</strong>
+          <span>Prompts</span>
         </div>
 
         <div style={styles.stat}>
-          <strong>0</strong>
-          <span>Favoritos</span>
+          <strong style={styles.statNumber}>03</strong>
+          <span>Estratégias</span>
         </div>
       </section>
 
-      <section>
-        <div style={styles.sectionTitle}>
-          <h2>Ferramentas</h2>
-          <a href="/ferramentas">Ver todas →</a>
+      <section style={styles.cards}>
+        <div style={styles.card}>
+          <div style={styles.icon}>🤖</div>
+          <h3>Ferramentas de IA</h3>
+          <p>
+            Recursos inteligentes para facilitar seu trabalho e acelerar
+            seus resultados.
+          </p>
+          <button style={styles.cardButton}>Acessar →</button>
         </div>
 
-        <div style={styles.grid}>
-          {ferramentas.map((ferramenta) => (
-            <a
-              key={ferramenta.titulo}
-              href={ferramenta.link}
-              style={{
-                ...styles.tool,
-                ...(ferramenta.destaque ? styles.featured : {}),
-              }}
-            >
-              <span style={styles.icon}>
-                {ferramenta.destaque ? "🤖" : "✦"}
-              </span>
+        <div style={styles.card}>
+          <div style={styles.icon}>💡</div>
+          <h3>Prompts inteligentes</h3>
+          <p>
+            Comandos prontos para gerar ideias, conteúdos, ofertas e muito
+            mais.
+          </p>
+          <button style={styles.cardButton}>Explorar →</button>
+        </div>
 
-              <h3>{ferramenta.titulo}</h3>
-
-              <p>{ferramenta.descricao}</p>
-
-              <span style={styles.access}>Acessar →</span>
-            </a>
-          ))}
+        <div style={styles.card}>
+          <div style={styles.icon}>📈</div>
+          <h3>Estratégias</h3>
+          <p>
+            Estratégias práticas para transformar conhecimento em
+            oportunidades digitais.
+          </p>
+          <button style={styles.cardButton}>Ver estratégias →</button>
         </div>
       </section>
 
-      <section style={styles.bottomGrid}>
-        <a href="/afiliados" style={styles.smallCard}>
-          <span>💰</span>
-          <div>
-            <h3>Área de Afiliados</h3>
-            <p>Divulgue a IA LUCRATIVA e acompanhe seus resultados.</p>
-          </div>
-        </a>
-
-        <a href="/historico" style={styles.smallCard}>
-          <span>🕐</span>
-          <div>
-            <h3>Histórico</h3>
-            <p>Consulte suas criações e conversas anteriores.</p>
-          </div>
-        </a>
-      </section>
+      <footer style={styles.footer}>
+        <strong>IA LUCRATIVA</strong>
+        <p>Inteligência artificial para criar novas oportunidades.</p>
+        <span>@ia.lucrativa1</span>
+      </footer>
     </main>
   );
 }
@@ -125,184 +115,185 @@ export default function Dashboard() {
 const styles = {
   page: {
     minHeight: "100vh",
-    padding: "28px",
-    maxWidth: "1200px",
-    margin: "0 auto",
+    background: "#050505",
+    color: "#ffffff",
+    fontFamily: "Arial, sans-serif",
+    paddingBottom: "40px",
   },
 
   header: {
+    height: "75px",
+    padding: "0 6%",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: "55px",
+    borderBottom: "1px solid #222",
+    background: "#080808",
+  },
+
+  logoArea: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
   },
 
   logo: {
-    color: "#00e5ff",
-    fontSize: "20px",
+    width: "42px",
+    height: "42px",
+    borderRadius: "12px",
+    background: "#ffffff",
+    color: "#000000",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     fontWeight: "900",
+    fontSize: "16px",
+  },
+
+  brand: {
+    margin: 0,
+    fontSize: "17px",
     letterSpacing: "1px",
   },
 
-  welcome: {
-    color: "#75828b",
-    marginTop: "5px",
+  subtitle: {
+    margin: "3px 0 0",
+    color: "#777",
+    fontSize: "11px",
   },
 
-  logout: {
-    color: "#9aa7ae",
-    border: "1px solid #25343d",
-    padding: "10px 18px",
+  menuButton: {
+    background: "transparent",
+    border: "1px solid #333",
+    color: "#fff",
     borderRadius: "10px",
+    fontSize: "20px",
+    padding: "8px 12px",
+    cursor: "pointer",
+  },
+
+  menu: {
+    position: "absolute",
+    right: "6%",
+    top: "70px",
+    width: "220px",
+    padding: "15px",
+    background: "#111",
+    border: "1px solid #292929",
+    borderRadius: "14px",
+    zIndex: 10,
+    boxShadow: "0 15px 40px rgba(0,0,0,.5)",
   },
 
   hero: {
-    padding: "45px 35px",
-    borderRadius: "25px",
-    background:
-      "radial-gradient(circle at top right, #10303a, #0a1015 55%, #070a0d)",
-    border: "1px solid #1b3139",
+    maxWidth: "900px",
+    margin: "0 auto",
+    padding: "90px 6% 60px",
+    textAlign: "center",
+  },
+
+  badge: {
+    display: "inline-block",
+    padding: "8px 14px",
+    borderRadius: "50px",
+    border: "1px solid #333",
+    color: "#aaa",
+    fontSize: "11px",
+    letterSpacing: "1px",
     marginBottom: "25px",
   },
 
-  tag: {
-    color: "#00e5ff",
-    fontSize: "12px",
-    fontWeight: "800",
-    letterSpacing: "1px",
-  },
-
-  hero h1: {
-    fontSize: "clamp(32px, 6vw, 58px)",
-    lineHeight: "1.05",
-    margin: "18px 0",
-    maxWidth: "800px",
+  heroTitle: {
+    fontSize: "clamp(42px, 8vw, 78px)",
+    lineHeight: "1",
+    margin: "0",
+    fontWeight: "900",
+    letterSpacing: "-3px",
   },
 
   highlight: {
-    color: "#00e5ff",
+    color: "#8b5cf6",
   },
 
-  hero p: {
-    color: "#9aa8af",
-    maxWidth: "700px",
-    lineHeight: "1.7",
-    marginBottom: "28px",
+  heroText: {
+    maxWidth: "650px",
+    margin: "25px auto",
+    color: "#999",
+    fontSize: "17px",
+    lineHeight: "1.6",
   },
 
-  mainButton: {
-    display: "inline-block",
-    background: "#00e5ff",
-    color: "#031014",
-    fontWeight: "800",
-    padding: "14px 22px",
+  primaryButton: {
+    border: "none",
+    background: "#ffffff",
+    color: "#000000",
+    padding: "15px 24px",
     borderRadius: "12px",
+    fontWeight: "800",
+    cursor: "pointer",
+    fontSize: "14px",
   },
 
   stats: {
+    maxWidth: "900px",
+    margin: "0 auto 50px",
+    padding: "0 6%",
     display: "grid",
     gridTemplateColumns: "repeat(3, 1fr)",
     gap: "15px",
-    marginBottom: "45px",
   },
 
   stat: {
-    background: "#0b1015",
-    border: "1px solid #1b2931",
-    padding: "22px",
-    borderRadius: "16px",
+    background: "#0d0d0d",
+    border: "1px solid #222",
+    borderRadius: "15px",
+    padding: "20px",
+    textAlign: "center",
   },
 
-  stat strong: {
+  statNumber: {
     display: "block",
-    fontSize: "28px",
-    marginBottom: "5px",
+    fontSize: "24px",
+    marginBottom: "7px",
   },
 
-  stat span: {
-    color: "#7d8b93",
-    fontSize: "14px",
-  },
-
-  sectionTitle: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "18px",
-  },
-
-  sectionTitle a: {
-    color: "#00e5ff",
-    fontSize: "14px",
-  },
-
-  grid: {
+  cards: {
+    maxWidth: "1100px",
+    margin: "0 auto",
+    padding: "0 6%",
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    gap: "15px",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "18px",
   },
 
-  tool: {
-    display: "block",
-    background: "#0b1015",
-    border: "1px solid #1b2931",
+  card: {
+    background: "#0d0d0d",
+    border: "1px solid #222",
     borderRadius: "18px",
     padding: "25px",
   },
 
-  featured: {
-    border: "1px solid #00e5ff",
-    background: "#0b171c",
-  },
-
   icon: {
-    fontSize: "26px",
+    fontSize: "30px",
+    marginBottom: "20px",
   },
 
-  tool h3: {
-    margin: "15px 0 8px",
-  },
-
-  tool p: {
-    color: "#7d8b93",
-    lineHeight: "1.5",
-    fontSize: "14px",
-    minHeight: "65px",
-  },
-
-  access: {
-    display: "inline-block",
-    color: "#00e5ff",
+  cardButton: {
     marginTop: "15px",
-    fontWeight: "700",
-    fontSize: "14px",
+    background: "transparent",
+    color: "#fff",
+    border: "1px solid #333",
+    borderRadius: "9px",
+    padding: "10px 14px",
+    cursor: "pointer",
   },
 
-  bottomGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: "15px",
-    marginTop: "35px",
-  },
-
-  smallCard: {
-    display: "flex",
-    gap: "18px",
-    alignItems: "flex-start",
-    background: "#0b1015",
-    border: "1px solid #1b2931",
-    borderRadius: "18px",
-    padding: "22px",
-  },
-
-  smallCard span: {
-    fontSize: "28px",
-  },
-
-  smallCard p: {
-    color: "#7d8b93",
-    fontSize: "14px",
-    marginTop: "7px",
-    lineHeight: "1.5",
+  footer: {
+    textAlign: "center",
+    marginTop: "80px",
+    padding: "30px 20px",
+    borderTop: "1px solid #222",
+    color: "#777",
+    fontSize: "13px",
   },
 };
