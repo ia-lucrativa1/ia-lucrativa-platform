@@ -54,7 +54,8 @@ export default function RootLayout({ children }) {
                 Ferramentas de IA
               </a>
 
-              <a href="/conta" className="menu-item">
+              {/* HISTÓRICO */}
+              <a href="/historico" className="menu-item">
                 <span>💼</span>
                 Meus Resultados
               </a>
