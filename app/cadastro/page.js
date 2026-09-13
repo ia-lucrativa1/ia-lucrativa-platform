@@ -5,217 +5,172 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
 export default function Cadastro() {
-const router = useRouter();
+  const router = useRouter();
 
-const [nome, setNome] = useState("");
-const [email, setEmail] = useState("");
-const [senha, setSenha] = useState("");
-const [carregando, setCarregando] = useState(false);
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
-async function cadastrar(e) {
-e.preventDefault();
+  async function criarConta(e) {
+    e.preventDefault();
 
-if (!nome.trim() || !email.trim() || !senha) {
-  alert("Preencha todos os campos.");
-  return;
-}
+    setErro("");
 
-if (senha.length < 6) {
-  alert("A senha precisa ter pelo menos 6 caracteres.");
-  return;
-}
+    if (!nome.trim() || !email.trim() || !senha) {
+      setErro("Preencha todos os campos.");
+      return;
+    }
 
-setCarregando(true);
+    if (senha.length < 6) {
+      setErro("A senha precisa ter pelo menos 6 caracteres.");
+      return;
+    }
 
-try {
-  const { data, error } = await supabase.auth.signUp({
-    email: email.trim(),
-    password: senha,
-  });
+    setCarregando(true);
 
-  if (error) {
-    alert(error.message);
-    setCarregando(false);
-    return;
-  }
-
-  if (!data.user) {
-    alert("Não foi possível criar a conta.");
-    setCarregando(false);
-    return;
-  }
-
-  const { error: perfilError } = await supabase
-    .from("profiles")
-    .insert({
-      id: data.user.id,
-      nome: nome.trim(),
+    const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
-      plano: "free",
+      password: senha,
+      options: {
+        data: {
+          nome: nome.trim(),
+        },
+      },
     });
 
-  if (perfilError) {
-    console.error(perfilError);
-    alert(
-      "A conta foi criada, mas não foi possível salvar o perfil. Tente entrar novamente."
-    );
-    setCarregando(false);
-    return;
+    if (error) {
+      setErro(error.message);
+      setCarregando(false);
+      return;
+    }
+
+    if (!data.user) {
+      setErro("Não foi possível criar a conta.");
+      setCarregando(false);
+      return;
+    }
+
+    router.replace("/dashboard");
   }
 
-  alert("Conta criada com sucesso!");
-
-  router.push("/dashboard");
-} catch (error) {
-  console.error(error);
-  alert("Ocorreu um erro ao criar sua conta.");
-  setCarregando(false);
-}
-
-}
-
-return (
-<main style={styles.container}>
-<section style={styles.card}>
-<div style={styles.logo}>IA LUCRATIVA</div>
-
-    <h1>Crie sua conta</h1>
-
-    <p style={styles.subtitle}>
-      Comece agora a usar inteligência artificial para criar oportunidades
-      no digital.
-    </p>
-
-    <form onSubmit={cadastrar} style={styles.form}>
-      <label>Nome</label>
-
-      <input
-        type="text"
-        placeholder="Seu nome"
-        value={nome}
-        onChange={(e) => setNome(e.target.value)}
-        disabled={carregando}
-        style={styles.input}
-      />
-
-      <label>E-mail</label>
-
-      <input
-        type="email"
-        placeholder="seu@email.com"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        disabled={carregando}
-        style={styles.input}
-      />
-
-      <label>Senha</label>
-
-      <input
-        type="password"
-        placeholder="Crie uma senha"
-        value={senha}
-        onChange={(e) => setSenha(e.target.value)}
-        disabled={carregando}
-        style={styles.input}
-      />
-
-      <button
-        type="submit"
-        disabled={carregando}
-        style={styles.button}
+  return (
+    <main
+      style={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top, #172554 0%, #020617 45%, #000 100%)",
+        color: "#fff",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "24px",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "430px",
+          background: "rgba(15, 23, 42, 0.92)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: "24px",
+          padding: "32px",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
+        }}
       >
-        {carregando ? "Criando conta..." : "Criar minha conta"}
-      </button>
-    </form>
+        <div style={{ textAlign: "center", marginBottom: "28px" }}>
+          <div
+            style={{
+              fontSize: "30px",
+              fontWeight: "800",
+              letterSpacing: "-1px",
+            }}
+          >
+            IA LUCRATIVA
+          </div>
 
-    <p style={styles.bottom}>
-      Já possui uma conta?{" "}
-      <a href="/login" style={styles.link}>
-        Entrar
-      </a>
-    </p>
-  </section>
-</main>
+          <p
+            style={{
+              color: "#94a3b8",
+              marginTop: "8px",
+              fontSize: "14px",
+            }}
+          >
+            Crie sua conta e comece sua jornada
+          </p>
+        </div>
 
-);
-}
+        <form onSubmit={criarConta}>
+          <label
+            style={{
+              display: "block",
+              marginBottom: "8px",
+              fontSize: "14px",
+              fontWeight: "600",
+            }}
+          >
+            Nome
+          </label>
 
-const styles = {
-container: {
-minHeight: "100vh",
-display: "flex",
-alignItems: "center",
-justifyContent: "center",
-padding: "24px",
-background:
-"radial-gradient(circle at top, #10202a 0%, #05070a 45%, #020304 100%)",
-},
+          <input
+            type="text"
+            placeholder="Seu nome"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "14px",
+              marginBottom: "18px",
+              borderRadius: "12px",
+              border: "1px solid #334155",
+              background: "#020617",
+              color: "#fff",
+              outline: "none",
+              boxSizing: "border-box",
+            }}
+          />
 
-card: {
-width: "100%",
-maxWidth: "430px",
-padding: "40px 30px",
-borderRadius: "22px",
-background: "#0b1015",
-border: "1px solid #1c2b34",
-boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
-},
+          <label
+            style={{
+              display: "block",
+              marginBottom: "8px",
+              fontSize: "14px",
+              fontWeight: "600",
+            }}
+          >
+            E-mail
+          </label>
 
-logo: {
-color: "#00e5ff",
-fontWeight: "800",
-fontSize: "20px",
-letterSpacing: "1px",
-marginBottom: "30px",
-},
+          <input
+            type="email"
+            placeholder="seuemail@exemplo.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "14px",
+              marginBottom: "18px",
+              borderRadius: "12px",
+              border: "1px solid #334155",
+              background: "#020617",
+              color: "#fff",
+              outline: "none",
+              boxSizing: "border-box",
+            }}
+          />
 
-subtitle: {
-color: "#8c9aa3",
-lineHeight: "1.6",
-marginTop: "10px",
-marginBottom: "28px",
-},
+          <label
+            style={{
+              display: "block",
+              marginBottom: "8px",
+              fontSize: "14px",
+              fontWeight: "600",
+            }}
+          >
+            Senha
+          </label>
 
-form: {
-display: "flex",
-flexDirection: "column",
-gap: "10px",
-},
-
-input: {
-padding: "14px",
-borderRadius: "10px",
-border: "1px solid #263640",
-background: "#070b0f",
-color: "#ffffff",
-outline: "none",
-fontSize: "15px",
-marginBottom: "8px",
-},
-
-button: {
-marginTop: "10px",
-padding: "14px",
-borderRadius: "10px",
-border: "none",
-background: "#00e5ff",
-color: "#001014",
-fontWeight: "800",
-fontSize: "15px",
-cursor: "pointer",
-},
-
-bottom: {
-color: "#7d8991",
-textAlign: "center",
-marginTop: "24px",
-fontSize: "14px",
-},
-
-link: {
-color: "#00e5ff",
-textDecoration: "none",
-fontWeight: "700",
-},
-};
+          <input
+            type="password"
+            placeholder="M
