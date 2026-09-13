@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 
 export default function Login() {
@@ -39,181 +40,281 @@ export default function Login() {
   }
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background:
-          "radial-gradient(circle at top, #172554 0%, #020617 45%, #000 100%)",
-        color: "#fff",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "430px",
-          background: "rgba(15, 23, 42, 0.92)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "24px",
-          padding: "32px",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
-        }}
-      >
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "28px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "30px",
-              fontWeight: "800",
-              letterSpacing: "-1px",
-            }}
-          >
-            IA LUCRATIVA
+    <main style={styles.page}>
+
+      <div style={styles.backgroundGlow}></div>
+
+      <div style={styles.container}>
+
+        {/* MARCA */}
+        <div style={styles.brandArea}>
+
+          <div style={styles.logo}>
+            <span>IA</span>
+            <span style={styles.logoArrow}>↗</span>
           </div>
 
-          <p
-            style={{
-              color: "#94a3b8",
-              marginTop: "8px",
-              fontSize: "14px",
-            }}
-          >
-            Acesse sua plataforma de inteligência artificial
+          <h1 style={styles.brand}>
+            IA LUCRATIVA
+          </h1>
+
+          <p style={styles.brandSub}>
+            TRANSFORME IDEIAS EM RENDA
           </p>
+
         </div>
 
-        <form onSubmit={entrar}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontSize: "14px",
-              fontWeight: "600",
-            }}
-          >
-            E-mail
-          </label>
+        {/* CARD */}
+        <div style={styles.card}>
 
-          <input
-            type="email"
-            placeholder="seuemail@exemplo.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
-            style={{
-              width: "100%",
-              padding: "14px",
-              marginBottom: "18px",
-              borderRadius: "12px",
-              border: "1px solid #334155",
-              background: "#020617",
-              color: "#fff",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
+          <div style={styles.cardHeader}>
 
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontSize: "14px",
-              fontWeight: "600",
-            }}
-          >
-            Senha
-          </label>
+            <span style={styles.badge}>
+              ACESSO À PLATAFORMA
+            </span>
 
-          <input
-            type="password"
-            placeholder="Digite sua senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            autoComplete="current-password"
-            style={{
-              width: "100%",
-              padding: "14px",
-              marginBottom: "18px",
-              borderRadius: "12px",
-              border: "1px solid #334155",
-              background: "#020617",
-              color: "#fff",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
+            <h2 style={styles.title}>
+              Bem-vindo de volta.
+            </h2>
 
-          {erro && (
-            <div
+            <p style={styles.description}>
+              Entre na sua conta para acessar suas ferramentas,
+              estratégias e recursos de inteligência artificial.
+            </p>
+
+          </div>
+
+          <form onSubmit={entrar}>
+
+            {/* E-MAIL */}
+            <div style={styles.field}>
+
+              <label style={styles.label}>
+                E-mail
+              </label>
+
+              <input
+                type="email"
+                placeholder="seuemail@exemplo.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                disabled={carregando}
+                style={styles.input}
+              />
+
+            </div>
+
+            {/* SENHA */}
+            <div style={styles.field}>
+
+              <label style={styles.label}>
+                Senha
+              </label>
+
+              <input
+                type="password"
+                placeholder="Digite sua senha"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                autoComplete="current-password"
+                disabled={carregando}
+                style={styles.input}
+              />
+
+            </div>
+
+            {/* ERRO */}
+            {erro && (
+              <div style={styles.error}>
+                <span>!</span>
+                {erro}
+              </div>
+            )}
+
+            {/* BOTÃO */}
+            <button
+              type="submit"
+              disabled={carregando}
               style={{
-                background: "rgba(127, 29, 29, 0.35)",
-                border: "1px solid rgba(248,113,113,0.35)",
-                color: "#fca5a5",
-                padding: "12px",
-                borderRadius: "10px",
-                marginBottom: "18px",
-                fontSize: "14px",
+                ...styles.button,
+                opacity: carregando ? 0.65 : 1,
+                cursor: carregando
+                  ? "not-allowed"
+                  : "pointer",
               }}
             >
-              {erro}
-            </div>
-          )}
+              {carregando
+                ? "Entrando..."
+                : "Entrar na plataforma →"}
+            </button>
 
-          <button
-            type="submit"
-            disabled={carregando}
-            style={{
-              width: "100%",
-              padding: "15px",
-              border: "none",
-              borderRadius: "12px",
-              background: "linear-gradient(135deg, #2563eb, #7c3aed)",
-              color: "#fff",
-              fontWeight: "700",
-              fontSize: "16px",
-              cursor: carregando ? "not-allowed" : "pointer",
-              opacity: carregando ? 0.7 : 1,
-            }}
-          >
-            {carregando ? "Entrando..." : "Entrar na plataforma"}
-          </button>
-        </form>
+          </form>
 
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "22px",
-            color: "#94a3b8",
-            fontSize: "14px",
-          }}
-        >
-          Ainda não possui uma conta?
+          {/* CADASTRO */}
+          <div style={styles.registerArea}>
+
+            <span style={styles.registerText}>
+              Ainda não possui uma conta?
+            </span>
+
+            <Link
+              href="/cadastro"
+              style={styles.registerLink}
+            >
+              Criar minha conta
+            </Link>
+
+          </div>
+
         </div>
 
-        <button
-          onClick={() => router.push("/cadastro")}
-          style={{
-            width: "100%",
-            marginTop: "10px",
-            padding: "13px",
-            borderRadius: "12px",
-            border: "1px solid #334155",
-            background: "transparent",
-            color: "#fff",
-            fontWeight: "600",
-            cursor: "pointer",
-          }}
-        >
-          Criar minha conta
-        </button>
+        {/* RODAPÉ */}
+        <div style={styles.footer}>
+
+          <span>
+            Plataforma IA LUCRATIVA
+          </span>
+
+          <span style={styles.footerDot}>
+            •
+          </span>
+
+          <span>
+            @ia.lucrativa1
+          </span>
+
+        </div>
+
       </div>
+
     </main>
   );
 }
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    background: "#050807",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "30px 20px",
+    boxSizing: "border-box",
+    position: "relative",
+    overflow: "hidden",
+  },
+
+  backgroundGlow: {
+    position: "absolute",
+    width: "500px",
+    height: "500px",
+    borderRadius: "50%",
+    background:
+      "radial-gradient(circle, rgba(0,255,170,0.08), transparent 70%)",
+    top: "-220px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    pointerEvents: "none",
+  },
+
+  container: {
+    width: "100%",
+    maxWidth: "430px",
+    position: "relative",
+    zIndex: 1,
+  },
+
+  brandArea: {
+    textAlign: "center",
+    marginBottom: "25px",
+  },
+
+  logo: {
+    width: "58px",
+    height: "58px",
+    margin: "0 auto 14px",
+    borderRadius: "16px",
+    background: "#00ffaa",
+    color: "#03100b",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+    fontSize: "18px",
+    fontWeight: "900",
+    boxShadow:
+      "0 0 35px rgba(0,255,170,0.14)",
+  },
+
+  logoArrow: {
+    position: "absolute",
+    right: "7px",
+    top: "5px",
+    fontSize: "11px",
+    fontWeight: "900",
+  },
+
+  brand: {
+    margin: 0,
+    fontSize: "18px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
+
+  brandSub: {
+    margin: "6px 0 0",
+    color: "#00a879",
+    fontSize: "8px",
+    fontWeight: "900",
+    letterSpacing: "1.5px",
+  },
+
+  card: {
+    width: "100%",
+    background:
+      "linear-gradient(145deg, #0b1110, #080d0b)",
+    border:
+      "1px solid rgba(0,255,170,0.11)",
+    borderRadius: "20px",
+    padding: "30px",
+    boxSizing: "border-box",
+    boxShadow:
+      "0 25px 80px rgba(0,0,0,0.35)",
+  },
+
+  cardHeader: {
+    marginBottom: "27px",
+  },
+
+  badge: {
+    display: "inline-block",
+    color: "#00ffaa",
+    fontSize: "9px",
+    fontWeight: "900",
+    letterSpacing: "1.3px",
+    marginBottom: "13px",
+  },
+
+  title: {
+    margin: 0,
+    fontSize: "30px",
+    lineHeight: "1.1",
+    letterSpacing: "-1px",
+    fontWeight: "900",
+  },
+
+  description: {
+    margin: "12px 0 0",
+    color: "#737d78",
+    fontSize: "13px",
+    lineHeight: "1.65",
+  },
+
+  field: {
+    marginBottom: "18px",
+  },
+
+  label: {
+    display: "
