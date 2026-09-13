@@ -1,19 +1,40 @@
 "use client";
 
 import { useState } from "react";
+import { supabase } from "../../lib/supabase";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
-  function entrar(e) {
+  async function entrar(e) {
     e.preventDefault();
 
     setErro("");
 
     if (!email.trim() || !senha.trim()) {
       setErro("Preencha seu e-mail e sua senha.");
+      return;
+    }
+
+    setCarregando(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password: senha,
+    });
+
+    if (error) {
+      setCarregando(false);
+
+      if (error.message.includes("Invalid login credentials")) {
+        setErro("E-mail ou senha incorretos.");
+      } else {
+        setErro("Não foi possível entrar. Tente novamente.");
+      }
+
       return;
     }
 
@@ -54,6 +75,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               style={styles.input}
+              disabled={carregando}
             />
 
             <label style={styles.label}>
@@ -66,6 +88,7 @@ export default function Login() {
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               style={styles.input}
+              disabled={carregando}
             />
 
             {erro && (
@@ -76,9 +99,15 @@ export default function Login() {
 
             <button
               type="submit"
-              style={styles.button}
+              style={{
+                ...styles.button,
+                opacity: carregando ? 0.6 : 1,
+              }}
+              disabled={carregando}
             >
-              Entrar na plataforma →
+              {carregando
+                ? "Entrando..."
+                : "Entrar na plataforma →"}
             </button>
 
           </form>
