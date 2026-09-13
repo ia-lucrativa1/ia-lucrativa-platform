@@ -1,8 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "../../../lib/supabase";
 
 export default function GeradorPublico() {
+  const router = useRouter();
+
+  const [verificando, setVerificando] = useState(true);
+
   const [nicho, setNicho] = useState("");
   const [produto, setProduto] = useState("");
   const [objetivo, setObjetivo] = useState("Atrair clientes");
@@ -10,6 +16,33 @@ export default function GeradorPublico() {
   const [carregando, setCarregando] = useState(false);
   const [copiado, setCopiado] = useState(false);
   const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    async function verificarUsuario() {
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        router.replace("/login");
+        return;
+      }
+
+      setVerificando(false);
+    }
+
+    verificarUsuario();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        router.replace("/login");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [router]);
 
   async function gerarPublico() {
     if (!nicho.trim() || !produto.trim()) {
@@ -131,29 +164,53 @@ Entregue diretamente o resultado pronto.
     setCopiado(false);
   }
 
+  if (verificando) {
+    return (
+      <main style={styles.loadingPage}>
+        <div style={styles.loadingBox}>
+          <div style={styles.loadingLogo}>
+            IA LUCRATIVA
+          </div>
+
+          <div style={styles.loadingText}>
+            Verificando acesso...
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main style={styles.page}>
       <header style={styles.header}>
         <div>
-          <div style={styles.logo}>IA LUCRATIVA</div>
+          <div style={styles.logo}>
+            IA LUCRATIVA
+          </div>
 
           <div style={styles.subtitle}>
             Gerador de Público com IA
           </div>
         </div>
 
-        <a href="/dashboard" style={styles.backButton}>
-          Dashboard
-        </a>
+        <button
+          onClick={() => router.push("/dashboard")}
+          style={styles.backButton}
+        >
+          ← Dashboard
+        </button>
       </header>
 
       <section style={styles.container}>
         <div style={styles.hero}>
-          <div style={styles.badge}>🎯 IA AUTOMÁTICA</div>
+          <div style={styles.badge}>
+            🎯 IA AUTOMÁTICA
+          </div>
 
           <h1 style={styles.title}>
             Encontre o público
             <br />
+
             <span style={styles.highlight}>
               certo para sua oferta.
             </span>
@@ -264,7 +321,9 @@ Entregue diretamente o resultado pronto.
         )}
 
         <section style={styles.tipCard}>
-          <div style={styles.tipIcon}>💡</div>
+          <div style={styles.tipIcon}>
+            💡
+          </div>
 
           <div>
             <strong style={styles.tipTitle}>
@@ -281,19 +340,49 @@ Entregue diretamente o resultado pronto.
       </section>
 
       <footer style={styles.footer}>
-        <strong>IA LUCRATIVA</strong>
+        <strong>
+          IA LUCRATIVA
+        </strong>
 
         <span>
           Transformando inteligência artificial em oportunidades.
         </span>
 
-        <span>@ia.lucrativa1</span>
+        <span>
+          @ia.lucrativa1
+        </span>
       </footer>
     </main>
   );
 }
 
 const styles = {
+  loadingPage: {
+    minHeight: "100vh",
+    background: "#050505",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "Arial, sans-serif",
+  },
+
+  loadingBox: {
+    textAlign: "center",
+  },
+
+  loadingLogo: {
+    fontSize: "22px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
+
+  loadingText: {
+    marginTop: "10px",
+    color: "#888888",
+    fontSize: "14px",
+  },
+
   page: {
     minHeight: "100vh",
     background: "#050505",
@@ -324,11 +413,13 @@ const styles = {
 
   backButton: {
     color: "#ffffff",
+    background: "#101010",
     textDecoration: "none",
     border: "1px solid #333333",
     borderRadius: "10px",
     padding: "10px 15px",
     fontSize: "13px",
+    cursor: "pointer",
   },
 
   container: {
