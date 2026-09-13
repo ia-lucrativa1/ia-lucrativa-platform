@@ -182,90 +182,113 @@ Entregue diretamente o resultado pronto.
 
   return (
     <main style={styles.page}>
-      <header style={styles.header}>
-        <div>
-          <div style={styles.logo}>
-            IA LUCRATIVA
-          </div>
-
-          <div style={styles.subtitle}>
-            Gerador de Público com IA
-          </div>
-        </div>
-
-        <button
-          onClick={() => router.push("/dashboard")}
-          style={styles.backButton}
-        >
-          ← Dashboard
-        </button>
-      </header>
-
       <section style={styles.container}>
-        <div style={styles.hero}>
-          <div style={styles.badge}>
-            🎯 IA AUTOMÁTICA
+
+        {/* CABEÇALHO DA FERRAMENTA */}
+        <div style={styles.toolHeader}>
+          <div>
+            <div style={styles.toolBadge}>
+              🎯 FERRAMENTA DE IA
+            </div>
+
+            <h1 style={styles.title}>
+              Encontre o público
+              <br />
+              <span style={styles.highlight}>
+                certo para sua oferta.
+              </span>
+            </h1>
+
+            <p style={styles.description}>
+              Descubra dores, desejos, objeções, linguagem e
+              oportunidades de conteúdo para entender melhor
+              quem você quer alcançar.
+            </p>
           </div>
 
-          <h1 style={styles.title}>
-            Encontre o público
-            <br />
-
-            <span style={styles.highlight}>
-              certo para sua oferta.
-            </span>
-          </h1>
-
-          <p style={styles.description}>
-            Descubra dores, desejos, objeções, linguagem e
-            oportunidades de conteúdo para entender melhor
-            quem você quer alcançar.
-          </p>
+          <div style={styles.status}>
+            <span style={styles.statusDot}></span>
+            IA ONLINE
+          </div>
         </div>
 
+        {/* FORMULÁRIO */}
         <section style={styles.card}>
-          <label style={styles.label}>
-            Seu nicho
-          </label>
+          <div style={styles.cardHeader}>
+            <div>
+              <span style={styles.cardLabel}>
+                CONFIGURAÇÃO
+              </span>
 
-          <input
-            type="text"
-            placeholder="Ex: Design gráfico"
-            value={nicho}
-            onChange={(event) => setNicho(event.target.value)}
-            style={styles.input}
-          />
+              <h2 style={styles.cardTitle}>
+                Defina seu público
+              </h2>
+            </div>
 
-          <label style={styles.label}>
-            Produto ou serviço
-          </label>
+            <div style={styles.cardIcon}>
+              🎯
+            </div>
+          </div>
 
-          <input
-            type="text"
-            placeholder="Ex: Identidade visual para empresas"
-            value={produto}
-            onChange={(event) => setProduto(event.target.value)}
-            style={styles.input}
-          />
+          <div style={styles.formGrid}>
 
-          <label style={styles.label}>
-            Objetivo
-          </label>
+            <div style={styles.field}>
+              <label style={styles.label}>
+                Seu nicho
+              </label>
 
-          <select
-            value={objetivo}
-            onChange={(event) => setObjetivo(event.target.value)}
-            style={styles.input}
-          >
-            <option>Atrair clientes</option>
-            <option>Gerar vendas</option>
-            <option>Conseguir seguidores</option>
-            <option>Gerar leads</option>
-            <option>Aumentar autoridade</option>
-          </select>
+              <input
+                type="text"
+                placeholder="Ex: Design gráfico"
+                value={nicho}
+                onChange={(event) =>
+                  setNicho(event.target.value)
+                }
+                style={styles.input}
+              />
+            </div>
+
+            <div style={styles.field}>
+              <label style={styles.label}>
+                Produto ou serviço
+              </label>
+
+              <input
+                type="text"
+                placeholder="Ex: Identidade visual para empresas"
+                value={produto}
+                onChange={(event) =>
+                  setProduto(event.target.value)
+                }
+                style={styles.input}
+              />
+            </div>
+
+          </div>
+
+          <div style={styles.field}>
+            <label style={styles.label}>
+              Objetivo principal
+            </label>
+
+            <select
+              value={objetivo}
+              onChange={(event) =>
+                setObjetivo(event.target.value)
+              }
+              style={styles.input}
+            >
+              <option>Atrair clientes</option>
+              <option>Gerar vendas</option>
+              <option>Conseguir seguidores</option>
+              <option>Gerar leads</option>
+              <option>Aumentar autoridade</option>
+            </select>
+          </div>
 
           {erro && (
             <div style={styles.error}>
+              <span>⚠️</span>
               {erro}
             </div>
           )}
@@ -276,16 +299,20 @@ Entregue diretamente o resultado pronto.
               disabled={carregando}
               style={{
                 ...styles.generateButton,
-                opacity: carregando ? 0.7 : 1,
+                opacity: carregando ? 0.65 : 1,
+                cursor: carregando
+                  ? "not-allowed"
+                  : "pointer",
               }}
             >
               {carregando
-                ? "Analisando público..."
-                : "✨ Gerar público"}
+                ? "⏳ Analisando público..."
+                : "✨ Gerar análise de público"}
             </button>
 
             <button
               onClick={limpar}
+              disabled={carregando}
               style={styles.clearButton}
             >
               Limpar
@@ -293,24 +320,32 @@ Entregue diretamente o resultado pronto.
           </div>
         </section>
 
+        {/* RESULTADO */}
         {resultado && (
           <section style={styles.resultCard}>
             <div style={styles.resultHeader}>
               <div>
                 <div style={styles.resultBadge}>
-                  RESULTADO DA IA
+                  ✓ RESULTADO GERADO PELA IA
                 </div>
 
                 <h2 style={styles.resultTitle}>
                   Seu público foi analisado
                 </h2>
+
+                <p style={styles.resultDescription}>
+                  Use esta análise para orientar seu conteúdo,
+                  posicionamento e comunicação.
+                </p>
               </div>
 
               <button
                 onClick={copiarResultado}
                 style={styles.copyButton}
               >
-                {copiado ? "✓ Copiado" : "📋 Copiar"}
+                {copiado
+                  ? "✓ Copiado"
+                  : "📋 Copiar resultado"}
               </button>
             </div>
 
@@ -320,6 +355,7 @@ Entregue diretamente o resultado pronto.
           </section>
         )}
 
+        {/* DICA */}
         <section style={styles.tipCard}>
           <div style={styles.tipIcon}>
             💡
@@ -337,21 +373,8 @@ Entregue diretamente o resultado pronto.
             </p>
           </div>
         </section>
+
       </section>
-
-      <footer style={styles.footer}>
-        <strong>
-          IA LUCRATIVA
-        </strong>
-
-        <span>
-          Transformando inteligência artificial em oportunidades.
-        </span>
-
-        <span>
-          @ia.lucrativa1
-        </span>
-      </footer>
     </main>
   );
 }
@@ -375,6 +398,7 @@ const styles = {
     fontSize: "22px",
     fontWeight: "900",
     letterSpacing: "1px",
+    color: "#00ffaa",
   },
 
   loadingText: {
@@ -385,96 +409,135 @@ const styles = {
 
   page: {
     minHeight: "100vh",
-    background: "#050505",
+    background: "transparent",
     color: "#ffffff",
     fontFamily: "Arial, sans-serif",
   },
 
-  header: {
+  container: {
+    width: "min(1000px, 100%)",
+    margin: "0 auto",
+    padding: "10px 0 50px",
+  },
+
+  toolHeader: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
-    padding: "20px 6%",
-    borderBottom: "1px solid #222222",
-    gap: "20px",
+    alignItems: "flex-start",
+    gap: "30px",
+    marginBottom: "40px",
   },
 
-  logo: {
-    fontSize: "20px",
-    fontWeight: "900",
-    letterSpacing: "1px",
-  },
-
-  subtitle: {
-    color: "#888888",
-    fontSize: "12px",
-    marginTop: "5px",
-  },
-
-  backButton: {
-    color: "#ffffff",
-    background: "#101010",
-    textDecoration: "none",
-    border: "1px solid #333333",
-    borderRadius: "10px",
-    padding: "10px 15px",
-    fontSize: "13px",
-    cursor: "pointer",
-  },
-
-  container: {
-    width: "min(920px, 90%)",
-    margin: "0 auto",
-    padding: "70px 0",
-  },
-
-  hero: {
-    textAlign: "center",
-    marginBottom: "45px",
-  },
-
-  badge: {
+  toolBadge: {
     display: "inline-block",
-    border: "1px solid #333333",
-    borderRadius: "30px",
-    padding: "8px 14px",
+    color: "#00ffaa",
     fontSize: "11px",
-    letterSpacing: "1px",
-    color: "#cccccc",
-    marginBottom: "20px",
+    fontWeight: "800",
+    letterSpacing: "1.5px",
+    marginBottom: "15px",
   },
 
   title: {
-    fontSize: "clamp(38px, 7vw, 70px)",
+    fontSize: "clamp(36px, 6vw, 62px)",
     lineHeight: "1.05",
     margin: "0",
     fontWeight: "900",
+    letterSpacing: "-1.5px",
   },
 
   highlight: {
-    color: "#888888",
+    color: "#00ffaa",
   },
 
   description: {
     maxWidth: "650px",
-    margin: "22px auto 0",
-    color: "#999999",
+    margin: "20px 0 0",
+    color: "#8d8d8d",
     lineHeight: "1.7",
-    fontSize: "16px",
+    fontSize: "15px",
+  },
+
+  status: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    border: "1px solid #1f3f34",
+    background: "#08120f",
+    color: "#00ffaa",
+    borderRadius: "30px",
+    padding: "9px 13px",
+    fontSize: "10px",
+    fontWeight: "800",
+    letterSpacing: "1px",
+    whiteSpace: "nowrap",
+  },
+
+  statusDot: {
+    width: "7px",
+    height: "7px",
+    borderRadius: "50%",
+    background: "#00ffaa",
+    boxShadow: "0 0 10px rgba(0,255,170,0.7)",
   },
 
   card: {
-    background: "#0d0d0d",
-    border: "1px solid #242424",
+    background: "#0b0b0b",
+    border: "1px solid #202020",
     borderRadius: "20px",
     padding: "30px",
+    boxShadow: "0 15px 45px rgba(0,0,0,0.2)",
+  },
+
+  cardHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "20px",
+    marginBottom: "28px",
+  },
+
+  cardLabel: {
+    display: "block",
+    color: "#00ffaa",
+    fontSize: "10px",
+    fontWeight: "800",
+    letterSpacing: "1.5px",
+    marginBottom: "7px",
+  },
+
+  cardTitle: {
+    margin: "0",
+    fontSize: "22px",
+    fontWeight: "800",
+  },
+
+  cardIcon: {
+    width: "45px",
+    height: "45px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "12px",
+    background: "#101010",
+    border: "1px solid #242424",
+    fontSize: "20px",
+  },
+
+  formGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "18px",
+  },
+
+  field: {
+    width: "100%",
   },
 
   label: {
     display: "block",
-    fontSize: "13px",
+    fontSize: "12px",
     fontWeight: "700",
-    marginBottom: "9px",
+    marginBottom: "8px",
     color: "#dddddd",
   },
 
@@ -483,10 +546,10 @@ const styles = {
     boxSizing: "border-box",
     background: "#050505",
     color: "#ffffff",
-    border: "1px solid #333333",
+    border: "1px solid #303030",
     borderRadius: "10px",
     padding: "14px",
-    marginBottom: "22px",
+    marginBottom: "20px",
     fontSize: "14px",
     outline: "none",
   },
@@ -495,18 +558,18 @@ const styles = {
     display: "flex",
     gap: "12px",
     flexWrap: "wrap",
+    marginTop: "3px",
   },
 
   generateButton: {
     flex: "1",
-    minWidth: "200px",
-    border: "none",
+    minWidth: "220px",
+    border: "1px solid #00ffaa",
     borderRadius: "10px",
     padding: "15px 20px",
-    background: "#ffffff",
+    background: "#00ffaa",
     color: "#000000",
-    fontWeight: "800",
-    cursor: "pointer",
+    fontWeight: "900",
     fontSize: "14px",
   },
 
@@ -514,14 +577,17 @@ const styles = {
     border: "1px solid #333333",
     borderRadius: "10px",
     padding: "15px 20px",
-    background: "transparent",
+    background: "#101010",
     color: "#ffffff",
     cursor: "pointer",
     fontSize: "14px",
   },
 
   error: {
-    background: "#1a0d0d",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    background: "#190c0c",
     border: "1px solid #4a2222",
     color: "#ff9b9b",
     borderRadius: "10px",
@@ -532,40 +598,48 @@ const styles = {
 
   resultCard: {
     marginTop: "25px",
-    background: "#0d0d0d",
-    border: "1px solid #242424",
+    background: "#0b0b0b",
+    border: "1px solid #1f3f34",
     borderRadius: "20px",
     padding: "30px",
+    boxShadow: "0 15px 45px rgba(0,0,0,0.2)",
   },
 
   resultHeader: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: "20px",
     flexWrap: "wrap",
     marginBottom: "25px",
   },
 
   resultBadge: {
-    color: "#888888",
-    fontSize: "11px",
-    letterSpacing: "1px",
+    color: "#00ffaa",
+    fontSize: "10px",
+    letterSpacing: "1.2px",
     fontWeight: "800",
   },
 
   resultTitle: {
     margin: "7px 0 0",
-    fontSize: "22px",
+    fontSize: "23px",
+  },
+
+  resultDescription: {
+    color: "#777777",
+    fontSize: "13px",
+    margin: "8px 0 0",
   },
 
   copyButton: {
-    border: "1px solid #333333",
-    background: "#151515",
-    color: "#ffffff",
+    border: "1px solid #284f43",
+    background: "#0d1714",
+    color: "#00ffaa",
     borderRadius: "10px",
     padding: "11px 15px",
     cursor: "pointer",
+    fontWeight: "700",
   },
 
   result: {
@@ -575,7 +649,7 @@ const styles = {
     borderRadius: "12px",
     padding: "22px",
     color: "#dddddd",
-    lineHeight: "1.7",
+    lineHeight: "1.75",
     fontSize: "14px",
   },
 
@@ -585,9 +659,9 @@ const styles = {
     alignItems: "flex-start",
     marginTop: "25px",
     padding: "22px",
-    border: "1px solid #222222",
+    border: "1px solid #1d2d27",
     borderRadius: "15px",
-    background: "#090909",
+    background: "#080d0b",
   },
 
   tipIcon: {
@@ -597,6 +671,7 @@ const styles = {
   tipTitle: {
     display: "block",
     marginBottom: "5px",
+    color: "#00ffaa",
   },
 
   tipText: {
@@ -604,18 +679,5 @@ const styles = {
     color: "#888888",
     fontSize: "13px",
     lineHeight: "1.6",
-  },
-
-  footer: {
-    borderTop: "1px solid #222222",
-    padding: "30px 6%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "15px",
-    flexWrap: "wrap",
-    color: "#777777",
-    fontSize: "12px",
-    textAlign: "center",
   },
 };
