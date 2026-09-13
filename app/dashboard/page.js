@@ -1,113 +1,229 @@
 "use client";
 
-import { useState } from "react";
-
 export default function Dashboard() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const ferramentas = [
+    {
+      icone: "✍️",
+      titulo: "Gerador de Conteúdo",
+      descricao: "Crie conteúdos estratégicos com IA.",
+      link: "/ferramentas/conteudo",
+    },
+    {
+      icone: "💡",
+      titulo: "Gerador de Ideias",
+      descricao: "Encontre ideias e oportunidades.",
+      link: "/ferramentas/ideias",
+    },
+    {
+      icone: "💰",
+      titulo: "Gerador de Ofertas",
+      descricao: "Crie ofertas mais atrativas.",
+      link: "/ferramentas/ofertas",
+    },
+    {
+      icone: "📱",
+      titulo: "Gerador de Posts",
+      descricao: "Crie posts e carrosséis.",
+      link: "/ferramentas/posts",
+    },
+    {
+      icone: "🎯",
+      titulo: "Gerador de Público",
+      descricao: "Defina e entenda seu público.",
+      link: "/ferramentas/publico",
+    },
+    {
+      icone: "🚀",
+      titulo: "Estratégias Digitais",
+      descricao: "Crie planos para seus objetivos.",
+      link: "/ferramentas/estrategias-digitais",
+    },
+  ];
 
   return (
     <main style={styles.page}>
-      <header style={styles.header}>
-        <div style={styles.logoArea}>
-          <div style={styles.logo}>IA</div>
-          <div>
-            <h2 style={styles.brand}>IA LUCRATIVA</h2>
-            <p style={styles.subtitle}>Sua inteligência para crescer.</p>
+      <div style={styles.container}>
+
+        <header style={styles.navbar}>
+          <a href="/dashboard" style={styles.brand}>
+            <div style={styles.logo}>IA</div>
+
+            <div>
+              <strong style={styles.brandName}>
+                IA LUCRATIVA
+              </strong>
+
+              <span style={styles.brandSub}>
+                Plataforma de Inteligência Artificial
+              </span>
+            </div>
+          </a>
+
+          <nav style={styles.nav}>
+            <a href="/ferramentas" style={styles.navLink}>
+              Ferramentas
+            </a>
+
+            <a href="/prompts" style={styles.navLink}>
+              Prompts
+            </a>
+
+            <a href="/estrategias" style={styles.navLink}>
+              Estratégias
+            </a>
+
+            <a href="/conta" style={styles.navLink}>
+              Minha Conta
+            </a>
+          </nav>
+        </header>
+
+        <section style={styles.hero}>
+          <span style={styles.badge}>
+            ⚡ PLATAFORMA IA LUCRATIVA
+          </span>
+
+          <h1 style={styles.heroTitle}>
+            Transforme IA em
+            <br />
+            oportunidades.
+          </h1>
+
+          <p style={styles.heroText}>
+            Tenha ferramentas, estratégias e recursos para usar
+            inteligência artificial de forma prática e transformar
+            ideias em resultados.
+          </p>
+
+          <a href="/ferramentas" style={styles.heroButton}>
+            Explorar ferramentas →
+          </a>
+        </section>
+
+        <section style={styles.stats}>
+
+          <div style={styles.stat}>
+            <strong style={styles.statNumber}>6</strong>
+            <span style={styles.statLabel}>Ferramentas</span>
           </div>
-        </div>
 
-        <button
-          style={styles.menuButton}
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </button>
-      </header>
+          <div style={styles.stat}>
+            <strong style={styles.statNumber}>10+</strong>
+            <span style={styles.statLabel}>Prompts</span>
+          </div>
 
-      {menuOpen && (
-        <div style={styles.menu}>
-          <p>Dashboard</p>
-          <p>Ferramentas de IA</p>
-          <p>Prompts</p>
-          <p>Estratégias</p>
-          <p>Minha conta</p>
-          <p>Sair</p>
-        </div>
-      )}
+          <div style={styles.stat}>
+            <strong style={styles.statNumber}>8</strong>
+            <span style={styles.statLabel}>Estratégias</span>
+          </div>
 
-      <section style={styles.hero}>
-        <span style={styles.badge}>🤖 PLATAFORMA IA LUCRATIVA</span>
+          <div style={styles.stat}>
+            <strong style={styles.statNumber}>24/7</strong>
+            <span style={styles.statLabel}>Disponível</span>
+          </div>
 
-        <h1 style={styles.heroTitle}>
-          Transforme IA em
+        </section>
+
+        <section style={styles.section}>
+
+          <div style={styles.sectionHeader}>
+            <div>
+              <span style={styles.sectionTag}>
+                RECURSOS
+              </span>
+
+              <h2 style={styles.sectionTitle}>
+                Suas ferramentas
+              </h2>
+
+              <p style={styles.sectionText}>
+                Escolha uma ferramenta e comece a criar.
+              </p>
+            </div>
+
+            <a href="/ferramentas" style={styles.viewAll}>
+              Ver todas →
+            </a>
+          </div>
+
+          <div style={styles.grid}>
+
+            {ferramentas.map((ferramenta) => (
+              <a
+                key={ferramenta.titulo}
+                href={ferramenta.link}
+                style={styles.card}
+              >
+                <div style={styles.cardIcon}>
+                  {ferramenta.icone}
+                </div>
+
+                <h3 style={styles.cardTitle}>
+                  {ferramenta.titulo}
+                </h3>
+
+                <p style={styles.cardText}>
+                  {ferramenta.descricao}
+                </p>
+
+                <span style={styles.cardLink}>
+                  Abrir ferramenta →
+                </span>
+              </a>
+            ))}
+
+          </div>
+        </section>
+
+        <section style={styles.bottomGrid}>
+
+          <a href="/prompts" style={styles.featureCard}>
+            <div style={styles.featureIcon}>🧠</div>
+
+            <div>
+              <h3 style={styles.featureTitle}>
+                Biblioteca de Prompts
+              </h3>
+
+              <p style={styles.featureText}>
+                Encontre comandos prontos para diferentes objetivos.
+              </p>
+
+              <span style={styles.featureLink}>
+                Explorar prompts →
+              </span>
+            </div>
+          </a>
+
+          <a href="/estrategias" style={styles.featureCard}>
+            <div style={styles.featureIcon}>📈</div>
+
+            <div>
+              <h3 style={styles.featureTitle}>
+                Estratégias Digitais
+              </h3>
+
+              <p style={styles.featureText}>
+                Aprenda como transformar conhecimento e IA em oportunidades.
+              </p>
+
+              <span style={styles.featureLink}>
+                Ver estratégias →
+              </span>
+            </div>
+          </a>
+
+        </section>
+
+        <footer style={styles.footer}>
+          <strong>IA LUCRATIVA</strong>
           <br />
-          <span style={styles.highlight}>oportunidades.</span>
-        </h1>
+          Transforme IA em oportunidades.
+          <br />
+          @ia.lucrativa1
+        </footer>
 
-        <p style={styles.heroText}>
-          Tenha acesso a ferramentas, estratégias e recursos de
-          inteligência artificial para criar, vender e crescer no digital.
-        </p>
-
-        <button style={styles.primaryButton}>
-          🚀 Explorar plataforma
-        </button>
-      </section>
-
-      <section style={styles.stats}>
-        <div style={styles.stat}>
-          <strong style={styles.statNumber}>01</strong>
-          <span>Ferramentas</span>
-        </div>
-
-        <div style={styles.stat}>
-          <strong style={styles.statNumber}>02</strong>
-          <span>Prompts</span>
-        </div>
-
-        <div style={styles.stat}>
-          <strong style={styles.statNumber}>03</strong>
-          <span>Estratégias</span>
-        </div>
-      </section>
-
-      <section style={styles.cards}>
-        <div style={styles.card}>
-          <div style={styles.icon}>🤖</div>
-          <h3>Ferramentas de IA</h3>
-          <p>
-            Recursos inteligentes para facilitar seu trabalho e acelerar
-            seus resultados.
-          </p>
-          <button style={styles.cardButton}>Acessar →</button>
-        </div>
-
-        <div style={styles.card}>
-          <div style={styles.icon}>💡</div>
-          <h3>Prompts inteligentes</h3>
-          <p>
-            Comandos prontos para gerar ideias, conteúdos, ofertas e muito
-            mais.
-          </p>
-          <button style={styles.cardButton}>Explorar →</button>
-        </div>
-
-        <div style={styles.card}>
-          <div style={styles.icon}>📈</div>
-          <h3>Estratégias</h3>
-          <p>
-            Estratégias práticas para transformar conhecimento em
-            oportunidades digitais.
-          </p>
-          <button style={styles.cardButton}>Ver estratégias →</button>
-        </div>
-      </section>
-
-      <footer style={styles.footer}>
-        <strong>IA LUCRATIVA</strong>
-        <p>Inteligência artificial para criar novas oportunidades.</p>
-        <span>@ia.lucrativa1</span>
-      </footer>
+      </div>
     </main>
   );
 }
@@ -117,29 +233,35 @@ const styles = {
     minHeight: "100vh",
     background: "#050505",
     color: "#ffffff",
+    padding: "20px",
     fontFamily: "Arial, sans-serif",
-    paddingBottom: "40px",
   },
 
-  header: {
-    height: "75px",
-    padding: "0 6%",
+  container: {
+    maxWidth: "1150px",
+    margin: "0 auto",
+  },
+
+  navbar: {
     display: "flex",
-    alignItems: "center",
     justifyContent: "space-between",
-    borderBottom: "1px solid #222",
-    background: "#080808",
+    alignItems: "center",
+    gap: "25px",
+    padding: "15px 0",
+    borderBottom: "1px solid #202020",
   },
 
-  logoArea: {
+  brand: {
     display: "flex",
     alignItems: "center",
     gap: "12px",
+    textDecoration: "none",
+    color: "#ffffff",
   },
 
   logo: {
-    width: "42px",
-    height: "42px",
+    width: "44px",
+    height: "44px",
     borderRadius: "12px",
     background: "#ffffff",
     color: "#000000",
@@ -150,150 +272,123 @@ const styles = {
     fontSize: "16px",
   },
 
-  brand: {
-    margin: 0,
-    fontSize: "17px",
-    letterSpacing: "1px",
+  brandName: {
+    display: "block",
+    fontSize: "15px",
   },
 
-  subtitle: {
-    margin: "3px 0 0",
-    color: "#777",
-    fontSize: "11px",
+  brandSub: {
+    display: "block",
+    color: "#666",
+    fontSize: "10px",
+    marginTop: "3px",
   },
 
-  menuButton: {
-    background: "transparent",
-    border: "1px solid #333",
-    color: "#fff",
-    borderRadius: "10px",
-    fontSize: "20px",
-    padding: "8px 12px",
-    cursor: "pointer",
+  nav: {
+    display: "flex",
+    gap: "20px",
+    flexWrap: "wrap",
+    justifyContent: "flex-end",
   },
 
-  menu: {
-    position: "absolute",
-    right: "6%",
-    top: "70px",
-    width: "220px",
-    padding: "15px",
-    background: "#111",
-    border: "1px solid #292929",
-    borderRadius: "14px",
-    zIndex: 10,
-    boxShadow: "0 15px 40px rgba(0,0,0,.5)",
+  navLink: {
+    color: "#aaa",
+    textDecoration: "none",
+    fontSize: "13px",
   },
 
   hero: {
-    maxWidth: "900px",
-    margin: "0 auto",
-    padding: "90px 6% 60px",
     textAlign: "center",
+    padding: "85px 20px 70px",
   },
 
   badge: {
     display: "inline-block",
-    padding: "8px 14px",
-    borderRadius: "50px",
-    border: "1px solid #333",
+    border: "1px solid #292929",
+    background: "#101010",
+    borderRadius: "30px",
+    padding: "9px 15px",
     color: "#aaa",
     fontSize: "11px",
+    fontWeight: "bold",
     letterSpacing: "1px",
-    marginBottom: "25px",
   },
 
   heroTitle: {
-    fontSize: "clamp(42px, 8vw, 78px)",
-    lineHeight: "1",
-    margin: "0",
-    fontWeight: "900",
-    letterSpacing: "-3px",
-  },
-
-  highlight: {
-    color: "#8b5cf6",
+    fontSize: "clamp(42px, 8vw, 76px)",
+    lineHeight: "1.02",
+    margin: "25px 0 20px",
+    letterSpacing: "-2px",
   },
 
   heroText: {
-    maxWidth: "650px",
-    margin: "25px auto",
+    maxWidth: "680px",
+    margin: "0 auto 30px",
     color: "#999",
-    fontSize: "17px",
-    lineHeight: "1.6",
+    lineHeight: "1.7",
+    fontSize: "16px",
   },
 
-  primaryButton: {
-    border: "none",
+  heroButton: {
+    display: "inline-block",
     background: "#ffffff",
     color: "#000000",
-    padding: "15px 24px",
-    borderRadius: "12px",
-    fontWeight: "800",
-    cursor: "pointer",
+    textDecoration: "none",
+    padding: "15px 22px",
+    borderRadius: "10px",
+    fontWeight: "bold",
     fontSize: "14px",
   },
 
   stats: {
-    maxWidth: "900px",
-    margin: "0 auto 50px",
-    padding: "0 6%",
     display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gap: "15px",
+    gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+    gap: "12px",
+    marginBottom: "80px",
   },
 
   stat: {
-    background: "#0d0d0d",
+    background: "#101010",
     border: "1px solid #222",
-    borderRadius: "15px",
+    borderRadius: "14px",
     padding: "20px",
     textAlign: "center",
   },
 
   statNumber: {
     display: "block",
-    fontSize: "24px",
-    marginBottom: "7px",
+    fontSize: "25px",
+    marginBottom: "6px",
   },
 
-  cards: {
-    maxWidth: "1100px",
-    margin: "0 auto",
-    padding: "0 6%",
-    display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gap: "18px",
-  },
-
-  card: {
-    background: "#0d0d0d",
-    border: "1px solid #222",
-    borderRadius: "18px",
-    padding: "25px",
-  },
-
-  icon: {
-    fontSize: "30px",
-    marginBottom: "20px",
-  },
-
-  cardButton: {
-    marginTop: "15px",
-    background: "transparent",
-    color: "#fff",
-    border: "1px solid #333",
-    borderRadius: "9px",
-    padding: "10px 14px",
-    cursor: "pointer",
-  },
-
-  footer: {
-    textAlign: "center",
-    marginTop: "80px",
-    padding: "30px 20px",
-    borderTop: "1px solid #222",
+  statLabel: {
     color: "#777",
-    fontSize: "13px",
+    fontSize: "12px",
   },
-};
+
+  section: {
+    marginBottom: "55px",
+  },
+
+  sectionHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    gap: "20px",
+    marginBottom: "22px",
+  },
+
+  sectionTag: {
+    color: "#666",
+    fontSize: "11px",
+    fontWeight: "bold",
+    letterSpacing: "2px",
+  },
+
+  sectionTitle: {
+    fontSize: "30px",
+    margin: "8px 0",
+  },
+
+  sectionText: {
+    color: "#
