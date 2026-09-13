@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(request) {
   try {
     const body = await request.json();
 
     const prompt = body?.prompt;
+    const toolName = body?.toolName || "IA LUCRATIVA";
 
     if (!prompt || typeof prompt !== "string") {
       return NextResponse.json(
@@ -27,6 +29,29 @@ export async function POST(request) {
         { status: 500 }
       );
     }
+
+    /* =====================================================
+       IDENTIFICAR USUÁRIO AUTENTICADO
+    ===================================================== */
+
+    let user = null;
+
+    const authorization = request.headers.get("authorization");
+
+    if (authorization?.startsWith("Bearer ")) {
+      const accessToken = authorization.replace("Bearer ", "").trim();
+
+      if (accessToken) {
+        const { data: userData } =
+          await supabase.auth.getUser(accessToken);
+
+        user = userData?.user || null;
+      }
+    }
+
+    /* =====================================================
+       CHAMADA PARA A IA
+    ===================================================== */
 
     const response = await fetch(
       "https://api.openai.com/v1/responses",
@@ -67,6 +92,10 @@ export async function POST(request) {
       );
     }
 
+    /* =====================================================
+       EXTRAIR RESPOSTA DA IA
+    ===================================================== */
+
     const texto =
       data?.output_text ||
       data?.output
@@ -86,9 +115,40 @@ export async function POST(request) {
       );
     }
 
+    /* =====================================================
+       SALVAR RESULTADO NO HISTÓRICO
+    ===================================================== */
+
+    let historicoSalvo = false;
+
+    if (user) {
+      const { error: saveError } = await supabase
+        .from("ai_results")
+        .insert({
+          user_id: user.id,
+          tool_name: toolName,
+          prompt: prompt,
+          result: texto,
+        });
+
+      if (saveError) {
+        console.error(
+          "Erro ao salvar histórico da IA LUCRATIVA:",
+          saveError
+        );
+      } else {
+        historicoSalvo = true;
+      }
+    }
+
+    /* =====================================================
+       RETORNO
+    ===================================================== */
+
     return NextResponse.json({
       sucesso: true,
       resultado: texto,
+      historicoSalvo,
     });
   } catch (error) {
     console.error("Erro na API IA LUCRATIVA:", error);
