@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 
 export default function Cadastro() {
@@ -56,121 +57,281 @@ export default function Cadastro() {
   }
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background:
-          "radial-gradient(circle at top, #172554 0%, #020617 45%, #000 100%)",
-        color: "#fff",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "430px",
-          background: "rgba(15, 23, 42, 0.92)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "24px",
-          padding: "32px",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
-        }}
-      >
-        <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <div
-            style={{
-              fontSize: "30px",
-              fontWeight: "800",
-              letterSpacing: "-1px",
-            }}
-          >
-            IA LUCRATIVA
+    <main style={styles.page}>
+
+      <div style={styles.backgroundGlow}></div>
+
+      <div style={styles.container}>
+
+        {/* MARCA */}
+        <div style={styles.brandArea}>
+
+          <div style={styles.logo}>
+            <span>IA</span>
+            <span style={styles.logoArrow}>↗</span>
           </div>
 
-          <p
-            style={{
-              color: "#94a3b8",
-              marginTop: "8px",
-              fontSize: "14px",
-            }}
-          >
-            Crie sua conta e comece sua jornada
+          <h1 style={styles.brand}>
+            IA LUCRATIVA
+          </h1>
+
+          <p style={styles.brandSub}>
+            TRANSFORME IDEIAS EM RENDA
           </p>
+
         </div>
 
-        <form onSubmit={criarConta}>
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontSize: "14px",
-              fontWeight: "600",
-            }}
-          >
-            Nome
-          </label>
+        {/* CARD */}
+        <div style={styles.card}>
 
-          <input
-            type="text"
-            placeholder="Seu nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "14px",
-              marginBottom: "18px",
-              borderRadius: "12px",
-              border: "1px solid #334155",
-              background: "#020617",
-              color: "#fff",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
+          <div style={styles.cardHeader}>
 
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontSize: "14px",
-              fontWeight: "600",
-            }}
-          >
-            E-mail
-          </label>
+            <span style={styles.badge}>
+              CRIE SUA CONTA
+            </span>
 
-          <input
-            type="email"
-            placeholder="seuemail@exemplo.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "14px",
-              marginBottom: "18px",
-              borderRadius: "12px",
-              border: "1px solid #334155",
-              background: "#020617",
-              color: "#fff",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
-          />
+            <h2 style={styles.title}>
+              Comece sua jornada.
+            </h2>
 
-          <label
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontSize: "14px",
-              fontWeight: "600",
-            }}
-          >
-            Senha
-          </label>
+            <p style={styles.description}>
+              Crie sua conta e tenha acesso às ferramentas,
+              estratégias e recursos da IA LUCRATIVA.
+            </p>
 
-          <input
-            type="password"
-            placeholder="M
+          </div>
+
+          <form onSubmit={criarConta}>
+
+            {/* NOME */}
+            <div style={styles.field}>
+
+              <label style={styles.label}>
+                Nome
+              </label>
+
+              <input
+                type="text"
+                placeholder="Seu nome"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                autoComplete="name"
+                disabled={carregando}
+                style={styles.input}
+              />
+
+            </div>
+
+            {/* E-MAIL */}
+            <div style={styles.field}>
+
+              <label style={styles.label}>
+                E-mail
+              </label>
+
+              <input
+                type="email"
+                placeholder="seuemail@exemplo.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                disabled={carregando}
+                style={styles.input}
+              />
+
+            </div>
+
+            {/* SENHA */}
+            <div style={styles.field}>
+
+              <label style={styles.label}>
+                Senha
+              </label>
+
+              <input
+                type="password"
+                placeholder="Crie uma senha com pelo menos 6 caracteres"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                autoComplete="new-password"
+                disabled={carregando}
+                style={styles.input}
+              />
+
+            </div>
+
+            {/* ERRO */}
+            {erro && (
+              <div style={styles.error}>
+                <span style={styles.errorIcon}>
+                  !
+                </span>
+
+                <span>
+                  {erro}
+                </span>
+              </div>
+            )}
+
+            {/* BOTÃO */}
+            <button
+              type="submit"
+              disabled={carregando}
+              style={{
+                ...styles.button,
+                opacity: carregando ? 0.65 : 1,
+                cursor: carregando
+                  ? "not-allowed"
+                  : "pointer",
+              }}
+            >
+              {carregando
+                ? "Criando conta..."
+                : "Criar minha conta →"}
+            </button>
+
+          </form>
+
+          {/* LOGIN */}
+          <div style={styles.loginArea}>
+
+            <span style={styles.loginText}>
+              Já possui uma conta?
+            </span>
+
+            <Link
+              href="/login"
+              style={styles.loginLink}
+            >
+              Entrar na plataforma
+            </Link>
+
+          </div>
+
+        </div>
+
+        {/* RODAPÉ */}
+        <div style={styles.footer}>
+
+          <span>
+            Plataforma IA LUCRATIVA
+          </span>
+
+          <span style={styles.footerDot}>
+            •
+          </span>
+
+          <span>
+            @ia.lucrativa1
+          </span>
+
+        </div>
+
+      </div>
+
+    </main>
+  );
+}
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    background: "#050807",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "30px 20px",
+    boxSizing: "border-box",
+    position: "relative",
+    overflow: "hidden",
+  },
+
+  backgroundGlow: {
+    position: "absolute",
+    width: "500px",
+    height: "500px",
+    borderRadius: "50%",
+    background:
+      "radial-gradient(circle, rgba(0,255,170,0.08), transparent 70%)",
+    top: "-220px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    pointerEvents: "none",
+  },
+
+  container: {
+    width: "100%",
+    maxWidth: "430px",
+    position: "relative",
+    zIndex: 1,
+  },
+
+  brandArea: {
+    textAlign: "center",
+    marginBottom: "25px",
+  },
+
+  logo: {
+    width: "58px",
+    height: "58px",
+    margin: "0 auto 14px",
+    borderRadius: "16px",
+    background: "#00ffaa",
+    color: "#03100b",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+    fontSize: "18px",
+    fontWeight: "900",
+    boxShadow:
+      "0 0 35px rgba(0,255,170,0.14)",
+  },
+
+  logoArrow: {
+    position: "absolute",
+    right: "7px",
+    top: "5px",
+    fontSize: "11px",
+    fontWeight: "900",
+  },
+
+  brand: {
+    margin: 0,
+    fontSize: "18px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
+
+  brandSub: {
+    margin: "6px 0 0",
+    color: "#00a879",
+    fontSize: "8px",
+    fontWeight: "900",
+    letterSpacing: "1.5px",
+  },
+
+  card: {
+    width: "100%",
+    background:
+      "linear-gradient(145deg, #0b1110, #080d0b)",
+    border:
+      "1px solid rgba(0,255,170,0.11)",
+    borderRadius: "20px",
+    padding: "30px",
+    boxSizing: "border-box",
+    boxShadow:
+      "0 25px 80px rgba(0,0,0,0.35)",
+  },
+
+  cardHeader: {
+    marginBottom: "27px",
+  },
+
+  badge: {
+    display: "inline-block",
+    color: "#00ffaa",
+    fontSize: "9px",
+    fontWeight: "900",
+    letterSpacing: "1.
