@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "../../lib/supabase";
 
 const ferramentas = [
   {
@@ -42,7 +44,55 @@ const ferramentas = [
 ];
 
 export default function Ferramentas() {
+  const router = useRouter();
+
   const [busca, setBusca] = useState("");
+  const [verificando, setVerificando] = useState(true);
+
+  useEffect(() => {
+    async function verificarUsuario() {
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        router.replace("/login");
+        return;
+      }
+
+      setVerificando(false);
+    }
+
+    verificarUsuario();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        router.replace("/login");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [router]);
+
+  if (verificando) {
+    return (
+      <main style={styles.loadingPage}>
+        <div style={styles.loadingBox}>
+          <div style={styles.loadingLogo}>IA</div>
+
+          <h1 style={styles.loadingTitle}>
+            IA LUCRATIVA
+          </h1>
+
+          <p style={styles.loadingText}>
+            Verificando acesso...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   const ferramentasFiltradas = ferramentas.filter((ferramenta) =>
     ferramenta.titulo.toLowerCase().includes(busca.toLowerCase())
@@ -155,6 +205,46 @@ const styles = {
     color: "#ffffff",
     padding: "30px 20px",
     fontFamily: "Arial, sans-serif",
+  },
+
+  loadingPage: {
+    minHeight: "100vh",
+    background: "#050505",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px",
+    fontFamily: "Arial, sans-serif",
+  },
+
+  loadingBox: {
+    textAlign: "center",
+  },
+
+  loadingLogo: {
+    width: "60px",
+    height: "60px",
+    borderRadius: "16px",
+    background: "#ffffff",
+    color: "#000000",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "20px",
+    fontWeight: "900",
+    margin: "0 auto 20px",
+  },
+
+  loadingTitle: {
+    fontSize: "24px",
+    margin: "0 0 8px",
+  },
+
+  loadingText: {
+    color: "#888",
+    margin: 0,
+    fontSize: "14px",
   },
 
   container: {
