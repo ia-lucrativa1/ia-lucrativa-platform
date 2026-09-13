@@ -185,4 +185,346 @@ Entregue diretamente o resultado pronto.
 
           <input
             type="text"
-            placeholder="Ex
+            placeholder="Ex: Identidade visual para empresas"
+            value={produto}
+            onChange={(event) => setProduto(event.target.value)}
+            style={styles.input}
+          />
+
+          <label style={styles.label}>
+            Objetivo
+          </label>
+
+          <select
+            value={objetivo}
+            onChange={(event) => setObjetivo(event.target.value)}
+            style={styles.input}
+          >
+            <option>Atrair clientes</option>
+            <option>Gerar vendas</option>
+            <option>Conseguir seguidores</option>
+            <option>Gerar leads</option>
+            <option>Aumentar autoridade</option>
+          </select>
+
+          {erro && (
+            <div style={styles.error}>
+              {erro}
+            </div>
+          )}
+
+          <div style={styles.actions}>
+            <button
+              onClick={gerarPublico}
+              disabled={carregando}
+              style={{
+                ...styles.generateButton,
+                opacity: carregando ? 0.7 : 1,
+              }}
+            >
+              {carregando
+                ? "Analisando público..."
+                : "✨ Gerar público"}
+            </button>
+
+            <button
+              onClick={limpar}
+              style={styles.clearButton}
+            >
+              Limpar
+            </button>
+          </div>
+        </section>
+
+        {resultado && (
+          <section style={styles.resultCard}>
+            <div style={styles.resultHeader}>
+              <div>
+                <div style={styles.resultBadge}>
+                  RESULTADO DA IA
+                </div>
+
+                <h2 style={styles.resultTitle}>
+                  Seu público foi analisado
+                </h2>
+              </div>
+
+              <button
+                onClick={copiarResultado}
+                style={styles.copyButton}
+              >
+                {copiado ? "✓ Copiado" : "📋 Copiar"}
+              </button>
+            </div>
+
+            <div style={styles.result}>
+              {resultado}
+            </div>
+          </section>
+        )}
+
+        <section style={styles.tipCard}>
+          <div style={styles.tipIcon}>💡</div>
+
+          <div>
+            <strong style={styles.tipTitle}>
+              Dica IA LUCRATIVA
+            </strong>
+
+            <p style={styles.tipText}>
+              Quanto melhor você entende as dores e desejos
+              do público, mais fácil fica criar conteúdo,
+              ofertas e estratégias relevantes.
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <footer style={styles.footer}>
+        <strong>IA LUCRATIVA</strong>
+
+        <span>
+          Transformando inteligência artificial em oportunidades.
+        </span>
+
+        <span>@ia.lucrativa1</span>
+      </footer>
+    </main>
+  );
+}
+
+const styles = {
+  page: {
+    minHeight: "100vh",
+    background: "#050505",
+    color: "#ffffff",
+    fontFamily: "Arial, sans-serif",
+  },
+
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "20px 6%",
+    borderBottom: "1px solid #222222",
+    gap: "20px",
+  },
+
+  logo: {
+    fontSize: "20px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
+
+  subtitle: {
+    color: "#888888",
+    fontSize: "12px",
+    marginTop: "5px",
+  },
+
+  backButton: {
+    color: "#ffffff",
+    textDecoration: "none",
+    border: "1px solid #333333",
+    borderRadius: "10px",
+    padding: "10px 15px",
+    fontSize: "13px",
+  },
+
+  container: {
+    width: "min(920px, 90%)",
+    margin: "0 auto",
+    padding: "70px 0",
+  },
+
+  hero: {
+    textAlign: "center",
+    marginBottom: "45px",
+  },
+
+  badge: {
+    display: "inline-block",
+    border: "1px solid #333333",
+    borderRadius: "30px",
+    padding: "8px 14px",
+    fontSize: "11px",
+    letterSpacing: "1px",
+    color: "#cccccc",
+    marginBottom: "20px",
+  },
+
+  title: {
+    fontSize: "clamp(38px, 7vw, 70px)",
+    lineHeight: "1.05",
+    margin: "0",
+    fontWeight: "900",
+  },
+
+  highlight: {
+    color: "#888888",
+  },
+
+  description: {
+    maxWidth: "650px",
+    margin: "22px auto 0",
+    color: "#999999",
+    lineHeight: "1.7",
+    fontSize: "16px",
+  },
+
+  card: {
+    background: "#0d0d0d",
+    border: "1px solid #242424",
+    borderRadius: "20px",
+    padding: "30px",
+  },
+
+  label: {
+    display: "block",
+    fontSize: "13px",
+    fontWeight: "700",
+    marginBottom: "9px",
+    color: "#dddddd",
+  },
+
+  input: {
+    width: "100%",
+    boxSizing: "border-box",
+    background: "#050505",
+    color: "#ffffff",
+    border: "1px solid #333333",
+    borderRadius: "10px",
+    padding: "14px",
+    marginBottom: "22px",
+    fontSize: "14px",
+    outline: "none",
+  },
+
+  actions: {
+    display: "flex",
+    gap: "12px",
+    flexWrap: "wrap",
+  },
+
+  generateButton: {
+    flex: "1",
+    minWidth: "200px",
+    border: "none",
+    borderRadius: "10px",
+    padding: "15px 20px",
+    background: "#ffffff",
+    color: "#000000",
+    fontWeight: "800",
+    cursor: "pointer",
+    fontSize: "14px",
+  },
+
+  clearButton: {
+    border: "1px solid #333333",
+    borderRadius: "10px",
+    padding: "15px 20px",
+    background: "transparent",
+    color: "#ffffff",
+    cursor: "pointer",
+    fontSize: "14px",
+  },
+
+  error: {
+    background: "#1a0d0d",
+    border: "1px solid #4a2222",
+    color: "#ff9b9b",
+    borderRadius: "10px",
+    padding: "12px",
+    marginBottom: "20px",
+    fontSize: "13px",
+  },
+
+  resultCard: {
+    marginTop: "25px",
+    background: "#0d0d0d",
+    border: "1px solid #242424",
+    borderRadius: "20px",
+    padding: "30px",
+  },
+
+  resultHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "20px",
+    flexWrap: "wrap",
+    marginBottom: "25px",
+  },
+
+  resultBadge: {
+    color: "#888888",
+    fontSize: "11px",
+    letterSpacing: "1px",
+    fontWeight: "800",
+  },
+
+  resultTitle: {
+    margin: "7px 0 0",
+    fontSize: "22px",
+  },
+
+  copyButton: {
+    border: "1px solid #333333",
+    background: "#151515",
+    color: "#ffffff",
+    borderRadius: "10px",
+    padding: "11px 15px",
+    cursor: "pointer",
+  },
+
+  result: {
+    whiteSpace: "pre-wrap",
+    background: "#050505",
+    border: "1px solid #222222",
+    borderRadius: "12px",
+    padding: "22px",
+    color: "#dddddd",
+    lineHeight: "1.7",
+    fontSize: "14px",
+  },
+
+  tipCard: {
+    display: "flex",
+    gap: "15px",
+    alignItems: "flex-start",
+    marginTop: "25px",
+    padding: "22px",
+    border: "1px solid #222222",
+    borderRadius: "15px",
+    background: "#090909",
+  },
+
+  tipIcon: {
+    fontSize: "22px",
+  },
+
+  tipTitle: {
+    display: "block",
+    marginBottom: "5px",
+  },
+
+  tipText: {
+    margin: "0",
+    color: "#888888",
+    fontSize: "13px",
+    lineHeight: "1.6",
+  },
+
+  footer: {
+    borderTop: "1px solid #222222",
+    padding: "30px 6%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
+    flexWrap: "wrap",
+    color: "#777777",
+    fontSize: "12px",
+    textAlign: "center",
+  },
+};
