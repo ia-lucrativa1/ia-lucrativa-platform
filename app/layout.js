@@ -31,10 +31,10 @@ export default function RootLayout({ children }) {
               </p>
             </div>
 
-            {/* MENU */}
+            {/* MENU PRINCIPAL */}
             <nav className="menu">
 
-              <a href="/" className="menu-item active">
+              <a href="/" className="menu-item">
                 <span>⌂</span>
                 Início
               </a>
@@ -109,7 +109,7 @@ export default function RootLayout({ children }) {
             {/* CABEÇALHO */}
             <header className="top-header">
 
-              <div>
+              <div className="header-welcome">
                 <h1>
                   Olá,{" "}
                   <span>
