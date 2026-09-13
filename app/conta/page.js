@@ -5,643 +5,790 @@ import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
 export default function Conta() {
-const router = useRouter();
+  const router = useRouter();
 
-const [usuario, setUsuario] = useState(null);
-const [nome, setNome] = useState("");
-const [email, setEmail] = useState("");
-const [plano, setPlano] = useState("free");
-const [carregando, setCarregando] = useState(true);
-const [salvando, setSalvando] = useState(false);
-const [salvo, setSalvo] = useState(false);
+  const [usuario, setUsuario] = useState(null);
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [plano, setPlano] = useState("free");
 
-useEffect(() => {
-async function carregarConta() {
-const {
-data: { session },
-} = await supabase.auth.getSession();
+  const [carregando, setCarregando] = useState(true);
+  const [salvando, setSalvando] = useState(false);
+  const [salvo, setSalvo] = useState(false);
 
-  if (!session) {
+  useEffect(() => {
+    async function carregarConta() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        router.replace("/login");
+        return;
+      }
+
+      const user = session.user;
+
+      setUsuario(user);
+      setEmail(user.email || "");
+
+      const { data: perfil, error } = await supabase
+        .from("profiles")
+        .select("nome, email, plano")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (!error && perfil) {
+        setNome(perfil.nome || "");
+        setEmail(perfil.email || user.email || "");
+        setPlano(perfil.plano || "free");
+      }
+
+      setCarregando(false);
+    }
+
+    carregarConta();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        router.replace("/login");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [router]);
+
+  async function salvarAlteracoes(e) {
+    e.preventDefault();
+
+    if (!usuario) return;
+
+    if (!nome.trim()) {
+      alert("Digite seu nome.");
+      return;
+    }
+
+    setSalvando(true);
+    setSalvo(false);
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        nome: nome.trim(),
+      })
+      .eq("id", usuario.id);
+
+    if (error) {
+      console.error(error);
+      alert("Não foi possível salvar as alterações.");
+      setSalvando(false);
+      return;
+    }
+
+    setSalvando(false);
+    setSalvo(true);
+
+    setTimeout(() => {
+      setSalvo(false);
+    }, 2500);
+  }
+
+  async function sair() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      alert("Não foi possível sair da conta.");
+      return;
+    }
+
     router.replace("/login");
-    return;
   }
 
-  const user = session.user;
+  if (carregando) {
+    return (
+      <main style={styles.loadingPage}>
+        <div style={styles.loadingCard}>
+          <div style={styles.loadingLogo}>IA</div>
 
-  setUsuario(user);
-  setEmail(user.email || "");
+          <h2 style={styles.loadingTitle}>
+            IA LUCRATIVA
+          </h2>
 
-  const { data: perfil, error } = await supabase
-    .from("profiles")
-    .select("nome, email, plano")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  if (!error && perfil) {
-    setNome(perfil.nome || "");
-    setEmail(perfil.email || user.email || "");
-    setPlano(perfil.plano || "free");
+          <p style={styles.loadingText}>
+            Carregando sua conta...
+          </p>
+        </div>
+      </main>
+    );
   }
 
-  setCarregando(false);
-}
+  const primeiraLetra = nome
+    ? nome.charAt(0).toUpperCase()
+    : email
+      ? email.charAt(0).toUpperCase()
+      : "U";
 
-carregarConta();
+  const planoFormatado =
+    plano.charAt(0).toUpperCase() + plano.slice(1);
 
-}, [router]);
+  return (
+    <main style={styles.page}>
+      <div style={styles.container}>
 
-async function salvarAlteracoes(e) {
-e.preventDefault();
+        {/* CABEÇALHO DA CONTA */}
+        <header style={styles.header}>
 
-if (!usuario) return;
+          <div style={styles.avatar}>
+            {primeiraLetra}
+          </div>
 
-if (!nome.trim()) {
-  alert("Digite seu nome.");
-  return;
-}
+          <div>
+            <span style={styles.eyebrow}>
+              MINHA CONTA
+            </span>
 
-setSalvando(true);
-setSalvo(false);
+            <h1 style={styles.title}>
+              {nome
+                ? `Olá, ${nome}!`
+                : "Minha Conta"}
+            </h1>
 
-const { error } = await supabase
-  .from("profiles")
-  .update({
-    nome: nome.trim(),
-  })
-  .eq("id", usuario.id);
+            <p style={styles.subtitle}>
+              Gerencie seu perfil e acompanhe sua experiência
+              dentro da IA LUCRATIVA.
+            </p>
+          </div>
 
-if (error) {
-  console.error(error);
-  alert("Não foi possível salvar as alterações.");
-  setSalvando(false);
-  return;
-}
+        </header>
 
-setSalvando(false);
-setSalvo(true);
+        {/* INFORMAÇÕES PESSOAIS */}
+        <section style={styles.card}>
 
-setTimeout(() => {
-  setSalvo(false);
-}, 2500);
+          <div style={styles.cardHeader}>
 
-}
+            <div>
+              <span style={styles.tag}>
+                PERFIL
+              </span>
 
-async function sair() {
-const { error } = await supabase.auth.signOut();
+              <h2 style={styles.cardTitle}>
+                Informações pessoais
+              </h2>
 
-if (error) {
-  alert("Não foi possível sair da conta.");
-  return;
-}
+              <p style={styles.cardDescription}>
+                Atualize as informações do seu perfil.
+              </p>
+            </div>
 
-router.replace("/login");
+            <span style={styles.status}>
+              ● Ativo
+            </span>
 
-}
+          </div>
 
-if (carregando) {
-return (
-<main style={styles.loadingPage}>
-<div style={styles.loadingCard}>
-<div style={styles.loadingLogo}>IA</div>
+          <form onSubmit={salvarAlteracoes}>
 
-      <h2 style={styles.loadingTitle}>
-        IA LUCRATIVA
-      </h2>
+            <label style={styles.label}>
+              Nome
+            </label>
 
-      <p style={styles.loadingText}>
-        Carregando sua conta...
-      </p>
-    </div>
-  </main>
-);
+            <input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              placeholder="Digite seu nome"
+              style={styles.input}
+              disabled={salvando}
+            />
 
-}
+            <label style={styles.label}>
+              E-mail
+            </label>
 
-const primeiraLetra = nome
-? nome.charAt(0).toUpperCase()
-: email
-? email.charAt(0).toUpperCase()
-: "U";
+            <input
+              type="email"
+              value={email}
+              disabled
+              style={styles.inputDisabled}
+            />
 
-const planoFormatado =
-plano.charAt(0).toUpperCase() + plano.slice(1);
+            <p style={styles.helper}>
+              O e-mail da conta não pode ser alterado por aqui.
+            </p>
 
-return (
-<main style={styles.page}>
-<div style={styles.container}>
+            <button
+              type="submit"
+              style={{
+                ...styles.button,
+                opacity: salvando ? 0.7 : 1,
+              }}
+              disabled={salvando}
+            >
+              {salvando
+                ? "Salvando..."
+                : salvo
+                  ? "✓ Alterações salvas"
+                  : "Salvar alterações"}
+            </button>
 
-    <a href="/dashboard" style={styles.back}>
-      ← Voltar para o Dashboard
-    </a>
+          </form>
 
-    <header style={styles.header}>
-      <div style={styles.avatar}>
-        {primeiraLetra}
-      </div>
+        </section>
 
-      <h1 style={styles.title}>
-        Minha Conta
-      </h1>
+        {/* PLANO */}
+        <section style={styles.card}>
 
-      <p style={styles.subtitle}>
-        Gerencie seu perfil e acompanhe sua experiência na IA LUCRATIVA.
-      </p>
-    </header>
+          <div style={styles.cardHeader}>
 
-    <section style={styles.card}>
-      <div style={styles.cardHeader}>
-        <div>
+            <div>
+              <span style={styles.tag}>
+                PLANO
+              </span>
+
+              <h2 style={styles.cardTitle}>
+                Seu plano
+              </h2>
+
+              <p style={styles.cardDescription}>
+                Consulte o plano associado à sua conta.
+              </p>
+            </div>
+
+            <span style={styles.planBadge}>
+              {planoFormatado.toUpperCase()}
+            </span>
+
+          </div>
+
+          <div style={styles.planBox}>
+
+            <div style={styles.planIcon}>
+              ✦
+            </div>
+
+            <div style={styles.planContent}>
+
+              <h3 style={styles.planTitle}>
+                IA LUCRATIVA {planoFormatado}
+              </h3>
+
+              <p style={styles.planText}>
+                Acesso aos recursos disponíveis atualmente
+                na plataforma.
+              </p>
+
+            </div>
+
+            <span style={styles.planStatus}>
+              Ativo
+            </span>
+
+          </div>
+
+          <div style={styles.planFeatures}>
+
+            <div style={styles.feature}>
+              <span>✓</span>
+              Ferramentas de IA
+            </div>
+
+            <div style={styles.feature}>
+              <span>✓</span>
+              Biblioteca de prompts
+            </div>
+
+            <div style={styles.feature}>
+              <span>✓</span>
+              Estratégias digitais
+            </div>
+
+            <div style={styles.feature}>
+              <span>✓</span>
+              Área exclusiva do usuário
+            </div>
+
+          </div>
+
+          <div style={styles.futureBox}>
+
+            <div style={styles.futureTitle}>
+              🚀 Novidades em desenvolvimento
+            </div>
+
+            <p style={styles.futureText}>
+              A IA LUCRATIVA continuará recebendo novos
+              recursos, automações, ferramentas inteligentes
+              e futuros planos premium.
+            </p>
+
+          </div>
+
+        </section>
+
+        {/* CONFIGURAÇÕES */}
+        <section style={styles.card}>
+
           <span style={styles.tag}>
-            PERFIL
+            CONFIGURAÇÕES
           </span>
 
           <h2 style={styles.cardTitle}>
-            Informações pessoais
+            Preferências
           </h2>
-        </div>
 
-        <span style={styles.status}>
-          ● Ativo
-        </span>
-      </div>
+          <p style={styles.cardDescription}>
+            Recursos adicionais serão liberados conforme
+            a evolução da plataforma.
+          </p>
 
-      <form onSubmit={salvarAlteracoes}>
+          <div style={styles.setting}>
 
-        <label style={styles.label}>
-          Nome
-        </label>
+            <div>
+              <strong>
+                Notificações
+              </strong>
 
-        <input
-          type="text"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          placeholder="Digite seu nome"
-          style={styles.input}
-          disabled={salvando}
-        />
+              <p style={styles.settingText}>
+                Controle das notificações da plataforma.
+              </p>
+            </div>
 
-        <label style={styles.label}>
-          E-mail
-        </label>
+            <span style={styles.comingSoon}>
+              Em breve
+            </span>
 
-        <input
-          type="email"
-          value={email}
-          disabled
-          style={styles.inputDisabled}
-        />
+          </div>
 
-        <button
-          type="submit"
-          style={styles.button}
-          disabled={salvando}
-        >
-          {salvando
-            ? "Salvando..."
-            : salvo
-              ? "✓ Alterações salvas"
-              : "Salvar alterações"}
-        </button>
+          <div style={styles.setting}>
 
-      </form>
-    </section>
+            <div>
+              <strong>
+                Segurança
+              </strong>
 
-    <section style={styles.card}>
+              <p style={styles.settingText}>
+                Recursos avançados de segurança e autenticação.
+              </p>
+            </div>
 
-      <div style={styles.cardHeader}>
-        <div>
-          <span style={styles.tag}>
-            PLANO
+            <span style={styles.comingSoon}>
+              Em breve
+            </span>
+
+          </div>
+
+        </section>
+
+        {/* AÇÕES */}
+        <section style={styles.actions}>
+
+          <button
+            type="button"
+            onClick={() => router.push("/dashboard")}
+            style={styles.dashboardButton}
+          >
+            ← Ir para o Dashboard
+          </button>
+
+          <button
+            type="button"
+            onClick={sair}
+            style={styles.logoutButton}
+          >
+            🚪 Sair da plataforma
+          </button>
+
+        </section>
+
+        {/* RODAPÉ */}
+        <footer style={styles.footer}>
+
+          <strong style={styles.footerBrand}>
+            IA LUCRATIVA
+          </strong>
+
+          <p>
+            Transforme IA em oportunidades.
+          </p>
+
+          <span>
+            @ia.lucrativa1
           </span>
 
-          <h2 style={styles.cardTitle}>
-            Seu plano
-          </h2>
-        </div>
-
-        <span style={styles.free}>
-          {planoFormatado.toUpperCase()}
-        </span>
-      </div>
-
-      <div style={styles.planBox}>
-
-        <div>
-          <h3 style={styles.planTitle}>
-            IA LUCRATIVA {planoFormatado}
-          </h3>
-
-          <p style={styles.planText}>
-            Acesso aos recursos disponíveis da plataforma.
-          </p>
-        </div>
-
-        <span style={styles.planStatus}>
-          Ativo
-        </span>
+        </footer>
 
       </div>
-
-      <div style={styles.planFeatures}>
-        <p>✓ Ferramentas disponíveis</p>
-        <p>✓ Biblioteca de prompts</p>
-        <p>✓ Estratégias digitais</p>
-        <p>✓ Área do usuário</p>
-      </div>
-
-      <div style={styles.futureBox}>
-        <strong>
-          🚀 Em breve
-        </strong>
-
-        <p style={styles.futureText}>
-          Novos recursos, automações, inteligência artificial avançada
-          e planos premium serão adicionados futuramente.
-        </p>
-      </div>
-
-    </section>
-
-    <section style={styles.card}>
-
-      <span style={styles.tag}>
-        CONFIGURAÇÕES
-      </span>
-
-      <h2 style={styles.cardTitle}>
-        Preferências
-      </h2>
-
-      <div style={styles.setting}>
-        <div>
-          <strong>
-            Notificações
-          </strong>
-
-          <p style={styles.settingText}>
-            Configuração de notificações será adicionada futuramente.
-          </p>
-        </div>
-
-        <span style={styles.comingSoon}>
-          Em breve
-        </span>
-      </div>
-
-      <div style={styles.setting}>
-        <div>
-          <strong>
-            Segurança
-          </strong>
-
-          <p style={styles.settingText}>
-            Recursos de segurança e autenticação avançada.
-          </p>
-        </div>
-
-        <span style={styles.comingSoon}>
-          Em breve
-        </span>
-      </div>
-
-    </section>
-
-    <section style={styles.actions}>
-
-      <a
-        href="/dashboard"
-        style={styles.dashboardButton}
-      >
-        ← Ir para o Dashboard
-      </a>
-
-      <button
-        onClick={sair}
-        style={styles.logoutButton}
-      >
-        🚪 Sair da plataforma
-      </button>
-
-    </section>
-
-    <footer style={styles.footer}>
-      <strong>
-        IA LUCRATIVA
-      </strong>
-
-      <br />
-
-      Transforme IA em oportunidades.
-
-      <br />
-
-      @ia.lucrativa1
-    </footer>
-
-  </div>
-</main>
-
-);
+    </main>
+  );
 }
 
 const styles = {
-page: {
-minHeight: "100vh",
-background: "#050505",
-color: "#ffffff",
-padding: "30px 20px",
-fontFamily: "Arial, sans-serif",
-},
+  page: {
+    minHeight: "100vh",
+    padding: "40px 35px 60px",
+    background: "#050505",
+    color: "#ffffff",
+    fontFamily: "Arial, sans-serif",
+  },
 
-container: {
-maxWidth: "850px",
-margin: "0 auto",
-},
+  container: {
+    width: "100%",
+    maxWidth: "900px",
+    margin: "0 auto",
+  },
 
-back: {
-color: "#888",
-textDecoration: "none",
-fontSize: "14px",
-},
+  header: {
+    display: "flex",
+    alignItems: "center",
+    gap: "20px",
+    marginBottom: "35px",
+  },
 
-header: {
-textAlign: "center",
-marginTop: "45px",
-marginBottom: "35px",
-},
+  avatar: {
+    width: "68px",
+    height: "68px",
+    minWidth: "68px",
+    borderRadius: "18px",
+    background: "#00ffaa",
+    color: "#000000",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "25px",
+    fontWeight: "900",
+    boxShadow: "0 0 30px rgba(0,255,170,0.12)",
+  },
 
-avatar: {
-width: "72px",
-height: "72px",
-borderRadius: "50%",
-background: "#ffffff",
-color: "#000000",
-display: "flex",
-alignItems: "center",
-justifyContent: "center",
-margin: "0 auto 18px",
-fontSize: "25px",
-fontWeight: "900",
-},
+  eyebrow: {
+    color: "#00ffaa",
+    fontSize: "10px",
+    fontWeight: "900",
+    letterSpacing: "2px",
+  },
 
-title: {
-fontSize: "36px",
-margin: "0 0 10px",
-},
+  title: {
+    margin: "5px 0 7px",
+    fontSize: "32px",
+    fontWeight: "800",
+    letterSpacing: "-0.5px",
+  },
 
-subtitle: {
-color: "#888",
-fontSize: "14px",
-lineHeight: "1.6",
-margin: 0,
-},
+  subtitle: {
+    margin: 0,
+    color: "#777",
+    fontSize: "13px",
+    lineHeight: "1.6",
+  },
 
-card: {
-background: "#101010",
-border: "1px solid #242424",
-borderRadius: "18px",
-padding: "25px",
-marginBottom: "18px",
-},
+  card: {
+    background: "#101010",
+    border: "1px solid #222",
+    borderRadius: "18px",
+    padding: "26px",
+    marginBottom: "18px",
+    boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
+  },
 
-cardHeader: {
-display: "flex",
-justifyContent: "space-between",
-alignItems: "flex-start",
-gap: "15px",
-marginBottom: "22px",
-},
+  cardHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: "20px",
+    marginBottom: "24px",
+  },
 
-tag: {
-display: "block",
-color: "#666",
-fontSize: "10px",
-fontWeight: "bold",
-letterSpacing: "2px",
-marginBottom: "7px",
-},
+  tag: {
+    display: "block",
+    color: "#00ffaa",
+    fontSize: "9px",
+    fontWeight: "900",
+    letterSpacing: "2px",
+    marginBottom: "8px",
+  },
 
-cardTitle: {
-fontSize: "21px",
-margin: 0,
-},
+  cardTitle: {
+    margin: 0,
+    fontSize: "20px",
+    fontWeight: "800",
+  },
 
-status: {
-color: "#aaa",
-fontSize: "12px",
-},
+  cardDescription: {
+    margin: "7px 0 0",
+    color: "#666",
+    fontSize: "12px",
+    lineHeight: "1.5",
+  },
 
-free: {
-background: "#1c1c1c",
-border: "1px solid #333",
-borderRadius: "8px",
-padding: "7px 10px",
-fontSize: "10px",
-fontWeight: "bold",
-},
+  status: {
+    color: "#00ffaa",
+    fontSize: "11px",
+    fontWeight: "700",
+    whiteSpace: "nowrap",
+  },
 
-label: {
-display: "block",
-fontSize: "13px",
-fontWeight: "bold",
-marginBottom: "8px",
-marginTop: "18px",
-},
+  planBadge: {
+    background: "rgba(0,255,170,0.08)",
+    border: "1px solid rgba(0,255,170,0.25)",
+    color: "#00ffaa",
+    borderRadius: "8px",
+    padding: "7px 10px",
+    fontSize: "9px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
 
-input: {
-width: "100%",
-boxSizing: "border-box",
-padding: "14px",
-borderRadius: "10px",
-border: "1px solid #333",
-background: "#080808",
-color: "#ffffff",
-fontSize: "14px",
-outline: "none",
-},
+  label: {
+    display: "block",
+    marginTop: "18px",
+    marginBottom: "8px",
+    color: "#ccc",
+    fontSize: "12px",
+    fontWeight: "700",
+  },
 
-inputDisabled: {
-width: "100%",
-boxSizing: "border-box",
-padding: "14px",
-borderRadius: "10px",
-border: "1px solid #222",
-background: "#050505",
-color: "#777",
-fontSize: "14px",
-outline: "none",
-},
+  input: {
+    width: "100%",
+    boxSizing: "border-box",
+    padding: "14px",
+    borderRadius: "10px",
+    border: "1px solid #333",
+    background: "#080808",
+    color: "#ffffff",
+    fontSize: "14px",
+    outline: "none",
+  },
 
-button: {
-width: "100%",
-marginTop: "24px",
-padding: "14px",
-border: "none",
-borderRadius: "10px",
-background: "#ffffff",
-color: "#000000",
-fontWeight: "bold",
-fontSize: "14px",
-cursor: "pointer",
-},
+  inputDisabled: {
+    width: "100%",
+    boxSizing: "border-box",
+    padding: "14px",
+    borderRadius: "10px",
+    border: "1px solid #222",
+    background: "#070707",
+    color: "#666",
+    fontSize: "14px",
+    outline: "none",
+  },
 
-planBox: {
-display: "flex",
-justifyContent: "space-between",
-alignItems: "center",
-gap: "15px",
-background: "#080808",
-border: "1px solid #222",
-borderRadius: "12px",
-padding: "18px",
-},
+  helper: {
+    margin: "7px 0 0",
+    color: "#555",
+    fontSize: "11px",
+  },
 
-planTitle: {
-margin: "0 0 6px",
-fontSize: "16px",
-},
+  button: {
+    width: "100%",
+    marginTop: "24px",
+    padding: "14px",
+    border: "none",
+    borderRadius: "10px",
+    background: "#00ffaa",
+    color: "#000000",
+    fontWeight: "900",
+    fontSize: "13px",
+    cursor: "pointer",
+  },
 
-planText: {
-margin: 0,
-color: "#777",
-fontSize: "12px",
-lineHeight: "1.5",
-},
+  planBox: {
+    display: "flex",
+    alignItems: "center",
+    gap: "15px",
+    padding: "18px",
+    background: "#080808",
+    border: "1px solid #222",
+    borderRadius: "14px",
+  },
 
-planStatus: {
-color: "#aaa",
-fontSize: "12px",
-fontWeight: "bold",
-},
+  planIcon: {
+    width: "42px",
+    height: "42px",
+    minWidth: "42px",
+    borderRadius: "12px",
+    background: "rgba(0,255,170,0.08)",
+    color: "#00ffaa",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "18px",
+    fontWeight: "900",
+  },
 
-planFeatures: {
-color: "#aaa",
-fontSize: "13px",
-lineHeight: "1.5",
-marginTop: "18px",
-},
+  planContent: {
+    flex: 1,
+  },
 
-futureBox: {
-marginTop: "20px",
-padding: "16px",
-background: "#0b0b0b",
-border: "1px solid #222",
-borderRadius: "12px",
-},
+  planTitle: {
+    margin: "0 0 5px",
+    fontSize: "15px",
+    fontWeight: "800",
+  },
 
-futureText: {
-color: "#777",
-fontSize: "12px",
-lineHeight: "1.6",
-margin: "8px 0 0",
-},
+  planText: {
+    margin: 0,
+    color: "#666",
+    fontSize: "11px",
+    lineHeight: "1.5",
+  },
 
-setting: {
-display: "flex",
-justifyContent: "space-between",
-alignItems: "center",
-gap: "15px",
-padding: "17px 0",
-borderBottom: "1px solid #202020",
-},
+  planStatus: {
+    color: "#00ffaa",
+    fontSize: "11px",
+    fontWeight: "800",
+  },
 
-settingText: {
-color: "#777",
-fontSize: "12px",
-lineHeight: "1.5",
-margin: "6px 0 0",
-},
+  planFeatures: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "10px",
+    marginTop: "18px",
+  },
 
-comingSoon: {
-color: "#666",
-fontSize: "11px",
-whiteSpace: "nowrap",
-},
+  feature: {
+    padding: "11px 12px",
+    borderRadius: "9px",
+    background: "#0b0b0b",
+    border: "1px solid #1d1d1d",
+    color: "#aaa",
+    fontSize: "11px",
+  },
 
-actions: {
-display: "flex",
-gap: "12px",
-flexWrap: "wrap",
-marginTop: "25px",
-},
+  futureBox: {
+    marginTop: "20px",
+    padding: "16px",
+    borderRadius: "12px",
+    background: "rgba(0,255,170,0.035)",
+    border: "1px solid rgba(0,255,170,0.12)",
+  },
 
-dashboardButton: {
-flex: 1,
-minWidth: "200px",
-textAlign: "center",
-padding: "14px",
-borderRadius: "10px",
-background: "#ffffff",
-color: "#000000",
-textDecoration: "none",
-fontWeight: "bold",
-fontSize: "13px",
-},
+  futureTitle: {
+    color: "#00ffaa",
+    fontSize: "12px",
+    fontWeight: "800",
+  },
 
-logoutButton: {
-flex: 1,
-minWidth: "200px",
-padding: "14px",
-borderRadius: "10px",
-background: "#101010",
-color: "#ffffff",
-border: "1px solid #333",
-fontWeight: "bold",
-fontSize: "13px",
-cursor: "pointer",
-},
+  futureText: {
+    margin: "7px 0 0",
+    color: "#666",
+    fontSize: "11px",
+    lineHeight: "1.6",
+  },
 
-footer: {
-textAlign: "center",
-color: "#555",
-fontSize: "12px",
-lineHeight: "1.8",
-padding: "35px 0 20px",
-},
+  setting: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "15px",
+    padding: "17px 0",
+    borderBottom: "1px solid #202020",
+  },
 
-loadingPage: {
-minHeight: "100vh",
-background: "#050505",
-color: "#ffffff",
-display: "flex",
-alignItems: "center",
-justifyContent: "center",
-padding: "20px",
-fontFamily: "Arial, sans-serif",
-},
+  settingText: {
+    margin: "6px 0 0",
+    color: "#666",
+    fontSize: "11px",
+    lineHeight: "1.5",
+  },
 
-loadingCard: {
-textAlign: "center",
-background: "#101010",
-border: "1px solid #222",
-borderRadius: "18px",
-padding: "40px",
-maxWidth: "360px",
-width: "100%",
-},
+  comingSoon: {
+    color: "#555",
+    fontSize: "10px",
+    fontWeight: "700",
+    whiteSpace: "nowrap",
+  },
 
-loadingLogo: {
-width: "55px",
-height: "55px",
-margin: "0 auto 20px",
-borderRadius: "14px",
-background: "#ffffff",
-color: "#000000",
-display: "flex",
-alignItems: "center",
-justifyContent: "center",
-fontWeight: "900",
-fontSize: "18px",
-},
+  actions: {
+    display: "flex",
+    gap: "12px",
+    flexWrap: "wrap",
+    marginTop: "25px",
+  },
 
-loadingTitle: {
-margin: "0 0 10px",
-fontSize: "20px",
-},
+  dashboardButton: {
+    flex: 1,
+    minWidth: "200px",
+    padding: "14px",
+    border: "1px solid #333",
+    borderRadius: "10px",
+    background: "#ffffff",
+    color: "#000000",
+    fontWeight: "900",
+    fontSize: "12px",
+    cursor: "pointer",
+  },
 
-loadingText: {
-margin: 0,
-color: "#777",
-fontSize: "13px",
-},
+  logoutButton: {
+    flex: 1,
+    minWidth: "200px",
+    padding: "14px",
+    border: "1px solid #333",
+    borderRadius: "10px",
+    background: "#101010",
+    color: "#ffffff",
+    fontWeight: "800",
+    fontSize: "12px",
+    cursor: "pointer",
+  },
+
+  footer: {
+    textAlign: "center",
+    color: "#444",
+    fontSize: "11px",
+    lineHeight: "1.8",
+    padding: "40px 0 10px",
+  },
+
+  footerBrand: {
+    color: "#00ffaa",
+    fontSize: "13px",
+  },
+
+  loadingPage: {
+    minHeight: "100vh",
+    background: "#050505",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px",
+    fontFamily: "Arial, sans-serif",
+  },
+
+  loadingCard: {
+    textAlign: "center",
+    background: "#101010",
+    border: "1px solid #222",
+    borderRadius: "18px",
+    padding: "40px",
+    maxWidth: "360px",
+    width: "100%",
+  },
+
+  loadingLogo: {
+    width: "55px",
+    height: "55px",
+    margin: "0 auto 20px",
+    borderRadius: "14px",
+    background: "#00ffaa",
+    color: "#000000",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "900",
+    fontSize: "18px",
+  },
+
+  loadingTitle: {
+    margin: "0 0 10px",
+    fontSize: "20px",
+  },
+
+  loadingText: {
+    margin: 0,
+    color: "#666",
+    fontSize: "13px",
+  },
 };
