@@ -160,7 +160,9 @@ button:disabled {
   width: 23px;
   display: inline-flex;
   justify-content: center;
+  align-items: center;
   font-size: 17px;
+  flex-shrink: 0;
 }
 
 .menu-item:hover {
@@ -224,6 +226,10 @@ button:disabled {
   font-weight: 800;
 }
 
+.instagram-card-sidebar a:hover {
+  text-decoration: underline;
+}
+
 /* =========================================================
    ÁREA PRINCIPAL
 ========================================================= */
@@ -250,6 +256,11 @@ button:disabled {
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
+.header-welcome {
+  min-width: 0;
+  flex: 1;
+}
+
 .top-header h1 {
   color: #ffffff;
   font-size: 28px;
@@ -273,12 +284,14 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .instagram-button {
   min-height: 42px;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 0 14px;
   border: 1px solid rgba(0, 255, 170, 0.16);
   border-radius: 10px;
@@ -306,6 +319,7 @@ button:disabled {
   color: #ffffff;
   font-size: 17px;
   transition: 0.2s ease;
+  flex-shrink: 0;
 }
 
 .notification:hover,
@@ -350,6 +364,18 @@ main textarea::placeholder {
   color: #555d66;
 }
 
+main button {
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+main button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
 /* =========================================================
    SCROLLBAR
 ========================================================= */
@@ -382,7 +408,7 @@ main textarea::placeholder {
 }
 
 /* =========================================================
-   RESPONSIVIDADE
+   RESPONSIVIDADE — TABLETS
 ========================================================= */
 
 @media (max-width: 1100px) {
@@ -408,6 +434,10 @@ main textarea::placeholder {
     display: none;
   }
 }
+
+/* =========================================================
+   RESPONSIVIDADE — CELULAR
+========================================================= */
 
 @media (max-width: 800px) {
   .app-layout {
@@ -477,6 +507,7 @@ main textarea::placeholder {
 
   .top-header {
     flex-direction: column;
+    align-items: stretch;
     margin-bottom: 28px;
     padding-bottom: 20px;
   }
@@ -494,6 +525,10 @@ main textarea::placeholder {
     justify-content: flex-end;
   }
 }
+
+/* =========================================================
+   RESPONSIVIDADE — CELULARES PEQUENOS
+========================================================= */
 
 @media (max-width: 480px) {
   .sidebar {
@@ -518,5 +553,15 @@ main textarea::placeholder {
 
   .top-header p {
     font-size: 12px;
+  }
+
+  .header-actions {
+    justify-content: space-between;
+  }
+
+  .notification,
+  .profile {
+    width: 40px;
+    height: 40px;
   }
 }
