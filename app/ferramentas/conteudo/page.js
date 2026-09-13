@@ -2,61 +2,78 @@
 
 import { useState } from "react";
 
-export default function GeradorConteudoPage() {
-  const [tema, setTema] = useState("");
+export default function GeradorConteudo() {
   const [nicho, setNicho] = useState("");
+  const [tema, setTema] = useState("");
   const [objetivo, setObjetivo] = useState("Atrair clientes");
   const [resultado, setResultado] = useState("");
+  const [carregando, setCarregando] = useState(false);
   const [copiado, setCopiado] = useState(false);
+  const [erro, setErro] = useState("");
 
-  function gerarConteudo() {
-    if (!tema.trim() || !nicho.trim()) {
-      alert("Preencha o tema e o nicho antes de gerar.");
+  async function gerarConteudo() {
+    if (!nicho.trim() || !tema.trim()) {
+      setErro("Preencha o nicho e o tema antes de gerar.");
       return;
     }
 
-    const conteudo = `
-IDEIA DE CONTEÚDO — IA LUCRATIVA
+    setCarregando(true);
+    setResultado("");
+    setErro("");
+    setCopiado(false);
 
-Nicho: ${nicho}
-Tema: ${tema}
-Objetivo: ${objetivo}
+    const prompt = `
+Crie um conteúdo completo para o nicho: ${nicho}.
 
-TÍTULO:
-${tema}: o que você precisa saber para começar
+Tema:
+${tema}
 
-GANCHO:
-Você está tentando melhorar seus resultados em ${nicho}, mas ainda não sabe por onde começar?
+Objetivo:
+${objetivo}
 
-DESENVOLVIMENTO:
-Mostre de forma simples por que esse assunto é importante para o público.
+Estruture a resposta exatamente com:
 
-Explique os principais pontos relacionados ao tema "${tema}".
+1. TÍTULO
+2. GANCHO
+3. DESENVOLVIMENTO
+4. APLICAÇÃO PRÁTICA
+5. CTA
+6. LEGENDA PARA INSTAGRAM
+7. HASHTAGS
 
-Apresente uma solução prática que a pessoa consiga aplicar ainda hoje.
-
-Mostre um exemplo real ou uma situação comum dentro do nicho.
-
-CTA:
-Quer aprender mais estratégias para transformar conhecimento em oportunidades?
-
-Acesse a IA LUCRATIVA e descubra novas ferramentas, prompts e estratégias.
-
-LEGENDA:
-Se você trabalha com ${nicho}, precisa entender melhor sobre ${tema}.
-
-Comece aplicando uma estratégia simples, acompanhe os resultados e vá melhorando com o tempo.
-
-Salve este conteúdo para consultar depois e compartilhe com alguém que precisa dessas informações.
-
-#${nicho.replace(/\s+/g, "")} #InteligenciaArtificial #MarketingDigital #IA #NegociosDigitais
+O conteúdo deve ser profissional, específico para o nicho informado e fácil de aplicar.
+Use português do Brasil.
+Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
 `;
 
-    setResultado(conteudo.trim());
-    setCopiado(false);
+    try {
+      const response = await fetch("/api/ia", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.sucesso) {
+        throw new Error(
+          data.erro || "Não foi possível gerar o conteúdo."
+        );
+      }
+
+      setResultado(data.resultado);
+    } catch (error) {
+      setErro(error.message || "Ocorreu um erro.");
+    } finally {
+      setCarregando(false);
+    }
   }
 
-  async function copiarConteudo() {
+  async function copiarResultado() {
     if (!resultado) return;
 
     try {
@@ -66,198 +83,132 @@ Salve este conteúdo para consultar depois e compartilhe com alguém que precisa
       setTimeout(() => {
         setCopiado(false);
       }, 2000);
-    } catch (error) {
-      alert("Não foi possível copiar automaticamente.");
+    } catch {
+      setErro("Não foi possível copiar o conteúdo.");
     }
   }
 
   function limpar() {
-    setTema("");
     setNicho("");
+    setTema("");
     setObjetivo("Atrair clientes");
     setResultado("");
+    setErro("");
     setCopiado(false);
   }
 
   return (
     <main style={styles.page}>
-      {/* HEADER */}
       <header style={styles.header}>
-        <div style={styles.logoArea}>
-          <div style={styles.logoBox}>IA</div>
-
-          <div>
-            <div style={styles.brand}>IA LUCRATIVA</div>
-            <div style={styles.subtitle}>
-              Gerador de Conteúdo
-            </div>
-          </div>
+        <div>
+          <div style={styles.logo}>IA LUCRATIVA</div>
+          <div style={styles.subtitle}>Gerador de Conteúdo com IA</div>
         </div>
 
-        <a href="/ferramentas" style={styles.backButton}>
-          ← Ferramentas
+        <a href="/dashboard" style={styles.backButton}>
+          Dashboard
         </a>
       </header>
 
-      {/* CONTEÚDO */}
       <section style={styles.container}>
-        <div style={styles.titleArea}>
-          <span style={styles.eyebrow}>
-            FERRAMENTA DE IA
-          </span>
+        <div style={styles.hero}>
+          <div style={styles.badge}>🤖 IA AUTOMÁTICA</div>
 
           <h1 style={styles.title}>
-            Gerador de Conteúdo
+            Crie conteúdos
+            <br />
+            <span style={styles.highlight}>em segundos.</span>
           </h1>
 
           <p style={styles.description}>
-            Crie ideias e estruturas de conteúdo para o seu negócio
-            de forma rápida e estratégica.
+            Informe seu nicho, escolha um tema e deixe a IA LUCRATIVA
+            criar uma estrutura completa de conteúdo para você.
           </p>
         </div>
 
-        <div style={styles.grid}>
-          {/* FORMULÁRIO */}
-          <section style={styles.card}>
-            <div style={styles.cardTop}>
-              <span style={styles.icon}>✦</span>
+        <section style={styles.card}>
+          <label style={styles.label}>Seu nicho</label>
 
-              <div>
-                <h2 style={styles.cardTitle}>
-                  Crie seu conteúdo
-                </h2>
+          <input
+            type="text"
+            placeholder="Ex: Marketing digital"
+            value={nicho}
+            onChange={(event) => setNicho(event.target.value)}
+            style={styles.input}
+          />
 
-                <p style={styles.cardDescription}>
-                  Preencha as informações abaixo.
-                </p>
-              </div>
-            </div>
+          <label style={styles.label}>Tema do conteúdo</label>
 
-            <div style={styles.form}>
-              <div style={styles.field}>
-                <label style={styles.label}>
-                  Qual é o seu nicho?
-                </label>
+          <input
+            type="text"
+            placeholder="Ex: Como conseguir o primeiro cliente"
+            value={tema}
+            onChange={(event) => setTema(event.target.value)}
+            style={styles.input}
+          />
 
-                <input
-                  type="text"
-                  value={nicho}
-                  onChange={(e) => setNicho(e.target.value)}
-                  placeholder="Ex.: estética, restaurante, design..."
-                  style={styles.input}
-                />
-              </div>
+          <label style={styles.label}>Objetivo</label>
 
-              <div style={styles.field}>
-                <label style={styles.label}>
-                  Qual é o tema?
-                </label>
+          <select
+            value={objetivo}
+            onChange={(event) => setObjetivo(event.target.value)}
+            style={styles.input}
+          >
+            <option>Atrair clientes</option>
+            <option>Gerar autoridade</option>
+            <option>Aumentar vendas</option>
+            <option>Gerar engajamento</option>
+            <option>Conseguir seguidores</option>
+          </select>
 
-                <input
-                  type="text"
-                  value={tema}
-                  onChange={(e) => setTema(e.target.value)}
-                  placeholder="Ex.: como conseguir mais clientes"
-                  style={styles.input}
-                />
-              </div>
+          {erro && <div style={styles.error}>{erro}</div>}
 
-              <div style={styles.field}>
-                <label style={styles.label}>
-                  Objetivo do conteúdo
-                </label>
+          <div style={styles.actions}>
+            <button
+              onClick={gerarConteudo}
+              disabled={carregando}
+              style={{
+                ...styles.generateButton,
+                opacity: carregando ? 0.7 : 1,
+              }}
+            >
+              {carregando ? "Gerando..." : "✨ Gerar conteúdo"}
+            </button>
 
-                <select
-                  value={objetivo}
-                  onChange={(e) => setObjetivo(e.target.value)}
-                  style={styles.input}
-                >
-                  <option value="Atrair clientes">
-                    Atrair clientes
-                  </option>
+            <button
+              onClick={limpar}
+              style={styles.clearButton}
+            >
+              Limpar
+            </button>
+          </div>
+        </section>
 
-                  <option value="Gerar autoridade">
-                    Gerar autoridade
-                  </option>
-
-                  <option value="Aumentar vendas">
-                    Aumentar vendas
-                  </option>
-
-                  <option value="Gerar engajamento">
-                    Gerar engajamento
-                  </option>
-
-                  <option value="Conseguir seguidores">
-                    Conseguir seguidores
-                  </option>
-                </select>
-              </div>
-
-              <button
-                onClick={gerarConteudo}
-                style={styles.generateButton}
-              >
-                ✦ Gerar conteúdo
-              </button>
-
-              <button
-                onClick={limpar}
-                style={styles.clearButton}
-              >
-                Limpar
-              </button>
-            </div>
-          </section>
-
-          {/* RESULTADO */}
-          <section style={styles.card}>
+        {resultado && (
+          <section style={styles.resultCard}>
             <div style={styles.resultHeader}>
               <div>
-                <h2 style={styles.cardTitle}>
-                  Resultado
+                <div style={styles.resultBadge}>RESULTADO DA IA</div>
+                <h2 style={styles.resultTitle}>
+                  Seu conteúdo está pronto
                 </h2>
-
-                <p style={styles.cardDescription}>
-                  Seu conteúdo aparecerá aqui.
-                </p>
               </div>
 
-              {resultado && (
-                <button
-                  onClick={copiarConteudo}
-                  style={styles.copyButton}
-                >
-                  {copiado ? "✓ Copiado" : "Copiar"}
-                </button>
-              )}
+              <button
+                onClick={copiarResultado}
+                style={styles.copyButton}
+              >
+                {copiado ? "✓ Copiado" : "📋 Copiar"}
+              </button>
             </div>
 
-            <div style={styles.resultBox}>
-              {resultado ? (
-                <pre style={styles.resultText}>
-                  {resultado}
-                </pre>
-              ) : (
-                <div style={styles.emptyState}>
-                  <div style={styles.emptyIcon}>✦</div>
-
-                  <strong>
-                    Seu conteúdo será criado aqui
-                  </strong>
-
-                  <p>
-                    Informe o nicho e o tema ao lado para
-                    começar.
-                  </p>
-                </div>
-              )}
+            <div style={styles.result}>
+              {resultado}
             </div>
           </section>
-        </div>
+        )}
 
-        {/* DICA */}
-        <section style={styles.tip}>
+        <section style={styles.tipCard}>
           <div style={styles.tipIcon}>💡</div>
 
           <div>
@@ -267,30 +218,16 @@ Salve este conteúdo para consultar depois e compartilhe com alguém que precisa
 
             <p style={styles.tipText}>
               Quanto mais específico for o nicho e o tema,
-              mais direcionado será o conteúdo gerado.
+              mais personalizada será a resposta da IA.
             </p>
           </div>
         </section>
-
-        {/* VOLTAR */}
-        <div style={styles.bottomArea}>
-          <a href="/dashboard" style={styles.dashboardLink}>
-            ← Voltar para o Dashboard
-          </a>
-        </div>
       </section>
 
-      {/* FOOTER */}
       <footer style={styles.footer}>
         <strong>IA LUCRATIVA</strong>
-
-        <span>
-          Crie. Automatize. Lucre.
-        </span>
-
-        <span>
-          @ia.lucrativa1
-        </span>
+        <span>Transformando inteligência artificial em oportunidades.</span>
+        <span>@ia.lucrativa1</span>
       </footer>
     </main>
   );
@@ -301,296 +238,233 @@ const styles = {
     minHeight: "100vh",
     background: "#050505",
     color: "#ffffff",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    fontFamily: "Arial, sans-serif",
   },
 
   header: {
-    minHeight: "76px",
-    padding: "0 6%",
     display: "flex",
-    alignItems: "center",
     justifyContent: "space-between",
-    borderBottom: "1px solid #1b1b1b",
-    background: "#070707",
+    alignItems: "center",
+    padding: "20px 6%",
+    borderBottom: "1px solid #222222",
+    gap: "20px",
   },
 
-  logoArea: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-  },
-
-  logoBox: {
-    width: "42px",
-    height: "42px",
-    borderRadius: "10px",
-    background: "#ffffff",
-    color: "#050505",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+  logo: {
+    fontSize: "20px",
     fontWeight: "900",
-    fontSize: "14px",
-  },
-
-  brand: {
-    fontSize: "15px",
-    fontWeight: "800",
     letterSpacing: "1px",
   },
 
   subtitle: {
-    marginTop: "3px",
-    fontSize: "11px",
-    color: "#777777",
+    color: "#888888",
+    fontSize: "12px",
+    marginTop: "5px",
   },
 
   backButton: {
-    textDecoration: "none",
     color: "#ffffff",
-    border: "1px solid #292929",
+    textDecoration: "none",
+    border: "1px solid #333333",
+    borderRadius: "10px",
     padding: "10px 15px",
-    borderRadius: "9px",
     fontSize: "13px",
-    fontWeight: "700",
   },
 
   container: {
-    width: "min(100% - 32px, 1100px)",
+    width: "min(920px, 90%)",
     margin: "0 auto",
-    padding: "60px 0",
+    padding: "70px 0",
   },
 
-  titleArea: {
-    marginBottom: "35px",
+  hero: {
+    textAlign: "center",
+    marginBottom: "45px",
   },
 
-  eyebrow: {
+  badge: {
+    display: "inline-block",
+    border: "1px solid #333333",
+    borderRadius: "30px",
+    padding: "8px 14px",
     fontSize: "11px",
-    fontWeight: "800",
-    letterSpacing: "2px",
-    color: "#888888",
+    letterSpacing: "1px",
+    color: "#cccccc",
+    marginBottom: "20px",
   },
 
   title: {
-    margin: "10px 0",
-    fontSize: "clamp(32px, 6vw, 52px)",
+    fontSize: "clamp(38px, 7vw, 70px)",
     lineHeight: "1.05",
-    letterSpacing: "-2px",
+    margin: "0",
+    fontWeight: "900",
+  },
+
+  highlight: {
+    color: "#888888",
   },
 
   description: {
     maxWidth: "650px",
-    color: "#929292",
+    margin: "22px auto 0",
+    color: "#999999",
     lineHeight: "1.7",
-    fontSize: "15px",
-  },
-
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-    gap: "20px",
+    fontSize: "16px",
   },
 
   card: {
-    background: "#0b0b0b",
-    border: "1px solid #202020",
-    borderRadius: "18px",
-    padding: "25px",
-  },
-
-  cardTop: {
-    display: "flex",
-    alignItems: "center",
-    gap: "13px",
-    marginBottom: "25px",
-  },
-
-  icon: {
-    width: "42px",
-    height: "42px",
-    borderRadius: "10px",
-    background: "#ffffff",
-    color: "#050505",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: "900",
-  },
-
-  cardTitle: {
-    margin: 0,
-    fontSize: "20px",
-  },
-
-  cardDescription: {
-    margin: "6px 0 0",
-    color: "#777777",
-    fontSize: "12px",
-  },
-
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "18px",
-  },
-
-  field: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
+    background: "#0d0d0d",
+    border: "1px solid #242424",
+    borderRadius: "20px",
+    padding: "30px",
   },
 
   label: {
-    fontSize: "12px",
-    color: "#aaaaaa",
+    display: "block",
+    fontSize: "13px",
     fontWeight: "700",
+    marginBottom: "9px",
+    color: "#dddddd",
   },
 
   input: {
     width: "100%",
     boxSizing: "border-box",
     background: "#050505",
-    border: "1px solid #292929",
     color: "#ffffff",
-    padding: "14px",
+    border: "1px solid #333333",
     borderRadius: "10px",
+    padding: "14px",
+    marginBottom: "22px",
+    fontSize: "14px",
     outline: "none",
-    fontSize: "13px",
+  },
+
+  actions: {
+    display: "flex",
+    gap: "12px",
+    flexWrap: "wrap",
   },
 
   generateButton: {
-    marginTop: "5px",
+    flex: "1",
+    minWidth: "200px",
     border: "none",
-    background: "#ffffff",
-    color: "#050505",
-    padding: "14px",
     borderRadius: "10px",
+    padding: "15px 20px",
+    background: "#ffffff",
+    color: "#000000",
     fontWeight: "800",
     cursor: "pointer",
-    fontSize: "13px",
+    fontSize: "14px",
   },
 
   clearButton: {
-    border: "1px solid #292929",
-    background: "transparent",
-    color: "#888888",
-    padding: "12px",
+    border: "1px solid #333333",
     borderRadius: "10px",
-    fontWeight: "700",
+    padding: "15px 20px",
+    background: "transparent",
+    color: "#ffffff",
     cursor: "pointer",
-    fontSize: "12px",
+    fontSize: "14px",
+  },
+
+  error: {
+    background: "#1a0d0d",
+    border: "1px solid #4a2222",
+    color: "#ff9b9b",
+    borderRadius: "10px",
+    padding: "12px",
+    marginBottom: "20px",
+    fontSize: "13px",
+  },
+
+  resultCard: {
+    marginTop: "25px",
+    background: "#0d0d0d",
+    border: "1px solid #242424",
+    borderRadius: "20px",
+    padding: "30px",
   },
 
   resultHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: "15px",
-    marginBottom: "20px",
+    gap: "20px",
+    flexWrap: "wrap",
+    marginBottom: "25px",
+  },
+
+  resultBadge: {
+    color: "#888888",
+    fontSize: "11px",
+    letterSpacing: "1px",
+    fontWeight: "800",
+  },
+
+  resultTitle: {
+    margin: "7px 0 0",
+    fontSize: "22px",
   },
 
   copyButton: {
-    border: "1px solid #303030",
+    border: "1px solid #333333",
     background: "#151515",
     color: "#ffffff",
-    padding: "9px 13px",
-    borderRadius: "8px",
+    borderRadius: "10px",
+    padding: "11px 15px",
     cursor: "pointer",
-    fontSize: "11px",
-    fontWeight: "700",
   },
 
-  resultBox: {
-    minHeight: "450px",
-    background: "#050505",
-    border: "1px solid #202020",
-    borderRadius: "12px",
-    padding: "18px",
-    boxSizing: "border-box",
-    overflow: "auto",
-  },
-
-  resultText: {
-    margin: 0,
+  result: {
     whiteSpace: "pre-wrap",
-    fontFamily: "Arial, Helvetica, sans-serif",
+    background: "#050505",
+    border: "1px solid #222222",
+    borderRadius: "12px",
+    padding: "22px",
     color: "#dddddd",
-    fontSize: "13px",
     lineHeight: "1.7",
+    fontSize: "14px",
   },
 
-  emptyState: {
-    minHeight: "410px",
+  tipCard: {
     display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    textAlign: "center",
-    color: "#777777",
-    padding: "20px",
-    boxSizing: "border-box",
-  },
-
-  emptyIcon: {
-    width: "50px",
-    height: "50px",
-    borderRadius: "50%",
-    background: "#111111",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#ffffff",
-    marginBottom: "15px",
-    fontSize: "20px",
-  },
-
-  tip: {
-    marginTop: "20px",
-    display: "flex",
-    gap: "14px",
-    padding: "20px",
+    gap: "15px",
+    alignItems: "flex-start",
+    marginTop: "25px",
+    padding: "22px",
+    border: "1px solid #222222",
     borderRadius: "15px",
-    background: "#0a0a0a",
-    border: "1px dashed #292929",
+    background: "#090909",
   },
 
   tipIcon: {
-    fontSize: "20px",
+    fontSize: "22px",
   },
 
   tipTitle: {
     display: "block",
-    fontSize: "13px",
     marginBottom: "5px",
   },
 
   tipText: {
-    margin: 0,
-    color: "#777777",
-    fontSize: "12px",
+    margin: "0",
+    color: "#888888",
+    fontSize: "13px",
     lineHeight: "1.6",
   },
 
-  bottomArea: {
-    marginTop: "30px",
-    textAlign: "center",
-  },
-
-  dashboardLink: {
-    color: "#aaaaaa",
-    textDecoration: "none",
-    fontSize: "12px",
-  },
-
   footer: {
+    borderTop: "1px solid #222222",
     padding: "30px 6%",
-    borderTop: "1px solid #1b1b1b",
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
     flexWrap: "wrap",
-    gap: "12px",
-    color: "#666666",
-    fontSize: "11px",
+    color: "#777777",
+    fontSize: "12px",
+    textAlign: "center",
   },
 };
