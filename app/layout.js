@@ -1,9 +1,17 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "IA LUCRATIVA",
+  title: "IA LUCRATIVA | Inteligência Artificial para o Digital",
   description:
-    "Sua plataforma de inteligência artificial para criar, vender e crescer no digital.",
+    "IA LUCRATIVA é uma plataforma de inteligência artificial para criar oportunidades, conteúdos, estratégias, ofertas e negócios no digital.",
+  keywords: [
+    "IA LUCRATIVA",
+    "inteligência artificial",
+    "IA para negócios",
+    "renda extra",
+    "negócios digitais",
+    "marketing digital",
+  ],
 };
 
 export default function RootLayout({ children }) {
