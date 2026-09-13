@@ -1,613 +1,846 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
 export default function Dashboard() {
-const router = useRouter();
-const [verificando, setVerificando] = useState(true);
-const [usuario, setUsuario] = useState(null);
+  const router = useRouter();
 
-useEffect(() => {
-async function verificarSessao() {
-const {
-data: { session },
-} = await supabase.auth.getSession();
+  const [verificando, setVerificando] = useState(true);
+  const [usuario, setUsuario] = useState(null);
 
-  if (!session) {
-    router.replace("/login");
-    return;
-  }
+  useEffect(() => {
+    async function verificarSessao() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-  setUsuario(session.user);
-  setVerificando(false);
-}
+      if (!session) {
+        router.replace("/login");
+        return;
+      }
 
-verificarSessao();
+      setUsuario(session.user);
+      setVerificando(false);
+    }
 
-const {
-  data: { subscription },
-} = supabase.auth.onAuthStateChange((_event, session) => {
-  if (!session) {
-    router.replace("/login");
-    return;
-  }
+    verificarSessao();
 
-  setUsuario(session.user);
-  setVerificando(false);
-});
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        router.replace("/login");
+        return;
+      }
 
-return () => {
-  subscription.unsubscribe();
-};
+      setUsuario(session.user);
+      setVerificando(false);
+    });
 
-}, [router]);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [router]);
 
-const ferramentas = [
-{
-icone: "✍️",
-titulo: "Gerador de Conteúdo",
-descricao: "Crie conteúdos estratégicos com IA.",
-link: "/ferramentas/conteudo",
-},
-{
-icone: "💡",
-titulo: "Gerador de Ideias",
-descricao: "Encontre ideias e oportunidades.",
-link: "/ferramentas/ideias",
-},
-{
-icone: "💰",
-titulo: "Gerador de Ofertas",
-descricao: "Crie ofertas mais atrativas.",
-link: "/ferramentas/ofertas",
-},
-{
-icone: "📱",
-titulo: "Gerador de Posts",
-descricao: "Crie posts e carrosséis.",
-link: "/ferramentas/posts",
-},
-{
-icone: "🎯",
-titulo: "Gerador de Público",
-descricao: "Defina e entenda seu público.",
-link: "/ferramentas/publico",
-},
-{
-icone: "🚀",
-titulo: "Estratégias Digitais",
-descricao: "Crie planos para seus objetivos.",
-link: "/ferramentas/estrategias-digitais",
-},
-];
+  const ferramentas = [
+    {
+      numero: "01",
+      icone: "✍️",
+      titulo: "Gerador de Conteúdo",
+      descricao:
+        "Crie conteúdos estratégicos para atrair, engajar e gerar oportunidades.",
+      link: "/ferramentas/conteudo",
+    },
+    {
+      numero: "02",
+      icone: "💡",
+      titulo: "Gerador de Ideias",
+      descricao:
+        "Encontre ideias de negócios, serviços e oportunidades utilizando IA.",
+      link: "/ferramentas/ideias",
+    },
+    {
+      numero: "03",
+      icone: "💰",
+      titulo: "Gerador de Ofertas",
+      descricao:
+        "Transforme produtos e serviços em ofertas mais claras e atrativas.",
+      link: "/ferramentas/ofertas",
+    },
+    {
+      numero: "04",
+      icone: "📱",
+      titulo: "Gerador de Posts",
+      descricao:
+        "Crie posts, carrosséis, chamadas, CTAs e estruturas de conteúdo.",
+      link: "/ferramentas/posts",
+    },
+    {
+      numero: "05",
+      icone: "🎯",
+      titulo: "Gerador de Público",
+      descricao:
+        "Entenda seu público, suas dores, desejos, objeções e comunicação.",
+      link: "/ferramentas/publico",
+    },
+    {
+      numero: "06",
+      icone: "🚀",
+      titulo: "Estratégias Digitais",
+      descricao:
+        "Monte estratégias práticas para transformar conhecimento em oportunidades.",
+      link: "/ferramentas/estrategias-digitais",
+    },
+  ];
 
-if (verificando) {
-return (
-<main style={styles.loadingPage}>
-<div style={styles.loadingCard}>
-<div style={styles.loadingLogo}>IA</div>
-<h2 style={styles.loadingTitle}>IA LUCRATIVA</h2>
-<p style={styles.loadingText}>
-Verificando sua sessão...
-</p>
-</div>
-</main>
-);
-}
+  if (verificando) {
+    return (
+      <main style={styles.loadingPage}>
+        <div style={styles.loadingCard}>
+          <div style={styles.loadingLogo}>IA</div>
 
-return (
-<main style={styles.page}>
-<div style={styles.container}>
-
-    <header style={styles.navbar}>
-      <a href="/dashboard" style={styles.brand}>
-        <div style={styles.logo}>IA</div>
-
-        <div>
-          <strong style={styles.brandName}>
+          <h2 style={styles.loadingTitle}>
             IA LUCRATIVA
-          </strong>
-
-          <span style={styles.brandSub}>
-            Plataforma de Inteligência Artificial
-          </span>
-        </div>
-      </a>
-
-      <nav style={styles.nav}>
-        <a href="/ferramentas" style={styles.navLink}>
-          Ferramentas
-        </a>
-
-        <a href="/prompts" style={styles.navLink}>
-          Prompts
-        </a>
-
-        <a href="/estrategias" style={styles.navLink}>
-          Estratégias
-        </a>
-
-        <a href="/conta" style={styles.navLink}>
-          Minha Conta
-        </a>
-      </nav>
-    </header>
-
-    <section style={styles.welcome}>
-      <span style={styles.welcomeText}>
-        Olá{usuario?.email ? `, ${usuario.email}` : ""} 👋
-      </span>
-    </section>
-
-    <section style={styles.hero}>
-      <span style={styles.badge}>
-        ⚡ PLATAFORMA IA LUCRATIVA
-      </span>
-
-      <h1 style={styles.heroTitle}>
-        Transforme IA em
-        <br />
-        oportunidades.
-      </h1>
-
-      <p style={styles.heroText}>
-        Tenha ferramentas, estratégias e recursos para usar
-        inteligência artificial de forma prática e transformar
-        ideias em resultados.
-      </p>
-
-      <a href="/ferramentas" style={styles.heroButton}>
-        Explorar ferramentas →
-      </a>
-    </section>
-
-    <section style={styles.stats}>
-
-      <div style={styles.stat}>
-        <strong style={styles.statNumber}>6</strong>
-        <span style={styles.statLabel}>Ferramentas</span>
-      </div>
-
-      <div style={styles.stat}>
-        <strong style={styles.statNumber}>10+</strong>
-        <span style={styles.statLabel}>Prompts</span>
-      </div>
-
-      <div style={styles.stat}>
-        <strong style={styles.statNumber}>8</strong>
-        <span style={styles.statLabel}>Estratégias</span>
-      </div>
-
-      <div style={styles.stat}>
-        <strong style={styles.statNumber}>24/7</strong>
-        <span style={styles.statLabel}>Disponível</span>
-      </div>
-
-    </section>
-
-    <section style={styles.section}>
-
-      <div style={styles.sectionHeader}>
-        <div>
-          <span style={styles.sectionTag}>
-            RECURSOS
-          </span>
-
-          <h2 style={styles.sectionTitle}>
-            Suas ferramentas
           </h2>
 
-          <p style={styles.sectionText}>
-            Escolha uma ferramenta e comece a criar.
+          <p style={styles.loadingText}>
+            Verificando sua sessão...
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <div style={styles.page}>
+
+      {/* CABEÇALHO DO PAINEL */}
+      <section style={styles.dashboardHeader}>
+
+        <div>
+          <span style={styles.sectionLabel}>
+            PAINEL PRINCIPAL
+          </span>
+
+          <h1 style={styles.title}>
+            Seu espaço para
+            <br />
+            <span style={styles.titleHighlight}>
+              transformar IA em ação.
+            </span>
+          </h1>
+
+          <p style={styles.description}>
+            Acesse suas ferramentas, prompts e estratégias
+            para transformar ideias em oportunidades.
           </p>
         </div>
 
-        <a href="/ferramentas" style={styles.viewAll}>
-          Ver todas →
-        </a>
-      </div>
+        <div style={styles.userCard}>
 
-      <div style={styles.grid}>
+          <div style={styles.userAvatar}>
+            👤
+          </div>
 
-        {ferramentas.map((ferramenta) => (
-          <a
-            key={ferramenta.titulo}
-            href={ferramenta.link}
-            style={styles.card}
+          <div>
+            <span style={styles.userLabel}>
+              USUÁRIO
+            </span>
+
+            <strong style={styles.userEmail}>
+              {usuario?.email || "Usuário"}
+            </strong>
+          </div>
+
+        </div>
+
+      </section>
+
+      {/* ACESSO RÁPIDO */}
+      <section style={styles.quickSection}>
+
+        <div style={styles.sectionHeader}>
+
+          <div>
+            <span style={styles.sectionLabel}>
+              ACESSO RÁPIDO
+            </span>
+
+            <h2 style={styles.sectionTitle}>
+              Comece por aqui
+            </h2>
+
+            <p style={styles.sectionText}>
+              Escolha um recurso e comece a executar.
+            </p>
+          </div>
+
+          <Link
+            href="/ferramentas"
+            style={styles.viewAll}
           >
-            <div style={styles.cardIcon}>
-              {ferramenta.icone}
+            Ver todas →
+          </Link>
+
+        </div>
+
+        <div style={styles.quickGrid}>
+
+          <Link
+            href="/ferramentas"
+            style={styles.quickCard}
+          >
+            <div style={styles.quickIcon}>
+              🤖
             </div>
 
-            <h3 style={styles.cardTitle}>
-              {ferramenta.titulo}
-            </h3>
+            <div>
+              <strong style={styles.quickTitle}>
+                Ferramentas de IA
+              </strong>
 
-            <p style={styles.cardText}>
-              {ferramenta.descricao}
-            </p>
+              <p style={styles.quickText}>
+                Acesse todas as ferramentas inteligentes da plataforma.
+              </p>
+            </div>
 
-            <span style={styles.cardLink}>
-              Abrir ferramenta →
+            <span style={styles.quickArrow}>
+              →
             </span>
-          </a>
-        ))}
+          </Link>
 
-      </div>
-    </section>
+          <Link
+            href="/prompts"
+            style={styles.quickCard}
+          >
+            <div style={styles.quickIcon}>
+              🧠
+            </div>
 
-    <section style={styles.bottomGrid}>
+            <div>
+              <strong style={styles.quickTitle}>
+                Biblioteca de Prompts
+              </strong>
 
-      <a href="/prompts" style={styles.featureCard}>
-        <div style={styles.featureIcon}>🧠</div>
+              <p style={styles.quickText}>
+                Use comandos prontos para acelerar seus resultados.
+              </p>
+            </div>
 
-        <div>
-          <h3 style={styles.featureTitle}>
-            Biblioteca de Prompts
-          </h3>
+            <span style={styles.quickArrow}>
+              →
+            </span>
+          </Link>
 
-          <p style={styles.featureText}>
-            Encontre comandos prontos para diferentes objetivos.
-          </p>
+          <Link
+            href="/estrategias"
+            style={styles.quickCard}
+          >
+            <div style={styles.quickIcon}>
+              📈
+            </div>
 
-          <span style={styles.featureLink}>
-            Explorar prompts →
+            <div>
+              <strong style={styles.quickTitle}>
+                Estratégias
+              </strong>
+
+              <p style={styles.quickText}>
+                Aplique estratégias práticas para seus objetivos.
+              </p>
+            </div>
+
+            <span style={styles.quickArrow}>
+              →
+            </span>
+          </Link>
+
+        </div>
+
+      </section>
+
+      {/* ESTATÍSTICAS */}
+      <section style={styles.stats}>
+
+        <div style={styles.stat}>
+          <strong style={styles.statNumber}>
+            06
+          </strong>
+
+          <span style={styles.statLabel}>
+            Ferramentas IA
           </span>
         </div>
-      </a>
 
-      <a href="/estrategias" style={styles.featureCard}>
-        <div style={styles.featureIcon}>📈</div>
+        <div style={styles.stat}>
+          <strong style={styles.statNumber}>
+            10+
+          </strong>
 
-        <div>
-          <h3 style={styles.featureTitle}>
-            Estratégias Digitais
-          </h3>
-
-          <p style={styles.featureText}>
-            Aprenda como transformar conhecimento e IA em oportunidades.
-          </p>
-
-          <span style={styles.featureLink}>
-            Ver estratégias →
+          <span style={styles.statLabel}>
+            Prompts
           </span>
         </div>
-      </a>
 
-    </section>
+        <div style={styles.stat}>
+          <strong style={styles.statNumber}>
+            08
+          </strong>
 
-    <footer style={styles.footer}>
-      <strong>IA LUCRATIVA</strong>
-      <br />
-      Transforme IA em oportunidades.
-      <br />
-      @ia.lucrativa1
-    </footer>
+          <span style={styles.statLabel}>
+            Estratégias
+          </span>
+        </div>
 
-  </div>
-</main>
+        <div style={styles.stat}>
+          <strong style={styles.statNumber}>
+            24/7
+          </strong>
 
-);
+          <span style={styles.statLabel}>
+            Disponibilidade
+          </span>
+        </div>
+
+      </section>
+
+      {/* FERRAMENTAS */}
+      <section style={styles.toolsSection}>
+
+        <div style={styles.sectionHeader}>
+
+          <div>
+            <span style={styles.sectionLabel}>
+              FERRAMENTAS
+            </span>
+
+            <h2 style={styles.sectionTitle}>
+              Coloque a IA para trabalhar.
+            </h2>
+
+            <p style={styles.sectionText}>
+              Ferramentas criadas para transformar ideias em execução.
+            </p>
+          </div>
+
+          <Link
+            href="/ferramentas"
+            style={styles.viewAll}
+          >
+            Explorar todas →
+          </Link>
+
+        </div>
+
+        <div style={styles.toolsGrid}>
+
+          {ferramentas.map((ferramenta) => (
+            <Link
+              key={ferramenta.numero}
+              href={ferramenta.link}
+              style={styles.toolCard}
+            >
+
+              <div style={styles.toolTop}>
+
+                <span style={styles.toolNumber}>
+                  {ferramenta.numero}
+                </span>
+
+                <span style={styles.toolArrow}>
+                  ↗
+                </span>
+
+              </div>
+
+              <div style={styles.toolIcon}>
+                {ferramenta.icone}
+              </div>
+
+              <h3 style={styles.toolTitle}>
+                {ferramenta.titulo}
+              </h3>
+
+              <p style={styles.toolDescription}>
+                {ferramenta.descricao}
+              </p>
+
+              <span style={styles.toolAction}>
+                Abrir ferramenta →
+              </span>
+
+            </Link>
+          ))}
+
+        </div>
+
+      </section>
+
+      {/* ÁREA DE EVOLUÇÃO */}
+      <section style={styles.evolutionSection}>
+
+        <div style={styles.evolutionCard}>
+
+          <div>
+            <span style={styles.evolutionLabel}>
+              IA LUCRATIVA
+            </span>
+
+            <h2 style={styles.evolutionTitle}>
+              Sua jornada está apenas começando.
+            </h2>
+
+            <p style={styles.evolutionText}>
+              Continue explorando a plataforma e utilize
+              inteligência artificial para criar, testar,
+              melhorar e executar suas ideias.
+            </p>
+          </div>
+
+          <Link
+            href="/conta"
+            style={styles.evolutionButton}
+          >
+            Minha conta →
+          </Link>
+
+        </div>
+
+      </section>
+
+      {/* RODAPÉ */}
+      <footer style={styles.footer}>
+
+        <strong style={styles.footerBrand}>
+          IA LUCRATIVA
+        </strong>
+
+        <span style={styles.footerText}>
+          Transforme inteligência artificial em oportunidades.
+        </span>
+
+        <span style={styles.footerInstagram}>
+          @ia.lucrativa1
+        </span>
+
+      </footer>
+
+    </div>
+  );
 }
 
 const styles = {
-page: {
-minHeight: "100vh",
-background: "#050505",
-color: "#ffffff",
-padding: "20px",
-fontFamily: "Arial, sans-serif",
-},
+  page: {
+    width: "100%",
+    minHeight: "100%",
+    color: "#ffffff",
+    boxSizing: "border-box",
+  },
 
-container: {
-maxWidth: "1150px",
-margin: "0 auto",
-},
+  dashboardHeader: {
+    maxWidth: "1150px",
+    margin: "0 auto",
+    padding: "45px 24px 35px",
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    gap: "30px",
+    flexWrap: "wrap",
+    boxSizing: "border-box",
+  },
 
-navbar: {
-display: "flex",
-justifyContent: "space-between",
-alignItems: "center",
-gap: "25px",
-padding: "15px 0",
-borderBottom: "1px solid #202020",
-},
+  sectionLabel: {
+    display: "block",
+    color: "#00ffaa",
+    fontSize: "10px",
+    fontWeight: "900",
+    letterSpacing: "1.5px",
+  },
 
-brand: {
-display: "flex",
-alignItems: "center",
-gap: "12px",
-textDecoration: "none",
-color: "#ffffff",
-},
+  title: {
+    margin: "12px 0 15px",
+    fontSize: "clamp(34px, 5vw, 58px)",
+    lineHeight: "1.05",
+    letterSpacing: "-2px",
+    fontWeight: "900",
+  },
 
-logo: {
-width: "44px",
-height: "44px",
-borderRadius: "12px",
-background: "#ffffff",
-color: "#000000",
-display: "flex",
-alignItems: "center",
-justifyContent: "center",
-fontWeight: "900",
-fontSize: "16px",
-},
+  titleHighlight: {
+    color: "#7d8783",
+  },
 
-brandName: {
-display: "block",
-fontSize: "15px",
-},
+  description: {
+    maxWidth: "650px",
+    margin: 0,
+    color: "#777f7b",
+    fontSize: "15px",
+    lineHeight: "1.7",
+  },
 
-brandSub: {
-display: "block",
-color: "#666",
-fontSize: "10px",
-marginTop: "3px",
-},
+  userCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    padding: "12px 15px",
+    background: "#080d0b",
+    border: "1px solid rgba(0, 255, 170, 0.1)",
+    borderRadius: "14px",
+    minWidth: "220px",
+    boxSizing: "border-box",
+  },
 
-nav: {
-display: "flex",
-gap: "20px",
-flexWrap: "wrap",
-justifyContent: "flex-end",
-},
+  userAvatar: {
+    width: "40px",
+    height: "40px",
+    borderRadius: "11px",
+    background: "rgba(0, 255, 170, 0.08)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "18px",
+  },
 
-navLink: {
-color: "#aaa",
-textDecoration: "none",
-fontSize: "13px",
-},
+  userLabel: {
+    display: "block",
+    color: "#00a879",
+    fontSize: "9px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+    marginBottom: "4px",
+  },
 
-welcome: {
-textAlign: "right",
-paddingTop: "18px",
-},
+  userEmail: {
+    display: "block",
+    color: "#d8dedb",
+    fontSize: "12px",
+    fontWeight: "700",
+    maxWidth: "170px",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
 
-welcomeText: {
-color: "#777",
-fontSize: "12px",
-},
+  quickSection: {
+    maxWidth: "1150px",
+    margin: "0 auto",
+    padding: "20px 24px 35px",
+    boxSizing: "border-box",
+  },
 
-hero: {
-textAlign: "center",
-padding: "65px 20px 70px",
-},
+  sectionHeader: {
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    gap: "25px",
+    marginBottom: "22px",
+    flexWrap: "wrap",
+  },
 
-badge: {
-display: "inline-block",
-border: "1px solid #292929",
-background: "#101010",
-borderRadius: "30px",
-padding: "9px 15px",
-color: "#aaa",
-fontSize: "11px",
-fontWeight: "bold",
-letterSpacing: "1px",
-},
+  sectionTitle: {
+    margin: "9px 0 5px",
+    fontSize: "28px",
+    lineHeight: "1.1",
+    letterSpacing: "-1px",
+  },
 
-heroTitle: {
-fontSize: "clamp(42px, 8vw, 76px)",
-lineHeight: "1.02",
-margin: "25px 0 20px",
-letterSpacing: "-2px",
-},
+  sectionText: {
+    margin: 0,
+    color: "#69736e",
+    fontSize: "13px",
+    lineHeight: "1.6",
+  },
 
-heroText: {
-maxWidth: "680px",
-margin: "0 auto 30px",
-color: "#999",
-lineHeight: "1.7",
-fontSize: "16px",
-},
+  viewAll: {
+    color: "#00ffaa",
+    textDecoration: "none",
+    fontSize: "12px",
+    fontWeight: "800",
+  },
 
-heroButton: {
-display: "inline-block",
-background: "#ffffff",
-color: "#000000",
-textDecoration: "none",
-padding: "15px 22px",
-borderRadius: "10px",
-fontWeight: "bold",
-fontSize: "14px",
-},
+  quickGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+    gap: "12px",
+  },
 
-stats: {
-display: "grid",
-gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-gap: "12px",
-marginBottom: "80px",
-},
+  quickCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "14px",
+    position: "relative",
+    background: "#080d0b",
+    border: "1px solid rgba(0, 255, 170, 0.09)",
+    borderRadius: "15px",
+    padding: "20px",
+    color: "#ffffff",
+    textDecoration: "none",
+    boxSizing: "border-box",
+  },
 
-stat: {
-background: "#101010",
-border: "1px solid #222",
-borderRadius: "14px",
-padding: "20px",
-textAlign: "center",
-},
+  quickIcon: {
+    width: "42px",
+    height: "42px",
+    flexShrink: 0,
+    borderRadius: "12px",
+    background: "rgba(0, 255, 170, 0.06)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "20px",
+  },
 
-statNumber: {
-display: "block",
-fontSize: "25px",
-marginBottom: "6px",
-},
+  quickTitle: {
+    display: "block",
+    fontSize: "14px",
+    marginBottom: "5px",
+  },
 
-statLabel: {
-color: "#777",
-fontSize: "12px",
-},
+  quickText: {
+    margin: 0,
+    color: "#6f7874",
+    fontSize: "11px",
+    lineHeight: "1.5",
+  },
 
-section: {
-marginBottom: "55px",
-},
+  quickArrow: {
+    marginLeft: "auto",
+    color: "#00ffaa",
+    fontSize: "18px",
+  },
 
-sectionHeader: {
-display: "flex",
-justifyContent: "space-between",
-alignItems: "flex-end",
-gap: "20px",
-marginBottom: "22px",
-},
+  stats: {
+    maxWidth: "1150px",
+    margin: "0 auto",
+    padding: "20px 24px 55px",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+    gap: "1px",
+    background: "rgba(0, 255, 170, 0.07)",
+    boxSizing: "border-box",
+  },
 
-sectionTag: {
-color: "#666",
-fontSize: "11px",
-fontWeight: "bold",
-letterSpacing: "2px",
-},
+  stat: {
+    minHeight: "105px",
+    background: "#080d0b",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+  },
 
-sectionTitle: {
-fontSize: "30px",
-margin: "8px 0",
-},
+  statNumber: {
+    color: "#00ffaa",
+    fontSize: "27px",
+    fontWeight: "900",
+  },
 
-sectionText: {
-color: "#777",
-margin: "0",
-fontSize: "14px",
-},
+  statLabel: {
+    marginTop: "6px",
+    color: "#69736e",
+    fontSize: "11px",
+  },
 
-viewAll: {
-color: "#aaa",
-textDecoration: "none",
-fontSize: "13px",
-},
+  toolsSection: {
+    maxWidth: "1150px",
+    margin: "0 auto",
+    padding: "35px 24px 75px",
+    boxSizing: "border-box",
+  },
 
-grid: {
-display: "grid",
-gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-gap: "15px",
-},
+  toolsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+    gap: "13px",
+  },
 
-card: {
-display: "block",
-background: "#101010",
-border: "1px solid #222",
-borderRadius: "16px",
-padding: "24px",
-textDecoration: "none",
-color: "#ffffff",
-},
+  toolCard: {
+    minHeight: "285px",
+    padding: "23px",
+    background: "linear-gradient(145deg, #0b1110, #080c0b)",
+    border: "1px solid rgba(0, 255, 170, 0.09)",
+    borderRadius: "17px",
+    color: "#ffffff",
+    textDecoration: "none",
+    display: "flex",
+    flexDirection: "column",
+    boxSizing: "border-box",
+  },
 
-cardIcon: {
-fontSize: "28px",
-marginBottom: "18px",
-},
+  toolTop: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 
-cardTitle: {
-fontSize: "17px",
-margin: "0 0 8px",
-},
+  toolNumber: {
+    color: "#00a879",
+    fontSize: "11px",
+    fontWeight: "900",
+  },
 
-cardText: {
-color: "#777",
-fontSize: "13px",
-lineHeight: "1.6",
-margin: "0 0 18px",
-},
+  toolArrow: {
+    color: "#00ffaa",
+    fontSize: "19px",
+  },
 
-cardLink: {
-color: "#ffffff",
-fontSize: "12px",
-fontWeight: "bold",
-},
+  toolIcon: {
+    marginTop: "28px",
+    fontSize: "27px",
+  },
 
-bottomGrid: {
-display: "grid",
-gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-gap: "15px",
-marginBottom: "70px",
-},
+  toolTitle: {
+    margin: "14px 0 8px",
+    fontSize: "18px",
+    fontWeight: "800",
+  },
 
-featureCard: {
-display: "flex",
-gap: "18px",
-alignItems: "flex-start",
-background: "#101010",
-border: "1px solid #222",
-borderRadius: "16px",
-padding: "24px",
-textDecoration: "none",
-color: "#ffffff",
-},
+  toolDescription: {
+    margin: 0,
+    color: "#737d78",
+    fontSize: "12px",
+    lineHeight: "1.65",
+  },
 
-featureIcon: {
-fontSize: "30px",
-},
+  toolAction: {
+    marginTop: "auto",
+    paddingTop: "22px",
+    color: "#00ffaa",
+    fontSize: "11px",
+    fontWeight: "800",
+  },
 
-featureTitle: {
-margin: "0 0 8px",
-fontSize: "17px",
-},
+  evolutionSection: {
+    maxWidth: "1150px",
+    margin: "0 auto",
+    padding: "0 24px 75px",
+    boxSizing: "border-box",
+  },
 
-featureText: {
-color: "#777",
-fontSize: "13px",
-lineHeight: "1.6",
-margin: "0 0 15px",
-},
+  evolutionCard: {
+    padding: "42px",
+    borderRadius: "20px",
+    border: "1px solid rgba(0, 255, 170, 0.1)",
+    background:
+      "radial-gradient(circle at 85% 15%, rgba(0, 255, 170, 0.08), transparent 35%), #080d0b",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "30px",
+    flexWrap: "wrap",
+    boxSizing: "border-box",
+  },
 
-featureLink: {
-color: "#ffffff",
-fontSize: "12px",
-fontWeight: "bold",
-},
+  evolutionLabel: {
+    color: "#00ffaa",
+    fontSize: "10px",
+    fontWeight: "900",
+    letterSpacing: "1.5px",
+  },
 
-footer: {
-textAlign: "center",
-borderTop: "1px solid #202020",
-padding: "35px 20px",
-color: "#555",
-fontSize: "12px",
-lineHeight: "1.8",
-},
+  evolutionTitle: {
+    margin: "14px 0 10px",
+    fontSize: "clamp(25px, 4vw, 40px)",
+    lineHeight: "1.1",
+    letterSpacing: "-1px",
+  },
 
-loadingPage: {
-minHeight: "100vh",
-background: "#050505",
-color: "#ffffff",
-display: "flex",
-alignItems: "center",
-justifyContent: "center",
-padding: "20px",
-fontFamily: "Arial, sans-serif",
-},
+  evolutionText: {
+    maxWidth: "620px",
+    margin: 0,
+    color: "#737d78",
+    fontSize: "13px",
+    lineHeight: "1.7",
+  },
 
-loadingCard: {
-textAlign: "center",
-background: "#101010",
-border: "1px solid #222",
-borderRadius: "18px",
-padding: "40px",
-maxWidth: "360px",
-width: "100%",
-},
+  evolutionButton: {
+    flexShrink: 0,
+    background: "#00ffaa",
+    color: "#03100b",
+    textDecoration: "none",
+    padding: "13px 19px",
+    borderRadius: "10px",
+    fontSize: "12px",
+    fontWeight: "900",
+  },
 
-loadingLogo: {
-width: "55px",
-height: "55px",
-margin: "0 auto 20px",
-borderRadius: "14px",
-background: "#ffffff",
-color: "#000000",
-display: "flex",
-alignItems: "center",
-justifyContent: "center",
-fontWeight: "900",
-fontSize: "18px",
-},
+  footer: {
+    borderTop: "1px solid rgba(0, 255, 170, 0.08)",
+    padding: "30px 24px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
+    flexWrap: "wrap",
+    textAlign: "center",
+    boxSizing: "border-box",
+  },
 
-loadingTitle: {
-margin: "0 0 10px",
-fontSize: "20px",
-},
+  footerBrand: {
+    color: "#00ffaa",
+    fontSize: "13px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
 
-loadingText: {
-margin: "0",
-color: "#777",
-fontSize: "13px",
-},
+  footerText: {
+    color: "#606a65",
+    fontSize: "11px",
+  },
+
+  footerInstagram: {
+    color: "#7a8580",
+    fontSize: "11px",
+    fontWeight: "700",
+  },
+
+  loadingPage: {
+    minHeight: "100vh",
+    background: "#050807",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px",
+    boxSizing: "border-box",
+  },
+
+  loadingCard: {
+    textAlign: "center",
+    background: "#080d0b",
+    border: "1px solid rgba(0, 255, 170, 0.1)",
+    borderRadius: "18px",
+    padding: "40px",
+    maxWidth: "360px",
+    width: "100%",
+    boxSizing: "border-box",
+  },
+
+  loadingLogo: {
+    width: "55px",
+    height: "55px",
+    margin: "0 auto 20px",
+    borderRadius: "14px",
+    background: "#00ffaa",
+    color: "#03100b",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "900",
+    fontSize: "18px",
+  },
+
+  loadingTitle: {
+    margin: "0 0 10px",
+    fontSize: "20px",
+  },
+
+  loadingText: {
+    margin: 0,
+    color: "#69736e",
+    fontSize: "13px",
+  },
 };
