@@ -58,14 +58,10 @@ export default function Cadastro() {
 
   return (
     <main style={styles.page}>
-
       <div style={styles.backgroundGlow}></div>
 
       <div style={styles.container}>
-
-        {/* MARCA */}
         <div style={styles.brandArea}>
-
           <div style={styles.logo}>
             <span>IA</span>
             <span style={styles.logoArrow}>↗</span>
@@ -78,14 +74,10 @@ export default function Cadastro() {
           <p style={styles.brandSub}>
             TRANSFORME IDEIAS EM RENDA
           </p>
-
         </div>
 
-        {/* CARD */}
         <div style={styles.card}>
-
           <div style={styles.cardHeader}>
-
             <span style={styles.badge}>
               CRIE SUA CONTA
             </span>
@@ -98,14 +90,10 @@ export default function Cadastro() {
               Crie sua conta e tenha acesso às ferramentas,
               estratégias e recursos da IA LUCRATIVA.
             </p>
-
           </div>
 
           <form onSubmit={criarConta}>
-
-            {/* NOME */}
             <div style={styles.field}>
-
               <label style={styles.label}>
                 Nome
               </label>
@@ -119,12 +107,9 @@ export default function Cadastro() {
                 disabled={carregando}
                 style={styles.input}
               />
-
             </div>
 
-            {/* E-MAIL */}
             <div style={styles.field}>
-
               <label style={styles.label}>
                 E-mail
               </label>
@@ -138,12 +123,9 @@ export default function Cadastro() {
                 disabled={carregando}
                 style={styles.input}
               />
-
             </div>
 
-            {/* SENHA */}
             <div style={styles.field}>
-
               <label style={styles.label}>
                 Senha
               </label>
@@ -157,10 +139,8 @@ export default function Cadastro() {
                 disabled={carregando}
                 style={styles.input}
               />
-
             </div>
 
-            {/* ERRO */}
             {erro && (
               <div style={styles.error}>
                 <span style={styles.errorIcon}>
@@ -173,7 +153,6 @@ export default function Cadastro() {
               </div>
             )}
 
-            {/* BOTÃO */}
             <button
               type="submit"
               disabled={carregando}
@@ -189,12 +168,9 @@ export default function Cadastro() {
                 ? "Criando conta..."
                 : "Criar minha conta →"}
             </button>
-
           </form>
 
-          {/* LOGIN */}
           <div style={styles.loginArea}>
-
             <span style={styles.loginText}>
               Já possui uma conta?
             </span>
@@ -205,14 +181,10 @@ export default function Cadastro() {
             >
               Entrar na plataforma
             </Link>
-
           </div>
-
         </div>
 
-        {/* RODAPÉ */}
         <div style={styles.footer}>
-
           <span>
             Plataforma IA LUCRATIVA
           </span>
@@ -224,11 +196,8 @@ export default function Cadastro() {
           <span>
             @ia.lucrativa1
           </span>
-
         </div>
-
       </div>
-
     </main>
   );
 }
@@ -334,4 +303,126 @@ const styles = {
     color: "#00ffaa",
     fontSize: "9px",
     fontWeight: "900",
-    letterSpacing: "1.
+    letterSpacing: "1.5px",
+    marginBottom: "12px",
+  },
+
+  title: {
+    margin: 0,
+    color: "#ffffff",
+    fontSize: "26px",
+    fontWeight: "900",
+    lineHeight: "1.2",
+  },
+
+  description: {
+    margin: "10px 0 0",
+    color: "#77817b",
+    fontSize: "12px",
+    lineHeight: "1.65",
+  },
+
+  field: {
+    marginBottom: "17px",
+  },
+
+  label: {
+    display: "block",
+    marginBottom: "8px",
+    color: "#b8c0bb",
+    fontSize: "11px",
+    fontWeight: "800",
+  },
+
+  input: {
+    width: "100%",
+    minHeight: "48px",
+    padding: "0 14px",
+    borderRadius: "10px",
+    background: "#070c0a",
+    border:
+      "1px solid rgba(255,255,255,0.08)",
+    color: "#ffffff",
+    outline: "none",
+    fontSize: "13px",
+    boxSizing: "border-box",
+  },
+
+  error: {
+    display: "flex",
+    alignItems: "center",
+    gap: "9px",
+    marginBottom: "16px",
+    padding: "12px 13px",
+    borderRadius: "10px",
+    background: "rgba(255,70,70,0.07)",
+    border:
+      "1px solid rgba(255,70,70,0.14)",
+    color: "#ff9d9d",
+    fontSize: "11px",
+    lineHeight: "1.5",
+  },
+
+  errorIcon: {
+    width: "19px",
+    height: "19px",
+    flexShrink: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "50%",
+    background: "rgba(255,70,70,0.15)",
+    fontSize: "11px",
+    fontWeight: "900",
+  },
+
+  button: {
+    width: "100%",
+    minHeight: "49px",
+    border: "none",
+    borderRadius: "11px",
+    background: "#00ffaa",
+    color: "#03100b",
+    fontSize: "12px",
+    fontWeight: "900",
+    boxShadow:
+      "0 12px 30px rgba(0,255,170,0.10)",
+  },
+
+  loginArea: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "7px",
+    marginTop: "22px",
+    paddingTop: "20px",
+    borderTop:
+      "1px solid rgba(255,255,255,0.06)",
+  },
+
+  loginText: {
+    color: "#69736d",
+    fontSize: "11px",
+  },
+
+  loginLink: {
+    color: "#00ffaa",
+    fontSize: "11px",
+    fontWeight: "800",
+    textDecoration: "none",
+  },
+
+  footer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "8px",
+    marginTop: "20px",
+    color: "#4f5954",
+    fontSize: "9px",
+  },
+
+  footerDot: {
+    color: "#00a879",
+  },
+};
