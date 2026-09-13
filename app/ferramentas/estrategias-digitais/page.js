@@ -2,168 +2,105 @@
 
 import { useState } from "react";
 
-export default function EstrategiasDigitais() {
+export default function EstrategiasDigitaisPage() {
   const [nicho, setNicho] = useState("");
   const [objetivo, setObjetivo] = useState("Criar renda");
   const [nivel, setNivel] = useState("Iniciante");
   const [resultado, setResultado] = useState("");
+  const [carregando, setCarregando] = useState(false);
   const [copiado, setCopiado] = useState(false);
+  const [erro, setErro] = useState("");
 
-  function gerarEstrategia() {
+  async function gerarEstrategia() {
     if (!nicho.trim()) {
-      setResultado("Preencha o nicho antes de gerar sua estratégia.");
+      setErro("Digite seu nicho ou área de atuação.");
       return;
     }
 
-    const estrategia = `
-ESTRATÉGIA DIGITAL IA LUCRATIVA
+    setCarregando(true);
+    setResultado("");
+    setErro("");
+    setCopiado(false);
 
-Nicho:
-${nicho}
+    const prompt = `
+Crie uma estratégia digital prática e personalizada para alguém que atua no nicho de "${nicho}".
 
-Objetivo:
-${objetivo}
+Objetivo principal: ${objetivo}
+Nível de experiência: ${nivel}
 
-Nível:
-${nivel}
+A estratégia deve ser realista para quem está começando e deve mostrar como a inteligência artificial pode ajudar.
 
-━━━━━━━━━━━━━━━━━━━━
+Organize exatamente nos seguintes tópicos:
 
-1. DEFINA SUA OPORTUNIDADE
+1. OPORTUNIDADE
+Explique qual oportunidade existe nesse nicho.
 
-Analise o nicho ${nicho} e identifique um problema específico que as pessoas enfrentam.
+2. POSICIONAMENTO
+Sugira um posicionamento claro e diferente.
 
-Procure problemas que tenham:
-• Demanda
-• Urgência
-• Possibilidade de solução
-• Pessoas dispostas a pagar
+3. PÚBLICO-ALVO
+Descreva quem pode ser atendido, sem inventar dados específicos que não foram informados.
 
-━━━━━━━━━━━━━━━━━━━━
+4. PROBLEMA
+Quais problemas esse público normalmente possui?
 
-2. ESCOLHA SUA SOLUÇÃO
+5. SOLUÇÃO
+Qual solução pode ser oferecida utilizando inteligência artificial?
 
-Crie uma solução simples utilizando inteligência artificial.
+6. MODELO DE NEGÓCIO
+Mostre formas práticas de transformar essa solução em dinheiro.
 
-Você pode começar oferecendo:
-• Serviços
-• Conteúdo
-• Consultoria
-• Automação
-• Produtos digitais
-• Soluções personalizadas
+7. OFERTA
+Crie uma oferta inicial simples e atrativa.
 
-━━━━━━━━━━━━━━━━━━━━
+8. AQUISIÇÃO DE CLIENTES
+Mostre formas orgânicas de encontrar os primeiros clientes.
 
-3. CONSTRUA SUA PRESENÇA
+9. PRIMEIRA VENDA
+Explique passo a passo como buscar a primeira venda.
 
-Crie um perfil profissional voltado para ${nicho}.
+10. FERRAMENTAS DE IA
+Sugira categorias de ferramentas de IA que podem ajudar em cada etapa.
 
-Publique conteúdos que:
-• Ensinem
-• Mostrem problemas
-• Apresentem soluções
-• Gerem autoridade
-• Mostrem resultados
+11. PLANO DE 7 DIAS
+Crie uma ação prática para cada um dos próximos 7 dias.
 
-━━━━━━━━━━━━━━━━━━━━
+12. PRÓXIMO PASSO
+Finalize indicando exatamente o que a pessoa deve fazer primeiro.
 
-4. CRIE UMA OFERTA
-
-Transforme sua solução em uma oferta clara.
-
-Sua oferta precisa responder:
-
-"Qual problema eu resolvo?"
-
-"Para quem?"
-
-"Qual resultado posso ajudar a alcançar?"
-
-"Por que a pessoa deveria escolher minha solução?"
-
-━━━━━━━━━━━━━━━━━━━━
-
-5. ATRAIA AS PRIMEIRAS PESSOAS
-
-Comece de forma orgânica.
-
-Utilize:
-• Instagram
-• WhatsApp
-• Grupos
-• Networking
-• Google
-• Indicações
-• Conteúdo estratégico
-
-━━━━━━━━━━━━━━━━━━━━
-
-6. FAÇA SUA PRIMEIRA VENDA
-
-Entre em contato com potenciais clientes de forma personalizada.
-
-Evite apenas enviar uma oferta.
-
-Primeiro:
-1. Entenda o problema.
-2. Mostre que identificou a necessidade.
-3. Apresente sua solução.
-4. Explique o benefício.
-5. Faça uma chamada para ação.
-
-━━━━━━━━━━━━━━━━━━━━
-
-7. ESCALABILIDADE
-
-Depois de validar a primeira solução, transforme o processo em algo repetível.
-
-Você pode:
-• Automatizar tarefas
-• Criar produtos digitais
-• Aumentar o número de clientes
-• Criar novos serviços
-• Construir uma audiência
-• Criar uma operação com IA
-
-━━━━━━━━━━━━━━━━━━━━
-
-PLANO DE AÇÃO — 7 DIAS
-
-DIA 1
-Escolha um problema específico dentro de ${nicho}.
-
-DIA 2
-Pesquise o público e seus principais problemas.
-
-DIA 3
-Crie uma solução inicial usando IA.
-
-DIA 4
-Monte seu posicionamento e oferta.
-
-DIA 5
-Publique conteúdos relacionados ao problema.
-
-DIA 6
-Entre em contato com potenciais clientes.
-
-DIA 7
-Analise os resultados e melhore sua estratégia.
-
-━━━━━━━━━━━━━━━━━━━━
-
-PRÓXIMO PASSO
-
-Não tente construir tudo de uma vez.
-
-Comece com um problema, uma solução e uma oferta.
-
-A execução consistente é o que transforma uma oportunidade em resultado.
+Seja direto, profissional e acionável.
+Evite respostas genéricas.
+Dê exemplos quando forem úteis.
 `;
 
-    setResultado(estrategia.trim());
-    setCopiado(false);
+    try {
+      const response = await fetch("/api/ia", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.sucesso) {
+        throw new Error(
+          data?.erro || "Não foi possível gerar a estratégia."
+        );
+      }
+
+      setResultado(data.resultado);
+    } catch (error) {
+      setErro(
+        error.message ||
+          "Ocorreu um erro ao gerar sua estratégia."
+      );
+    } finally {
+      setCarregando(false);
+    }
   }
 
   async function copiarResultado() {
@@ -177,7 +114,7 @@ A execução consistente é o que transforma uma oportunidade em resultado.
         setCopiado(false);
       }, 2000);
     } catch {
-      setCopiado(false);
+      setErro("Não foi possível copiar o resultado.");
     }
   }
 
@@ -186,129 +123,182 @@ A execução consistente é o que transforma uma oportunidade em resultado.
     setObjetivo("Criar renda");
     setNivel("Iniciante");
     setResultado("");
+    setErro("");
     setCopiado(false);
   }
 
   return (
     <main style={styles.page}>
-      <div style={styles.container}>
+      <header style={styles.header}>
+        <div>
+          <div style={styles.brand}>IA LUCRATIVA</div>
+          <div style={styles.subtitle}>Estratégias Digitais</div>
+        </div>
 
-        <a href="/dashboard" style={styles.back}>
-          ← Voltar para o Dashboard
+        <a href="/dashboard" style={styles.backButton}>
+          Dashboard
         </a>
+      </header>
 
-        <section style={styles.header}>
-          <div style={styles.icon}>🚀</div>
+      <section style={styles.container}>
+        <div style={styles.hero}>
+          <span style={styles.badge}>IA LUCRATIVA • ESTRATÉGIA</span>
 
           <h1 style={styles.title}>
-            Estratégias Digitais
+            Crie sua estratégia
+            <br />
+            <span style={styles.highlight}>digital com IA.</span>
           </h1>
 
-          <p style={styles.subtitle}>
-            Crie um plano estratégico para transformar seu conhecimento,
-            habilidades e inteligência artificial em oportunidades digitais.
+          <p style={styles.description}>
+            Descubra oportunidades, monte uma oferta e tenha um
+            plano prático para começar a transformar seu nicho em
+            uma oportunidade digital.
           </p>
-        </section>
+        </div>
 
         <section style={styles.card}>
+          <div style={styles.cardHeader}>
+            <h2 style={styles.cardTitle}>Configure sua estratégia</h2>
 
-          <label style={styles.label}>
-            Qual é o seu nicho?
-          </label>
+            <p style={styles.cardDescription}>
+              Quanto mais contexto você fornecer, mais personalizada
+              será a estratégia.
+            </p>
+          </div>
 
-          <input
-            style={styles.input}
-            value={nicho}
-            onChange={(e) => setNicho(e.target.value)}
-            placeholder="Ex: Design gráfico, marketing, fitness..."
-          />
+          <div style={styles.formGrid}>
+            <div style={styles.field}>
+              <label style={styles.label}>
+                Nicho ou área de atuação
+              </label>
 
-          <label style={styles.label}>
-            Qual é o seu objetivo?
-          </label>
+              <input
+                type="text"
+                value={nicho}
+                onChange={(event) => setNicho(event.target.value)}
+                placeholder="Ex.: Design gráfico, estética, marketing..."
+                style={styles.input}
+              />
+            </div>
 
-          <select
-            style={styles.input}
-            value={objetivo}
-            onChange={(e) => setObjetivo(e.target.value)}
-          >
-            <option>Criar renda</option>
-            <option>Criar um negócio</option>
-            <option>Conseguir clientes</option>
-            <option>Vender produtos digitais</option>
-            <option>Prestar serviços</option>
-            <option>Aumentar vendas</option>
-          </select>
+            <div style={styles.field}>
+              <label style={styles.label}>Objetivo principal</label>
 
-          <label style={styles.label}>
-            Qual é o seu nível?
-          </label>
+              <select
+                value={objetivo}
+                onChange={(event) => setObjetivo(event.target.value)}
+                style={styles.input}
+              >
+                <option>Criar renda</option>
+                <option>Criar um negócio</option>
+                <option>Conseguir clientes</option>
+                <option>Vender produtos digitais</option>
+                <option>Prestar serviços</option>
+                <option>Aumentar vendas</option>
+              </select>
+            </div>
 
-          <select
-            style={styles.input}
-            value={nivel}
-            onChange={(e) => setNivel(e.target.value)}
-          >
-            <option>Iniciante</option>
-            <option>Intermediário</option>
-            <option>Avançado</option>
-          </select>
+            <div style={styles.field}>
+              <label style={styles.label}>Seu nível</label>
+
+              <select
+                value={nivel}
+                onChange={(event) => setNivel(event.target.value)}
+                style={styles.input}
+              >
+                <option>Iniciante</option>
+                <option>Intermediário</option>
+                <option>Avançado</option>
+              </select>
+            </div>
+          </div>
+
+          {erro && (
+            <div style={styles.error}>
+              {erro}
+            </div>
+          )}
 
           <button
-            style={styles.button}
             onClick={gerarEstrategia}
+            disabled={carregando}
+            style={{
+              ...styles.generateButton,
+              opacity: carregando ? 0.7 : 1,
+            }}
           >
-            🚀 Gerar Estratégia
+            {carregando
+              ? "Criando sua estratégia..."
+              : "🚀 Gerar Estratégia com IA"}
           </button>
-
-          <button
-            style={styles.clearButton}
-            onClick={limpar}
-          >
-            Limpar
-          </button>
-
         </section>
 
         {resultado && (
           <section style={styles.resultCard}>
-
             <div style={styles.resultHeader}>
-              <h2 style={styles.resultTitle}>
-                Sua estratégia
-              </h2>
+              <div>
+                <span style={styles.resultBadge}>
+                  ESTRATÉGIA GERADA
+                </span>
+
+                <h2 style={styles.resultTitle}>
+                  Sua estratégia digital
+                </h2>
+              </div>
 
               <button
-                style={styles.copyButton}
                 onClick={copiarResultado}
+                style={styles.copyButton}
               >
-                {copiado ? "✓ Copiado" : "Copiar"}
+                {copiado ? "✓ Copiado" : "📋 Copiar"}
               </button>
             </div>
 
-            <pre style={styles.result}>
+            <div style={styles.resultContent}>
               {resultado}
-            </pre>
+            </div>
 
+            <div style={styles.resultActions}>
+              <button
+                onClick={gerarEstrategia}
+                disabled={carregando}
+                style={styles.secondaryButton}
+              >
+                🔄 Gerar novamente
+              </button>
+
+              <button
+                onClick={limpar}
+                style={styles.secondaryButton}
+              >
+                Limpar
+              </button>
+            </div>
           </section>
         )}
 
-        <section style={styles.tip}>
-          <strong>💡 Dica IA LUCRATIVA</strong>
+        <section style={styles.tipCard}>
+          <div style={styles.tipIcon}>💡</div>
 
-          <p style={styles.tipText}>
-            Estratégia não significa fazer tudo. Significa saber qual é o
-            próximo passo mais importante e executá-lo com consistência.
-          </p>
+          <div>
+            <h3 style={styles.tipTitle}>
+              Estratégia sem execução não gera resultado.
+            </h3>
+
+            <p style={styles.tipText}>
+              Use o plano de 7 dias gerado pela IA LUCRATIVA e
+              transforme cada etapa em uma ação concreta.
+            </p>
+          </div>
         </section>
+      </section>
 
-        <footer style={styles.footer}>
-          IA LUCRATIVA • Transforme IA em oportunidades.
-          <br />
-          @ia.lucrativa1
-        </footer>
-
-      </div>
+      <footer style={styles.footer}>
+        <strong>IA LUCRATIVA</strong>
+        <span>Transforme inteligência artificial em oportunidades.</span>
+        <span>@ia.lucrativa1</span>
+      </footer>
     </main>
   );
 }
@@ -318,156 +308,267 @@ const styles = {
     minHeight: "100vh",
     background: "#050505",
     color: "#ffffff",
-    padding: "30px 20px",
-    fontFamily: "Arial, sans-serif",
-  },
-
-  container: {
-    maxWidth: "900px",
-    margin: "0 auto",
-  },
-
-  back: {
-    color: "#aaa",
-    textDecoration: "none",
-    fontSize: "14px",
+    fontFamily:
+      "Arial, Helvetica, sans-serif",
   },
 
   header: {
-    textAlign: "center",
-    marginTop: "45px",
-    marginBottom: "35px",
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "22px 24px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "20px",
+    boxSizing: "border-box",
+    borderBottom: "1px solid #1b1b1b",
   },
 
-  icon: {
-    fontSize: "42px",
-    marginBottom: "15px",
-  },
-
-  title: {
-    fontSize: "38px",
-    margin: "0 0 12px",
+  brand: {
+    fontSize: "20px",
+    fontWeight: "900",
+    letterSpacing: "1px",
   },
 
   subtitle: {
-    color: "#aaa",
-    fontSize: "16px",
-    lineHeight: "1.6",
+    marginTop: "4px",
+    color: "#8c8c8c",
+    fontSize: "13px",
+  },
+
+  backButton: {
+    textDecoration: "none",
+    color: "#ffffff",
+    border: "1px solid #333333",
+    borderRadius: "10px",
+    padding: "10px 16px",
+    fontSize: "14px",
+    fontWeight: "700",
+  },
+
+  container: {
+    width: "100%",
+    maxWidth: "1000px",
+    margin: "0 auto",
+    padding: "70px 24px",
+    boxSizing: "border-box",
+  },
+
+  hero: {
+    textAlign: "center",
+    marginBottom: "45px",
+  },
+
+  badge: {
+    display: "inline-block",
+    padding: "8px 14px",
+    border: "1px solid #303030",
+    borderRadius: "999px",
+    color: "#bdbdbd",
+    fontSize: "11px",
+    fontWeight: "800",
+    letterSpacing: "1px",
+  },
+
+  title: {
+    margin: "20px 0 15px",
+    fontSize: "clamp(38px, 7vw, 68px)",
+    lineHeight: "1.02",
+    letterSpacing: "-2px",
+  },
+
+  highlight: {
+    color: "#9b9b9b",
+  },
+
+  description: {
     maxWidth: "680px",
     margin: "0 auto",
+    color: "#9b9b9b",
+    fontSize: "17px",
+    lineHeight: "1.7",
   },
 
   card: {
-    background: "#101010",
-    border: "1px solid #242424",
-    borderRadius: "18px",
-    padding: "25px",
+    background: "#0d0d0d",
+    border: "1px solid #202020",
+    borderRadius: "20px",
+    padding: "28px",
+  },
+
+  cardHeader: {
     marginBottom: "25px",
   },
 
+  cardTitle: {
+    margin: "0 0 8px",
+    fontSize: "24px",
+  },
+
+  cardDescription: {
+    margin: 0,
+    color: "#858585",
+    lineHeight: "1.6",
+  },
+
+  formGrid: {
+    display: "grid",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "18px",
+  },
+
+  field: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+  },
+
   label: {
-    display: "block",
-    fontSize: "14px",
-    fontWeight: "bold",
-    marginBottom: "8px",
-    marginTop: "18px",
+    color: "#cfcfcf",
+    fontSize: "13px",
+    fontWeight: "700",
   },
 
   input: {
     width: "100%",
     boxSizing: "border-box",
-    padding: "14px",
-    borderRadius: "10px",
-    border: "1px solid #333",
     background: "#080808",
-    color: "#fff",
+    color: "#ffffff",
+    border: "1px solid #292929",
+    borderRadius: "11px",
+    padding: "14px",
     fontSize: "15px",
     outline: "none",
   },
 
-  button: {
-    width: "100%",
-    marginTop: "25px",
-    padding: "15px",
-    border: "none",
+  error: {
+    marginTop: "18px",
+    padding: "13px 15px",
     borderRadius: "10px",
-    background: "#ffffff",
-    color: "#000000",
-    fontWeight: "bold",
-    fontSize: "16px",
-    cursor: "pointer",
+    background: "#241010",
+    border: "1px solid #4a1c1c",
+    color: "#ffb5b5",
+    fontSize: "14px",
   },
 
-  clearButton: {
+  generateButton: {
     width: "100%",
-    marginTop: "10px",
-    padding: "12px",
-    border: "1px solid #333",
-    borderRadius: "10px",
-    background: "transparent",
-    color: "#aaa",
-    fontWeight: "bold",
+    marginTop: "22px",
+    padding: "16px",
+    border: "none",
+    borderRadius: "12px",
+    background: "#ffffff",
+    color: "#050505",
+    fontSize: "15px",
+    fontWeight: "900",
     cursor: "pointer",
   },
 
   resultCard: {
-    background: "#101010",
-    border: "1px solid #242424",
-    borderRadius: "18px",
-    padding: "25px",
-    marginBottom: "25px",
+    marginTop: "28px",
+    background: "#0d0d0d",
+    border: "1px solid #252525",
+    borderRadius: "20px",
+    padding: "28px",
   },
 
   resultHeader: {
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
-    gap: "15px",
-    marginBottom: "20px",
+    justifyContent: "space-between",
+    gap: "20px",
+    flexWrap: "wrap",
+    paddingBottom: "20px",
+    borderBottom: "1px solid #222222",
+  },
+
+  resultBadge: {
+    fontSize: "11px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+    color: "#8e8e8e",
   },
 
   resultTitle: {
-    margin: 0,
-    fontSize: "21px",
+    margin: "7px 0 0",
+    fontSize: "25px",
   },
 
   copyButton: {
-    padding: "10px 16px",
-    borderRadius: "8px",
-    border: "1px solid #333",
-    background: "#181818",
-    color: "#fff",
+    background: "#ffffff",
+    color: "#050505",
+    border: "none",
+    borderRadius: "10px",
+    padding: "11px 16px",
+    fontWeight: "800",
     cursor: "pointer",
   },
 
-  result: {
+  resultContent: {
+    marginTop: "24px",
     whiteSpace: "pre-wrap",
-    fontFamily: "Arial, sans-serif",
-    color: "#ddd",
-    lineHeight: "1.7",
-    fontSize: "14px",
-    margin: 0,
+    color: "#dddddd",
+    fontSize: "15px",
+    lineHeight: "1.8",
+    overflowWrap: "anywhere",
   },
 
-  tip: {
-    background: "#0d0d0d",
-    border: "1px solid #222",
-    borderRadius: "14px",
-    padding: "20px",
-    marginBottom: "35px",
+  resultActions: {
+    display: "flex",
+    gap: "10px",
+    flexWrap: "wrap",
+    marginTop: "25px",
+  },
+
+  secondaryButton: {
+    background: "#151515",
+    color: "#ffffff",
+    border: "1px solid #303030",
+    borderRadius: "10px",
+    padding: "11px 16px",
+    fontWeight: "700",
+    cursor: "pointer",
+  },
+
+  tipCard: {
+    marginTop: "25px",
+    padding: "22px",
+    background: "#0a0a0a",
+    border: "1px solid #1d1d1d",
+    borderRadius: "16px",
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "15px",
+  },
+
+  tipIcon: {
+    fontSize: "24px",
+  },
+
+  tipTitle: {
+    margin: "0 0 7px",
+    fontSize: "16px",
   },
 
   tipText: {
-    color: "#aaa",
+    margin: 0,
+    color: "#858585",
+    fontSize: "14px",
     lineHeight: "1.6",
-    marginBottom: 0,
   },
 
   footer: {
-    textAlign: "center",
-    color: "#666",
+    borderTop: "1px solid #1b1b1b",
+    padding: "25px 24px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
+    flexWrap: "wrap",
+    color: "#777777",
     fontSize: "13px",
-    lineHeight: "1.8",
-    paddingBottom: "30px",
+    textAlign: "center",
   },
 };
