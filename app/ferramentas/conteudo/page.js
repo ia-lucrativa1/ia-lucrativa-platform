@@ -110,6 +110,7 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
 
     try {
       await navigator.clipboard.writeText(resultado);
+
       setCopiado(true);
 
       setTimeout(() => {
@@ -149,27 +150,20 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
 
   return (
     <main style={styles.page}>
-      <header style={styles.header}>
-        <div>
-          <div style={styles.logo}>IA LUCRATIVA</div>
-          <div style={styles.subtitle}>
-            Gerador de Conteúdo com IA
-          </div>
-        </div>
-
-        <a href="/dashboard" style={styles.backButton}>
-          Dashboard
-        </a>
-      </header>
-
       <section style={styles.container}>
+
+        {/* HERO */}
         <div style={styles.hero}>
-          <div style={styles.badge}>🤖 IA AUTOMÁTICA</div>
+          <div style={styles.badge}>
+            🤖 IA AUTOMÁTICA
+          </div>
 
           <h1 style={styles.title}>
             Crie conteúdos
             <br />
-            <span style={styles.highlight}>em segundos.</span>
+            <span style={styles.highlight}>
+              em segundos.
+            </span>
           </h1>
 
           <p style={styles.description}>
@@ -178,8 +172,31 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
           </p>
         </div>
 
+        {/* FORMULÁRIO */}
         <section style={styles.card}>
-          <label style={styles.label}>Seu nicho</label>
+          <div style={styles.cardHeader}>
+            <div>
+              <div style={styles.cardBadge}>
+                FERRAMENTA DE IA
+              </div>
+
+              <h2 style={styles.cardTitle}>
+                Gerador de Conteúdo
+              </h2>
+
+              <p style={styles.cardDescription}>
+                Crie conteúdos estratégicos personalizados para o seu nicho.
+              </p>
+            </div>
+
+            <div style={styles.cardIcon}>
+              ✨
+            </div>
+          </div>
+
+          <label style={styles.label}>
+            Seu nicho
+          </label>
 
           <input
             type="text"
@@ -189,7 +206,9 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
             style={styles.input}
           />
 
-          <label style={styles.label}>Tema do conteúdo</label>
+          <label style={styles.label}>
+            Tema do conteúdo
+          </label>
 
           <input
             type="text"
@@ -199,7 +218,9 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
             style={styles.input}
           />
 
-          <label style={styles.label}>Objetivo</label>
+          <label style={styles.label}>
+            Objetivo
+          </label>
 
           <select
             value={objetivo}
@@ -213,21 +234,32 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
             <option>Conseguir seguidores</option>
           </select>
 
-          {erro && <div style={styles.error}>{erro}</div>}
+          {erro && (
+            <div style={styles.error}>
+              {erro}
+            </div>
+          )}
 
           <div style={styles.actions}>
             <button
+              type="button"
               onClick={gerarConteudo}
               disabled={carregando}
               style={{
                 ...styles.generateButton,
                 opacity: carregando ? 0.7 : 1,
+                cursor: carregando
+                  ? "not-allowed"
+                  : "pointer",
               }}
             >
-              {carregando ? "Gerando..." : "✨ Gerar conteúdo"}
+              {carregando
+                ? "⏳ Gerando conteúdo..."
+                : "✨ Gerar conteúdo"}
             </button>
 
             <button
+              type="button"
               onClick={limpar}
               style={styles.clearButton}
             >
@@ -236,6 +268,7 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
           </div>
         </section>
 
+        {/* RESULTADO */}
         {resultado && (
           <section style={styles.resultCard}>
             <div style={styles.resultHeader}>
@@ -247,13 +280,20 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
                 <h2 style={styles.resultTitle}>
                   Seu conteúdo está pronto
                 </h2>
+
+                <p style={styles.resultDescription}>
+                  Revise, copie e utilize o conteúdo criado pela IA.
+                </p>
               </div>
 
               <button
+                type="button"
                 onClick={copiarResultado}
                 style={styles.copyButton}
               >
-                {copiado ? "✓ Copiado" : "📋 Copiar"}
+                {copiado
+                  ? "✓ Copiado"
+                  : "📋 Copiar conteúdo"}
               </button>
             </div>
 
@@ -263,8 +303,11 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
           </section>
         )}
 
+        {/* DICA */}
         <section style={styles.tipCard}>
-          <div style={styles.tipIcon}>💡</div>
+          <div style={styles.tipIcon}>
+            💡
+          </div>
 
           <div>
             <strong style={styles.tipTitle}>
@@ -277,15 +320,8 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
             </p>
           </div>
         </section>
-      </section>
 
-      <footer style={styles.footer}>
-        <strong>IA LUCRATIVA</strong>
-        <span>
-          Transformando inteligência artificial em oportunidades.
-        </span>
-        <span>@ia.lucrativa1</span>
-      </footer>
+      </section>
     </main>
   );
 }
@@ -293,7 +329,7 @@ Não explique o processo de criação. Entregue diretamente o conteúdo pronto.
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "#050505",
+    background: "transparent",
     color: "#ffffff",
     fontFamily: "Arial, sans-serif",
   },
@@ -338,67 +374,41 @@ const styles = {
     fontSize: "14px",
   },
 
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "20px 6%",
-    borderBottom: "1px solid #222222",
-    gap: "20px",
-  },
-
-  logo: {
-    fontSize: "20px",
-    fontWeight: "900",
-    letterSpacing: "1px",
-  },
-
-  subtitle: {
-    color: "#888888",
-    fontSize: "12px",
-    marginTop: "5px",
-  },
-
-  backButton: {
-    color: "#ffffff",
-    textDecoration: "none",
-    border: "1px solid #333333",
-    borderRadius: "10px",
-    padding: "10px 15px",
-    fontSize: "13px",
-  },
-
   container: {
-    width: "min(920px, 90%)",
+    width: "min(920px, 100%)",
     margin: "0 auto",
-    padding: "70px 0",
+    padding: "45px 20px 60px",
+    boxSizing: "border-box",
   },
 
   hero: {
     textAlign: "center",
-    marginBottom: "45px",
+    marginBottom: "40px",
   },
 
   badge: {
     display: "inline-block",
-    border: "1px solid #333333",
+    border: "1px solid #26352f",
+    background: "#07100c",
     borderRadius: "30px",
     padding: "8px 14px",
     fontSize: "11px",
     letterSpacing: "1px",
-    color: "#cccccc",
+    color: "#00ffaa",
     marginBottom: "20px",
+    fontWeight: "800",
   },
 
   title: {
-    fontSize: "clamp(38px, 7vw, 70px)",
+    fontSize: "clamp(38px, 7vw, 68px)",
     lineHeight: "1.05",
-    margin: "0",
+    margin: 0,
     fontWeight: "900",
+    letterSpacing: "-2px",
   },
 
   highlight: {
-    color: "#888888",
+    color: "#00ffaa",
   },
 
   description: {
@@ -414,6 +424,50 @@ const styles = {
     border: "1px solid #242424",
     borderRadius: "20px",
     padding: "30px",
+    boxSizing: "border-box",
+    boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+  },
+
+  cardHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: "20px",
+    marginBottom: "30px",
+  },
+
+  cardBadge: {
+    color: "#00ffaa",
+    fontSize: "10px",
+    letterSpacing: "1.5px",
+    fontWeight: "900",
+    marginBottom: "7px",
+  },
+
+  cardTitle: {
+    margin: 0,
+    fontSize: "24px",
+    fontWeight: "800",
+  },
+
+  cardDescription: {
+    margin: "8px 0 0",
+    color: "#777777",
+    fontSize: "13px",
+    lineHeight: "1.5",
+  },
+
+  cardIcon: {
+    width: "48px",
+    height: "48px",
+    borderRadius: "14px",
+    background: "#07100c",
+    border: "1px solid #17352a",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "20px",
+    flexShrink: 0,
   },
 
   label: {
@@ -441,18 +495,18 @@ const styles = {
     display: "flex",
     gap: "12px",
     flexWrap: "wrap",
+    marginTop: "5px",
   },
 
   generateButton: {
     flex: "1",
-    minWidth: "200px",
+    minWidth: "210px",
     border: "none",
     borderRadius: "10px",
     padding: "15px 20px",
-    background: "#ffffff",
+    background: "#00ffaa",
     color: "#000000",
-    fontWeight: "800",
-    cursor: "pointer",
+    fontWeight: "900",
     fontSize: "14px",
   },
 
@@ -474,6 +528,7 @@ const styles = {
     padding: "12px",
     marginBottom: "20px",
     fontSize: "13px",
+    lineHeight: "1.5",
   },
 
   resultCard: {
@@ -482,6 +537,7 @@ const styles = {
     border: "1px solid #242424",
     borderRadius: "20px",
     padding: "30px",
+    boxSizing: "border-box",
   },
 
   resultHeader: {
@@ -494,10 +550,10 @@ const styles = {
   },
 
   resultBadge: {
-    color: "#888888",
-    fontSize: "11px",
-    letterSpacing: "1px",
-    fontWeight: "800",
+    color: "#00ffaa",
+    fontSize: "10px",
+    letterSpacing: "1.5px",
+    fontWeight: "900",
   },
 
   resultTitle: {
@@ -505,13 +561,20 @@ const styles = {
     fontSize: "22px",
   },
 
+  resultDescription: {
+    margin: "7px 0 0",
+    color: "#777777",
+    fontSize: "13px",
+  },
+
   copyButton: {
-    border: "1px solid #333333",
-    background: "#151515",
-    color: "#ffffff",
+    border: "1px solid #1d4436",
+    background: "#07100c",
+    color: "#00ffaa",
     borderRadius: "10px",
     padding: "11px 15px",
     cursor: "pointer",
+    fontWeight: "800",
   },
 
   result: {
@@ -523,6 +586,8 @@ const styles = {
     color: "#dddddd",
     lineHeight: "1.7",
     fontSize: "14px",
+    boxSizing: "border-box",
+    overflowWrap: "break-word",
   },
 
   tipCard: {
@@ -534,34 +599,24 @@ const styles = {
     border: "1px solid #222222",
     borderRadius: "15px",
     background: "#090909",
+    boxSizing: "border-box",
   },
 
   tipIcon: {
     fontSize: "22px",
+    flexShrink: 0,
   },
 
   tipTitle: {
     display: "block",
     marginBottom: "5px",
+    color: "#ffffff",
   },
 
   tipText: {
-    margin: "0",
+    margin: 0,
     color: "#888888",
     fontSize: "13px",
     lineHeight: "1.6",
-  },
-
-  footer: {
-    borderTop: "1px solid #222222",
-    padding: "30px 6%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "15px",
-    flexWrap: "wrap",
-    color: "#777777",
-    fontSize: "12px",
-    textAlign: "center",
   },
 };
