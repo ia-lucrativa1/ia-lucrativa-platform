@@ -76,20 +76,19 @@ ${objetivo}
 
 REGRAS:
 
-Use português do Brasil.
+- Use português do Brasil.
+- Evite conteúdo genérico.
+- Crie textos claros, profissionais e fáceis de entender.
+- Não invente resultados garantidos.
+- Utilize ganchos fortes e naturais.
+- O conteúdo deve entregar valor real.
+- Seja específico para o nicho e tema informados.
+- Não invente informações sobre o negócio.
+- O resultado deve ser prático e pronto para utilização.
 
-Evite conteúdo genérico.
-
-Crie textos claros, profissionais e fáceis de entender.
-
-Não invente resultados garantidos.
-
-Utilize ganchos fortes e naturais.
-
-O conteúdo deve entregar valor real.
-
-${formato === "Carrossel"
-  ? `
+${
+  formato === "Carrossel"
+    ? `
 Crie um carrossel com exatamente 7 slides.
 
 Estruture assim:
@@ -115,7 +114,7 @@ Entregue uma informação, estratégia ou reflexão de valor.
 SLIDE 7 — CTA
 Crie uma chamada para ação relacionada ao objetivo do conteúdo.
 `
-  : `
+    : `
 Crie o conteúdo completo do post no formato escolhido.
 
 Organize o texto de forma profissional e pronta para publicação.
@@ -202,7 +201,9 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
     return (
       <main style={styles.loadingPage}>
         <div style={styles.loadingBox}>
-          <div style={styles.loadingLogo}>IA LUCRATIVA</div>
+          <div style={styles.loadingLogo}>
+            IA LUCRATIVA
+          </div>
 
           <div style={styles.loadingText}>
             Verificando acesso...
@@ -214,24 +215,9 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
 
   return (
     <main style={styles.page}>
-      <header style={styles.header}>
-        <div>
-          <div style={styles.logo}>IA LUCRATIVA</div>
-
-          <div style={styles.subtitle}>
-            Gerador de Posts com IA
-          </div>
-        </div>
-
-        <button
-          onClick={() => router.push("/dashboard")}
-          style={styles.backButton}
-        >
-          ← Dashboard
-        </button>
-      </header>
-
       <section style={styles.container}>
+
+        {/* HERO */}
         <div style={styles.hero}>
           <div style={styles.badge}>
             📱 IA AUTOMÁTICA
@@ -251,9 +237,23 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
           </p>
         </div>
 
-        <div style={styles.card}>
-          <div style={styles.sectionTitle}>
-            Configure seu conteúdo
+        {/* FORMULÁRIO */}
+        <section style={styles.card}>
+          <div style={styles.cardHeader}>
+            <div>
+              <span style={styles.cardLabel}>
+                GERADOR DE POSTS
+              </span>
+
+              <h2 style={styles.cardTitle}>
+                Configure seu conteúdo
+              </h2>
+
+              <p style={styles.cardDescription}>
+                Informe o nicho, tema, formato e objetivo
+                para criar um conteúdo estratégico.
+              </p>
+            </div>
           </div>
 
           <label style={styles.label}>
@@ -264,7 +264,9 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
             type="text"
             placeholder="Ex: Marketing digital"
             value={nicho}
-            onChange={(e) => setNicho(e.target.value)}
+            onChange={(event) =>
+              setNicho(event.target.value)
+            }
             style={styles.input}
           />
 
@@ -276,7 +278,9 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
             type="text"
             placeholder="Ex: Como conseguir os primeiros clientes"
             value={tema}
-            onChange={(e) => setTema(e.target.value)}
+            onChange={(event) =>
+              setTema(event.target.value)
+            }
             style={styles.input}
           />
 
@@ -286,7 +290,9 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
 
           <select
             value={formato}
-            onChange={(e) => setFormato(e.target.value)}
+            onChange={(event) =>
+              setFormato(event.target.value)
+            }
             style={styles.input}
           >
             <option value="Carrossel">
@@ -308,7 +314,9 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
 
           <select
             value={objetivo}
-            onChange={(e) => setObjetivo(e.target.value)}
+            onChange={(event) =>
+              setObjetivo(event.target.value)
+            }
             style={styles.input}
           >
             <option value="Gerar engajamento">
@@ -338,27 +346,43 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
             </div>
           )}
 
-          <button
-            onClick={gerarPost}
-            disabled={carregando}
-            style={{
-              ...styles.generateButton,
-              opacity: carregando ? 0.7 : 1,
-            }}
-          >
-            {carregando
-              ? "🤖 Criando conteúdo..."
-              : "✨ Gerar conteúdo"}
-          </button>
-        </div>
+          <div style={styles.actions}>
+            <button
+              type="button"
+              onClick={gerarPost}
+              disabled={carregando}
+              style={{
+                ...styles.generateButton,
+                opacity: carregando ? 0.7 : 1,
+              }}
+            >
+              {carregando
+                ? "🤖 Criando conteúdo..."
+                : "✨ Gerar conteúdo"}
+            </button>
 
+            <button
+              type="button"
+              onClick={limpar}
+              style={styles.clearButton}
+            >
+              Limpar
+            </button>
+          </div>
+        </section>
+
+        {/* RESULTADO */}
         {resultado && (
-          <div style={styles.resultCard}>
+          <section style={styles.resultCard}>
             <div style={styles.resultHeader}>
               <div>
-                <div style={styles.resultTitle}>
-                  Conteúdo gerado
+                <div style={styles.resultBadge}>
+                  RESULTADO DA IA
                 </div>
+
+                <h2 style={styles.resultTitle}>
+                  Conteúdo gerado
+                </h2>
 
                 <div style={styles.resultSubtitle}>
                   Criado pela IA LUCRATIVA
@@ -366,10 +390,13 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
               </div>
 
               <button
+                type="button"
                 onClick={copiarResultado}
                 style={styles.copyButton}
               >
-                {copiado ? "✓ Copiado" : "📋 Copiar"}
+                {copiado
+                  ? "✓ Copiado"
+                  : "📋 Copiar"}
               </button>
             </div>
 
@@ -378,16 +405,20 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
             </div>
 
             <button
+              type="button"
               onClick={limpar}
-              style={styles.clearButton}
+              style={styles.clearResultButton}
             >
               🧹 Limpar conteúdo
             </button>
-          </div>
+          </section>
         )}
 
-        <div style={styles.tip}>
-          <div style={styles.tipIcon}>💡</div>
+        {/* DICA */}
+        <section style={styles.tip}>
+          <div style={styles.tipIcon}>
+            💡
+          </div>
 
           <div>
             <strong style={styles.tipTitle}>
@@ -400,7 +431,8 @@ O resultado deve parecer criado por um profissional de marketing digital e socia
               gerado pela inteligência artificial.
             </p>
           </div>
-        </div>
+        </section>
+
       </section>
     </main>
   );
@@ -425,6 +457,7 @@ const styles = {
     fontSize: "22px",
     fontWeight: "900",
     letterSpacing: "1px",
+    color: "#ffffff",
   },
 
   loadingText: {
@@ -435,50 +468,17 @@ const styles = {
 
   page: {
     minHeight: "100vh",
-    background:
-      "radial-gradient(circle at top, #151515 0%, #070707 45%, #030303 100%)",
+    background: "transparent",
     color: "#ffffff",
     fontFamily: "Arial, sans-serif",
     paddingBottom: "60px",
   },
 
-  header: {
-    width: "100%",
-    boxSizing: "border-box",
-    padding: "24px 7%",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderBottom: "1px solid #1d1d1d",
-  },
-
-  logo: {
-    fontSize: "20px",
-    fontWeight: "900",
-    letterSpacing: "1.5px",
-  },
-
-  subtitle: {
-    marginTop: "5px",
-    color: "#8d8d8d",
-    fontSize: "13px",
-  },
-
-  backButton: {
-    background: "#111111",
-    color: "#ffffff",
-    border: "1px solid #2a2a2a",
-    borderRadius: "10px",
-    padding: "11px 16px",
-    cursor: "pointer",
-    fontWeight: "700",
-  },
-
   container: {
-    width: "90%",
-    maxWidth: "900px",
+    width: "min(900px, 100%)",
     margin: "0 auto",
-    paddingTop: "50px",
+    padding: "20px 0 40px",
+    boxSizing: "border-box",
   },
 
   hero: {
@@ -488,69 +488,122 @@ const styles = {
 
   badge: {
     display: "inline-block",
-    padding: "8px 13px",
+    padding: "8px 14px",
     borderRadius: "30px",
-    background: "#111111",
-    border: "1px solid #292929",
-    color: "#bdbdbd",
-    fontSize: "12px",
-    fontWeight: "800",
+    background: "rgba(0, 255, 170, 0.05)",
+    border: "1px solid rgba(0, 255, 170, 0.35)",
+    color: "#00ffaa",
+    fontSize: "11px",
+    fontWeight: "900",
     letterSpacing: "1px",
-    marginBottom: "18px",
+    marginBottom: "20px",
   },
 
   title: {
-    fontSize: "42px",
-    lineHeight: "1.1",
+    fontSize: "clamp(38px, 7vw, 64px)",
+    lineHeight: "1.05",
     margin: "0",
     fontWeight: "900",
+    letterSpacing: "-1.5px",
   },
 
   highlight: {
-    color: "#8d8d8d",
+    color: "#00ffaa",
   },
 
   description: {
     color: "#999999",
-    fontSize: "16px",
-    lineHeight: "1.6",
+    fontSize: "15px",
+    lineHeight: "1.7",
     maxWidth: "650px",
-    margin: "18px auto 0",
+    margin: "20px auto 0",
   },
 
   card: {
-    background: "#0c0c0c",
-    border: "1px solid #202020",
-    borderRadius: "18px",
-    padding: "28px",
-    boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
+    background: "#0d0d0d",
+    border: "1px solid #242424",
+    borderRadius: "20px",
+    padding: "30px",
+    boxSizing: "border-box",
+    boxShadow: "0 15px 50px rgba(0, 0, 0, 0.2)",
   },
 
-  sectionTitle: {
-    fontSize: "20px",
+  cardHeader: {
+    marginBottom: "28px",
+    paddingBottom: "22px",
+    borderBottom: "1px solid #222222",
+  },
+
+  cardLabel: {
+    color: "#00ffaa",
+    fontSize: "10px",
+    fontWeight: "900",
+    letterSpacing: "1.5px",
+  },
+
+  cardTitle: {
+    margin: "8px 0 6px",
+    fontSize: "23px",
     fontWeight: "800",
-    marginBottom: "24px",
+  },
+
+  cardDescription: {
+    margin: "0",
+    color: "#777777",
+    fontSize: "13px",
+    lineHeight: "1.6",
   },
 
   label: {
     display: "block",
     fontSize: "13px",
-    color: "#b8b8b8",
-    marginBottom: "8px",
-    marginTop: "18px",
+    color: "#dddddd",
+    marginBottom: "9px",
+    marginTop: "20px",
     fontWeight: "700",
   },
 
   input: {
     width: "100%",
     boxSizing: "border-box",
-    background: "#151515",
+    background: "#050505",
     color: "#ffffff",
-    border: "1px solid #292929",
+    border: "1px solid #333333",
     borderRadius: "10px",
     padding: "14px",
     fontSize: "14px",
     outline: "none",
+    marginBottom: "3px",
+  },
+
+  actions: {
+    display: "flex",
+    gap: "12px",
+    flexWrap: "wrap",
+    marginTop: "25px",
+  },
+
+  generateButton: {
+    flex: "1",
+    minWidth: "200px",
+    padding: "15px 20px",
+    border: "1px solid #00ffaa",
+    borderRadius: "10px",
+    background: "#00ffaa",
+    color: "#000000",
+    fontSize: "14px",
+    fontWeight: "900",
+    cursor: "pointer",
+  },
+
+  clearButton: {
+    border: "1px solid #333333",
+    borderRadius: "10px",
+    padding: "15px 20px",
+    background: "transparent",
+    color: "#ffffff",
+    cursor: "pointer",
+    fontSize: "14px",
   },
 
   error: {
@@ -563,38 +616,35 @@ const styles = {
     fontSize: "13px",
   },
 
-  generateButton: {
-    width: "100%",
-    marginTop: "25px",
-    padding: "15px",
-    border: "none",
-    borderRadius: "11px",
-    background: "#ffffff",
-    color: "#050505",
-    fontSize: "15px",
-    fontWeight: "900",
-    cursor: "pointer",
-  },
-
   resultCard: {
     marginTop: "25px",
-    background: "#0c0c0c",
-    border: "1px solid #202020",
-    borderRadius: "18px",
-    padding: "25px",
+    background: "#0d0d0d",
+    border: "1px solid rgba(0, 255, 170, 0.25)",
+    borderRadius: "20px",
+    padding: "30px",
+    boxSizing: "border-box",
   },
 
   resultHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: "15px",
-    marginBottom: "20px",
+    gap: "20px",
+    flexWrap: "wrap",
+    marginBottom: "25px",
+  },
+
+  resultBadge: {
+    color: "#00ffaa",
+    fontSize: "10px",
+    letterSpacing: "1.5px",
+    fontWeight: "900",
   },
 
   resultTitle: {
-    fontSize: "20px",
-    fontWeight: "900",
+    margin: "7px 0 0",
+    fontSize: "22px",
+    fontWeight: "800",
   },
 
   resultSubtitle: {
@@ -604,11 +654,11 @@ const styles = {
   },
 
   copyButton: {
-    background: "#171717",
+    background: "#151515",
     color: "#ffffff",
-    border: "1px solid #303030",
-    borderRadius: "9px",
-    padding: "10px 14px",
+    border: "1px solid #333333",
+    borderRadius: "10px",
+    padding: "11px 15px",
     cursor: "pointer",
     fontWeight: "700",
   },
@@ -617,14 +667,15 @@ const styles = {
     whiteSpace: "pre-wrap",
     lineHeight: "1.7",
     color: "#dddddd",
-    background: "#080808",
-    border: "1px solid #1c1c1c",
+    background: "#050505",
+    border: "1px solid #222222",
     borderRadius: "12px",
-    padding: "20px",
+    padding: "22px",
     fontSize: "14px",
+    overflowX: "auto",
   },
 
-  clearButton: {
+  clearResultButton: {
     marginTop: "18px",
     background: "transparent",
     color: "#888888",
@@ -636,26 +687,32 @@ const styles = {
 
   tip: {
     marginTop: "25px",
-    padding: "20px",
-    background: "#0b0b0b",
-    border: "1px solid #1c1c1c",
+    padding: "22px",
+    background: "#090909",
+    border: "1px solid #222222",
     borderRadius: "15px",
     display: "flex",
     gap: "15px",
+    alignItems: "flex-start",
+    boxSizing: "border-box",
   },
 
   tipIcon: {
-    fontSize: "24px",
+    fontSize: "23px",
+    flexShrink: 0,
   },
 
   tipTitle: {
+    display: "block",
+    color: "#00ffaa",
     fontSize: "14px",
+    marginBottom: "5px",
   },
 
   tipText: {
     color: "#888888",
     fontSize: "13px",
     lineHeight: "1.6",
-    margin: "7px 0 0",
+    margin: "0",
   },
 };
