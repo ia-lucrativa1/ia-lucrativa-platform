@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "../../../lib/supabase";
 
 export default function GeradorIdeias() {
+  const router = useRouter();
+
+  const [verificando, setVerificando] = useState(true);
   const [nicho, setNicho] = useState("");
   const [objetivo, setObjetivo] = useState("Criar renda");
   const [experiencia, setExperiencia] = useState("Iniciante");
@@ -10,6 +15,33 @@ export default function GeradorIdeias() {
   const [carregando, setCarregando] = useState(false);
   const [copiado, setCopiado] = useState(false);
   const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    async function verificarUsuario() {
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        router.replace("/login");
+        return;
+      }
+
+      setVerificando(false);
+    }
+
+    verificarUsuario();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        router.replace("/login");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [router]);
 
   async function gerarIdeias() {
     if (!nicho.trim()) {
@@ -86,7 +118,9 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
 
       setResultado(data.resultado);
     } catch (error) {
-      setErro(error.message || "Ocorreu um erro ao gerar as ideias.");
+      setErro(
+        error.message || "Ocorreu um erro ao gerar as ideias."
+      );
     } finally {
       setCarregando(false);
     }
@@ -116,11 +150,25 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
     setCopiado(false);
   }
 
+  if (verificando) {
+    return (
+      <main style={styles.loadingPage}>
+        <div style={styles.loadingBox}>
+          <div style={styles.loadingLogo}>IA LUCRATIVA</div>
+          <div style={styles.loadingText}>
+            Verificando acesso...
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main style={styles.page}>
       <header style={styles.header}>
         <div>
           <div style={styles.logo}>IA LUCRATIVA</div>
+
           <div style={styles.subtitle}>
             Gerador de Ideias com IA
           </div>
@@ -133,12 +181,16 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
 
       <section style={styles.container}>
         <div style={styles.hero}>
-          <div style={styles.badge}>💡 IA AUTOMÁTICA</div>
+          <div style={styles.badge}>
+            💡 IA AUTOMÁTICA
+          </div>
 
           <h1 style={styles.title}>
             Encontre novas
             <br />
-            <span style={styles.highlight}>oportunidades.</span>
+            <span style={styles.highlight}>
+              oportunidades.
+            </span>
           </h1>
 
           <p style={styles.description}>
@@ -148,21 +200,29 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
         </div>
 
         <section style={styles.card}>
-          <label style={styles.label}>Seu nicho</label>
+          <label style={styles.label}>
+            Seu nicho
+          </label>
 
           <input
             type="text"
             placeholder="Ex: Design gráfico"
             value={nicho}
-            onChange={(event) => setNicho(event.target.value)}
+            onChange={(event) =>
+              setNicho(event.target.value)
+            }
             style={styles.input}
           />
 
-          <label style={styles.label}>Seu objetivo</label>
+          <label style={styles.label}>
+            Seu objetivo
+          </label>
 
           <select
             value={objetivo}
-            onChange={(event) => setObjetivo(event.target.value)}
+            onChange={(event) =>
+              setObjetivo(event.target.value)
+            }
             style={styles.input}
           >
             <option>Criar renda</option>
@@ -172,11 +232,15 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
             <option>Criar serviços</option>
           </select>
 
-          <label style={styles.label}>Seu nível</label>
+          <label style={styles.label}>
+            Seu nível
+          </label>
 
           <select
             value={experiencia}
-            onChange={(event) => setExperiencia(event.target.value)}
+            onChange={(event) =>
+              setExperiencia(event.target.value)
+            }
             style={styles.input}
           >
             <option>Iniciante</option>
@@ -230,7 +294,9 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
                 onClick={copiarResultado}
                 style={styles.copyButton}
               >
-                {copiado ? "✓ Copiado" : "📋 Copiar"}
+                {copiado
+                  ? "✓ Copiado"
+                  : "📋 Copiar"}
               </button>
             </div>
 
@@ -241,7 +307,9 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
         )}
 
         <section style={styles.tipCard}>
-          <div style={styles.tipIcon}>🚀</div>
+          <div style={styles.tipIcon}>
+            🚀
+          </div>
 
           <div>
             <strong style={styles.tipTitle}>
@@ -249,9 +317,9 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
             </strong>
 
             <p style={styles.tipText}>
-              Não tente começar todas as ideias ao mesmo tempo.
-              Escolha uma oportunidade, valide e dê o primeiro
-              passo.
+              Não tente começar todas as ideias ao mesmo
+              tempo. Escolha uma oportunidade, valide e dê
+              o primeiro passo.
             </p>
           </div>
         </section>
@@ -259,10 +327,15 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
 
       <footer style={styles.footer}>
         <strong>IA LUCRATIVA</strong>
+
         <span>
-          Transformando inteligência artificial em oportunidades.
+          Transformando inteligência artificial em
+          oportunidades.
         </span>
-        <span>@ia.lucrativa1</span>
+
+        <span>
+          @ia.lucrativa1
+        </span>
       </footer>
     </main>
   );
@@ -274,6 +347,32 @@ const styles = {
     background: "#050505",
     color: "#ffffff",
     fontFamily: "Arial, sans-serif",
+  },
+
+  loadingPage: {
+    minHeight: "100vh",
+    background: "#050505",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "Arial, sans-serif",
+  },
+
+  loadingBox: {
+    textAlign: "center",
+  },
+
+  loadingLogo: {
+    fontSize: "22px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
+
+  loadingText: {
+    marginTop: "10px",
+    color: "#888888",
+    fontSize: "14px",
   },
 
   header: {
@@ -388,3 +487,122 @@ const styles = {
     borderRadius: "10px",
     padding: "15px 20px",
     background: "#ffffff",
+    color: "#000000",
+    fontSize: "14px",
+    fontWeight: "800",
+    cursor: "pointer",
+  },
+
+  clearButton: {
+    border: "1px solid #333333",
+    borderRadius: "10px",
+    padding: "15px 20px",
+    background: "transparent",
+    color: "#ffffff",
+    fontSize: "14px",
+    fontWeight: "700",
+    cursor: "pointer",
+  },
+
+  error: {
+    background: "#1a0b0b",
+    border: "1px solid #542222",
+    color: "#ffb0b0",
+    borderRadius: "10px",
+    padding: "12px",
+    marginBottom: "18px",
+    fontSize: "13px",
+  },
+
+  resultCard: {
+    marginTop: "25px",
+    background: "#0d0d0d",
+    border: "1px solid #242424",
+    borderRadius: "20px",
+    padding: "30px",
+  },
+
+  resultHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: "20px",
+    marginBottom: "25px",
+    flexWrap: "wrap",
+  },
+
+  resultBadge: {
+    fontSize: "10px",
+    letterSpacing: "1px",
+    color: "#888888",
+    fontWeight: "800",
+  },
+
+  resultTitle: {
+    margin: "7px 0 0",
+    fontSize: "25px",
+    fontWeight: "900",
+  },
+
+  copyButton: {
+    border: "1px solid #333333",
+    borderRadius: "10px",
+    padding: "10px 15px",
+    background: "#111111",
+    color: "#ffffff",
+    fontSize: "13px",
+    fontWeight: "700",
+    cursor: "pointer",
+  },
+
+  result: {
+    whiteSpace: "pre-wrap",
+    lineHeight: "1.8",
+    color: "#dddddd",
+    fontSize: "14px",
+    background: "#050505",
+    border: "1px solid #222222",
+    borderRadius: "12px",
+    padding: "20px",
+    overflowX: "auto",
+  },
+
+  tipCard: {
+    marginTop: "25px",
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "15px",
+    background: "#0d0d0d",
+    border: "1px solid #242424",
+    borderRadius: "18px",
+    padding: "22px",
+  },
+
+  tipIcon: {
+    fontSize: "25px",
+  },
+
+  tipTitle: {
+    fontSize: "14px",
+  },
+
+  tipText: {
+    color: "#999999",
+    fontSize: "13px",
+    lineHeight: "1.6",
+    margin: "7px 0 0",
+  },
+
+  footer: {
+    borderTop: "1px solid #222222",
+    padding: "25px 6%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
+    flexWrap: "wrap",
+    color: "#777777",
+    fontSize: "12px",
+    textAlign: "center",
+  },
+};
