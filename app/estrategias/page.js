@@ -1,10 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "../../lib/supabase";
 
 export default function Estrategias() {
+  const router = useRouter();
+
+  const [verificando, setVerificando] = useState(true);
   const [categoria, setCategoria] = useState("Todas");
   const [busca, setBusca] = useState("");
+
+  useEffect(() => {
+    async function verificarUsuario() {
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        router.replace("/login");
+        return;
+      }
+
+      setVerificando(false);
+    }
+
+    verificarUsuario();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        router.replace("/login");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [router]);
 
   const categorias = [
     "Todas",
@@ -142,12 +174,26 @@ export default function Estrategias() {
     const correspondeCategoria =
       categoria === "Todas" || item.categoria === categoria;
 
-    const texto = `${item.titulo} ${item.descricao} ${item.categoria}`.toLowerCase();
+    const texto =
+      `${item.titulo} ${item.descricao} ${item.categoria} ${item.passos.join(
+        " "
+      )}`.toLowerCase();
 
     const correspondeBusca = texto.includes(busca.toLowerCase());
 
     return correspondeCategoria && correspondeBusca;
   });
+
+  if (verificando) {
+    return (
+      <main style={styles.loadingPage}>
+        <div style={styles.loadingBox}>
+          <div style={styles.loadingLogo}>IA LUCRATIVA</div>
+          <div style={styles.loadingText}>Verificando acesso...</div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main style={styles.page}>
@@ -253,8 +299,12 @@ export default function Estrategias() {
         {filtradas.length === 0 && (
           <div style={styles.empty}>
             <div style={styles.emptyIcon}>🔍</div>
-            <h3>Nenhuma estratégia encontrada</h3>
-            <p>Experimente pesquisar outro termo.</p>
+            <h3 style={styles.emptyTitle}>
+              Nenhuma estratégia encontrada
+            </h3>
+            <p style={styles.emptyText}>
+              Experimente pesquisar outro termo.
+            </p>
           </div>
         )}
       </section>
@@ -264,4 +314,417 @@ export default function Estrategias() {
 
         <div>
           <h3 style={styles.motivationTitle}>
-            Conhecimento só gera
+            Conhecimento só gera resultado quando colocado em prática.
+          </h3>
+
+          <p style={styles.motivationText}>
+            Escolha uma estratégia, siga os passos e transforme pequenas ações
+            em novas oportunidades no digital.
+          </p>
+        </div>
+      </section>
+
+      <footer style={styles.footer}>
+        <div style={styles.footerBrand}>IA LUCRATIVA</div>
+        <div style={styles.footerText}>
+          Estratégias, ferramentas e inteligência artificial para criar novas
+          oportunidades.
+        </div>
+        <div style={styles.instagram}>@ia.lucrativa1</div>
+      </footer>
+    </main>
+  );
+}
+
+const styles = {
+  loadingPage: {
+    minHeight: "100vh",
+    background: "#050505",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "Arial, sans-serif",
+  },
+
+  loadingBox: {
+    textAlign: "center",
+  },
+
+  loadingLogo: {
+    fontSize: "22px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
+
+  loadingText: {
+    marginTop: "10px",
+    color: "#888888",
+    fontSize: "14px",
+  },
+
+  page: {
+    minHeight: "100vh",
+    background:
+      "radial-gradient(circle at top, #151515 0%, #080808 35%, #050505 100%)",
+    color: "#ffffff",
+    fontFamily: "Arial, sans-serif",
+    paddingBottom: "60px",
+  },
+
+  header: {
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "24px 20px",
+    boxSizing: "border-box",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "20px",
+  },
+
+  brand: {
+    fontSize: "20px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
+
+  subtitle: {
+    marginTop: "5px",
+    color: "#888888",
+    fontSize: "13px",
+  },
+
+  backButton: {
+    color: "#ffffff",
+    textDecoration: "none",
+    border: "1px solid #292929",
+    background: "#111111",
+    padding: "10px 15px",
+    borderRadius: "10px",
+    fontSize: "13px",
+    fontWeight: "700",
+  },
+
+  hero: {
+    maxWidth: "1000px",
+    margin: "0 auto",
+    padding: "65px 20px 45px",
+    textAlign: "center",
+  },
+
+  badge: {
+    display: "inline-block",
+    padding: "9px 14px",
+    borderRadius: "999px",
+    border: "1px solid #292929",
+    background: "#101010",
+    color: "#bdbdbd",
+    fontSize: "11px",
+    fontWeight: "800",
+    letterSpacing: "1px",
+  },
+
+  title: {
+    fontSize: "clamp(38px, 7vw, 72px)",
+    lineHeight: "1.02",
+    margin: "22px 0",
+    fontWeight: "900",
+    letterSpacing: "-2px",
+  },
+
+  highlight: {
+    background: "linear-gradient(90deg, #ffffff, #777777)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+
+  description: {
+    maxWidth: "720px",
+    margin: "0 auto",
+    color: "#9b9b9b",
+    fontSize: "16px",
+    lineHeight: "1.7",
+  },
+
+  searchBox: {
+    maxWidth: "620px",
+    margin: "32px auto 0",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    padding: "15px 17px",
+    borderRadius: "14px",
+    border: "1px solid #292929",
+    background: "#0d0d0d",
+    boxSizing: "border-box",
+  },
+
+  input: {
+    width: "100%",
+    border: "none",
+    outline: "none",
+    background: "transparent",
+    color: "#ffffff",
+    fontSize: "15px",
+  },
+
+  container: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "0 20px",
+    boxSizing: "border-box",
+  },
+
+  categories: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "10px",
+    marginBottom: "35px",
+  },
+
+  categoryButton: {
+    border: "1px solid #292929",
+    background: "#0d0d0d",
+    color: "#999999",
+    padding: "11px 15px",
+    borderRadius: "10px",
+    cursor: "pointer",
+    fontSize: "13px",
+    fontWeight: "700",
+  },
+
+  categoryActive: {
+    background: "#ffffff",
+    color: "#050505",
+    borderColor: "#ffffff",
+  },
+
+  sectionHeader: {
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    gap: "20px",
+    marginBottom: "25px",
+  },
+
+  sectionTitle: {
+    margin: 0,
+    fontSize: "25px",
+    fontWeight: "900",
+  },
+
+  sectionDescription: {
+    margin: "7px 0 0",
+    color: "#777777",
+    fontSize: "14px",
+  },
+
+  counter: {
+    color: "#888888",
+    fontSize: "13px",
+    whiteSpace: "nowrap",
+  },
+
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: "18px",
+  },
+
+  card: {
+    background:
+      "linear-gradient(145deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015))",
+    border: "1px solid #242424",
+    borderRadius: "18px",
+    padding: "22px",
+    boxSizing: "border-box",
+  },
+
+  cardHeader: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "12px",
+  },
+
+  icon: {
+    width: "48px",
+    height: "48px",
+    borderRadius: "14px",
+    background: "#151515",
+    border: "1px solid #292929",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "22px",
+  },
+
+  tag: {
+    fontSize: "10px",
+    color: "#9a9a9a",
+    border: "1px solid #292929",
+    borderRadius: "999px",
+    padding: "7px 10px",
+    fontWeight: "800",
+    textTransform: "uppercase",
+  },
+
+  cardTitle: {
+    margin: "20px 0 9px",
+    fontSize: "21px",
+    fontWeight: "900",
+  },
+
+  cardDescription: {
+    margin: 0,
+    color: "#888888",
+    fontSize: "14px",
+    lineHeight: "1.6",
+  },
+
+  steps: {
+    marginTop: "22px",
+    paddingTop: "18px",
+    borderTop: "1px solid #242424",
+  },
+
+  stepsTitle: {
+    display: "block",
+    marginBottom: "14px",
+    fontSize: "10px",
+    letterSpacing: "1px",
+    color: "#777777",
+  },
+
+  step: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "10px",
+    marginBottom: "11px",
+  },
+
+  stepNumber: {
+    flexShrink: 0,
+    width: "23px",
+    height: "23px",
+    borderRadius: "50%",
+    background: "#ffffff",
+    color: "#050505",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "11px",
+    fontWeight: "900",
+  },
+
+  stepText: {
+    color: "#b1b1b1",
+    fontSize: "13px",
+    lineHeight: "1.5",
+    paddingTop: "2px",
+  },
+
+  actionButton: {
+    width: "100%",
+    marginTop: "12px",
+    padding: "13px",
+    borderRadius: "10px",
+    border: "1px solid #ffffff",
+    background: "#ffffff",
+    color: "#050505",
+    fontSize: "13px",
+    fontWeight: "900",
+    cursor: "pointer",
+  },
+
+  empty: {
+    textAlign: "center",
+    padding: "70px 20px",
+    border: "1px solid #242424",
+    borderRadius: "18px",
+    background: "#0c0c0c",
+  },
+
+  emptyIcon: {
+    fontSize: "35px",
+    marginBottom: "10px",
+  },
+
+  emptyTitle: {
+    margin: 0,
+    fontSize: "18px",
+  },
+
+  emptyText: {
+    color: "#777777",
+    fontSize: "14px",
+  },
+
+  motivation: {
+    maxWidth: "1160px",
+    margin: "45px auto 0",
+    padding: "24px",
+    borderRadius: "18px",
+    border: "1px solid #292929",
+    background: "#0d0d0d",
+    display: "flex",
+    alignItems: "center",
+    gap: "18px",
+    boxSizing: "border-box",
+  },
+
+  motivationIcon: {
+    width: "50px",
+    height: "50px",
+    flexShrink: 0,
+    borderRadius: "14px",
+    background: "#ffffff",
+    color: "#050505",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "23px",
+  },
+
+  motivationTitle: {
+    margin: 0,
+    fontSize: "18px",
+    fontWeight: "900",
+  },
+
+  motivationText: {
+    margin: "7px 0 0",
+    color: "#858585",
+    fontSize: "14px",
+    lineHeight: "1.6",
+  },
+
+  footer: {
+    maxWidth: "1200px",
+    margin: "60px auto 0",
+    padding: "0 20px",
+    textAlign: "center",
+    boxSizing: "border-box",
+  },
+
+  footerBrand: {
+    fontSize: "17px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
+
+  footerText: {
+    marginTop: "8px",
+    color: "#666666",
+    fontSize: "12px",
+  },
+
+  instagram: {
+    marginTop: "12px",
+    color: "#999999",
+    fontSize: "12px",
+    fontWeight: "700",
+  },
+};
