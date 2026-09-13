@@ -135,13 +135,14 @@ export default function RootLayout({ children }) {
                   📸 @ia.lucrativa1
                 </a>
 
-                <button
-                  type="button"
+                {/* NOTIFICAÇÕES */}
+                <a
+                  href="/notificacoes"
                   className="notification"
                   aria-label="Notificações"
                 >
                   🔔
-                </button>
+                </a>
 
                 <a
                   href="/conta"
