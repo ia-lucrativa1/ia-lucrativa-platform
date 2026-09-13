@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "../../../lib/supabase";
 
 export default function GeradorOfertas() {
+  const router = useRouter();
+
+  const [verificando, setVerificando] = useState(true);
   const [produto, setProduto] = useState("");
   const [publico, setPublico] = useState("");
   const [problema, setProblema] = useState("");
@@ -11,6 +16,33 @@ export default function GeradorOfertas() {
   const [carregando, setCarregando] = useState(false);
   const [copiado, setCopiado] = useState(false);
   const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    async function verificarUsuario() {
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        router.replace("/login");
+        return;
+      }
+
+      setVerificando(false);
+    }
+
+    verificarUsuario();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session) {
+        router.replace("/login");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [router]);
 
   async function gerarOferta() {
     if (!produto.trim() || !publico.trim() || !problema.trim()) {
@@ -101,7 +133,9 @@ Entregue diretamente o resultado pronto.
 
       setResultado(data.resultado);
     } catch (error) {
-      setErro(error.message || "Ocorreu um erro ao gerar a oferta.");
+      setErro(
+        error.message || "Ocorreu um erro ao gerar a oferta."
+      );
     } finally {
       setCarregando(false);
     }
@@ -132,11 +166,29 @@ Entregue diretamente o resultado pronto.
     setCopiado(false);
   }
 
+  if (verificando) {
+    return (
+      <main style={styles.loadingPage}>
+        <div style={styles.loadingBox}>
+          <div style={styles.loadingLogo}>
+            IA LUCRATIVA
+          </div>
+
+          <div style={styles.loadingText}>
+            Verificando acesso...
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main style={styles.page}>
       <header style={styles.header}>
         <div>
-          <div style={styles.logo}>IA LUCRATIVA</div>
+          <div style={styles.logo}>
+            IA LUCRATIVA
+          </div>
 
           <div style={styles.subtitle}>
             Gerador de Ofertas com IA
@@ -150,7 +202,9 @@ Entregue diretamente o resultado pronto.
 
       <section style={styles.container}>
         <div style={styles.hero}>
-          <div style={styles.badge}>💰 IA AUTOMÁTICA</div>
+          <div style={styles.badge}>
+            💰 IA AUTOMÁTICA
+          </div>
 
           <h1 style={styles.title}>
             Crie ofertas
@@ -175,7 +229,9 @@ Entregue diretamente o resultado pronto.
             type="text"
             placeholder="Ex: Gestão de Instagram"
             value={produto}
-            onChange={(event) => setProduto(event.target.value)}
+            onChange={(event) =>
+              setProduto(event.target.value)
+            }
             style={styles.input}
           />
 
@@ -187,7 +243,9 @@ Entregue diretamente o resultado pronto.
             type="text"
             placeholder="Ex: Pequenos comerciantes"
             value={publico}
-            onChange={(event) => setPublico(event.target.value)}
+            onChange={(event) =>
+              setPublico(event.target.value)
+            }
             style={styles.input}
           />
 
@@ -199,7 +257,9 @@ Entregue diretamente o resultado pronto.
             type="text"
             placeholder="Ex: Não conseguem atrair clientes pelo Instagram"
             value={problema}
-            onChange={(event) => setProblema(event.target.value)}
+            onChange={(event) =>
+              setProblema(event.target.value)
+            }
             style={styles.input}
           />
 
@@ -209,7 +269,9 @@ Entregue diretamente o resultado pronto.
 
           <select
             value={objetivo}
-            onChange={(event) => setObjetivo(event.target.value)}
+            onChange={(event) =>
+              setObjetivo(event.target.value)
+            }
             style={styles.input}
           >
             <option>Gerar vendas</option>
@@ -265,7 +327,9 @@ Entregue diretamente o resultado pronto.
                 onClick={copiarResultado}
                 style={styles.copyButton}
               >
-                {copiado ? "✓ Copiado" : "📋 Copiar"}
+                {copiado
+                  ? "✓ Copiado"
+                  : "📋 Copiar"}
               </button>
             </div>
 
@@ -276,7 +340,9 @@ Entregue diretamente o resultado pronto.
         )}
 
         <section style={styles.tipCard}>
-          <div style={styles.tipIcon}>🎯</div>
+          <div style={styles.tipIcon}>
+            🎯
+          </div>
 
           <div>
             <strong style={styles.tipTitle}>
@@ -293,13 +359,17 @@ Entregue diretamente o resultado pronto.
       </section>
 
       <footer style={styles.footer}>
-        <strong>IA LUCRATIVA</strong>
+        <strong>
+          IA LUCRATIVA
+        </strong>
 
         <span>
           Transformando inteligência artificial em oportunidades.
         </span>
 
-        <span>@ia.lucrativa1</span>
+        <span>
+          @ia.lucrativa1
+        </span>
       </footer>
     </main>
   );
@@ -311,6 +381,32 @@ const styles = {
     background: "#050505",
     color: "#ffffff",
     fontFamily: "Arial, sans-serif",
+  },
+
+  loadingPage: {
+    minHeight: "100vh",
+    background: "#050505",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "Arial, sans-serif",
+  },
+
+  loadingBox: {
+    textAlign: "center",
+  },
+
+  loadingLogo: {
+    fontSize: "22px",
+    fontWeight: "900",
+    letterSpacing: "1px",
+  },
+
+  loadingText: {
+    marginTop: "10px",
+    color: "#888888",
+    fontSize: "14px",
   },
 
   header: {
