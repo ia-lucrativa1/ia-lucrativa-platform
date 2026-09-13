@@ -110,7 +110,7 @@ export default function Conta() {
 
   if (carregando) {
     return (
-      <main style={styles.loadingPage}>
+      <div style={styles.loadingPage}>
         <div style={styles.loadingCard}>
           <div style={styles.loadingLogo}>IA</div>
 
@@ -122,7 +122,7 @@ export default function Conta() {
             Carregando sua conta...
           </p>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -136,17 +136,17 @@ export default function Conta() {
     plano.charAt(0).toUpperCase() + plano.slice(1);
 
   return (
-    <main style={styles.page}>
+    <div style={styles.page}>
       <div style={styles.container}>
 
-        {/* CABEÇALHO DA CONTA */}
+        {/* CABEÇALHO */}
         <header style={styles.header}>
 
           <div style={styles.avatar}>
             {primeiraLetra}
           </div>
 
-          <div>
+          <div style={styles.headerInfo}>
             <span style={styles.eyebrow}>
               MINHA CONTA
             </span>
@@ -292,22 +292,22 @@ export default function Conta() {
           <div style={styles.planFeatures}>
 
             <div style={styles.feature}>
-              <span>✓</span>
+              <span style={styles.featureCheck}>✓</span>
               Ferramentas de IA
             </div>
 
             <div style={styles.feature}>
-              <span>✓</span>
+              <span style={styles.featureCheck}>✓</span>
               Biblioteca de prompts
             </div>
 
             <div style={styles.feature}>
-              <span>✓</span>
+              <span style={styles.featureCheck}>✓</span>
               Estratégias digitais
             </div>
 
             <div style={styles.feature}>
-              <span>✓</span>
+              <span style={styles.featureCheck}>✓</span>
               Área exclusiva do usuário
             </div>
 
@@ -347,7 +347,7 @@ export default function Conta() {
 
           <div style={styles.setting}>
 
-            <div>
+            <div style={styles.settingContent}>
               <strong>
                 Notificações
               </strong>
@@ -365,7 +365,7 @@ export default function Conta() {
 
           <div style={styles.setting}>
 
-            <div>
+            <div style={styles.settingContent}>
               <strong>
                 Segurança
               </strong>
@@ -404,7 +404,7 @@ export default function Conta() {
 
         </section>
 
-        {/* RODAPÉ */}
+        {/* RODAPÉ DA CONTA */}
         <footer style={styles.footer}>
 
           <strong style={styles.footerBrand}>
@@ -422,17 +422,17 @@ export default function Conta() {
         </footer>
 
       </div>
-    </main>
+    </div>
   );
 }
 
 const styles = {
   page: {
-    minHeight: "100vh",
-    padding: "40px 35px 60px",
-    background: "#050505",
+    width: "100%",
+    minHeight: "100%",
+    padding: "10px 0 50px",
+    boxSizing: "border-box",
     color: "#ffffff",
-    fontFamily: "Arial, sans-serif",
   },
 
   container: {
@@ -445,7 +445,11 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: "20px",
-    marginBottom: "35px",
+    marginBottom: "30px",
+  },
+
+  headerInfo: {
+    minWidth: 0,
   },
 
   avatar: {
@@ -619,6 +623,7 @@ const styles = {
 
   planContent: {
     flex: 1,
+    minWidth: 0,
   },
 
   planTitle: {
@@ -638,6 +643,7 @@ const styles = {
     color: "#00ffaa",
     fontSize: "11px",
     fontWeight: "800",
+    whiteSpace: "nowrap",
   },
 
   planFeatures: {
@@ -654,6 +660,12 @@ const styles = {
     border: "1px solid #1d1d1d",
     color: "#aaa",
     fontSize: "11px",
+  },
+
+  featureCheck: {
+    color: "#00ffaa",
+    marginRight: "7px",
+    fontWeight: "900",
   },
 
   futureBox: {
@@ -684,6 +696,10 @@ const styles = {
     gap: "15px",
     padding: "17px 0",
     borderBottom: "1px solid #202020",
+  },
+
+  settingContent: {
+    minWidth: 0,
   },
 
   settingText: {
@@ -738,7 +754,7 @@ const styles = {
     color: "#444",
     fontSize: "11px",
     lineHeight: "1.8",
-    padding: "40px 0 10px",
+    padding: "30px 0 10px",
   },
 
   footerBrand: {
@@ -747,14 +763,13 @@ const styles = {
   },
 
   loadingPage: {
-    minHeight: "100vh",
-    background: "#050505",
-    color: "#ffffff",
+    width: "100%",
+    minHeight: "60vh",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: "20px",
-    fontFamily: "Arial, sans-serif",
+    padding: "40px 20px",
+    boxSizing: "border-box",
   },
 
   loadingCard: {
