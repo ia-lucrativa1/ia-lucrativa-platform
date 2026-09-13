@@ -50,10 +50,8 @@ export default function HomePage() {
 
   return (
     <div style={styles.page}>
-
       {/* HERO */}
       <section style={styles.hero}>
-
         <div style={styles.heroBadge}>
           <span style={styles.statusDot}></span>
           PLATAFORMA DE INTELIGÊNCIA ARTIFICIAL
@@ -88,12 +86,10 @@ export default function HomePage() {
           <span>✓ Estratégias práticas</span>
           <span>✓ Feito para começar do zero</span>
         </div>
-
       </section>
 
       {/* ESTATÍSTICAS */}
       <section style={styles.statsSection}>
-
         <div style={styles.stat}>
           <strong style={styles.statNumber}>06</strong>
           <span style={styles.statLabel}>Ferramentas IA</span>
@@ -113,17 +109,11 @@ export default function HomePage() {
           <strong style={styles.statNumber}>24/7</strong>
           <span style={styles.statLabel}>Disponibilidade</span>
         </div>
-
       </section>
 
       {/* FERRAMENTAS */}
-      <section
-        id="ferramentas"
-        style={styles.toolsSection}
-      >
-
+      <section id="ferramentas" style={styles.toolsSection}>
         <div style={styles.sectionHeader}>
-
           <div>
             <span style={styles.sectionLabel}>
               PLATAFORMA
@@ -142,20 +132,16 @@ export default function HomePage() {
             Escolha uma ferramenta, informe o que você precisa
             e deixe a inteligência artificial ajudar na execução.
           </p>
-
         </div>
 
         <div style={styles.toolsGrid}>
-
           {ferramentas.map((ferramenta) => (
             <Link
               key={ferramenta.numero}
               href={ferramenta.link}
               style={styles.toolCard}
             >
-
               <div style={styles.toolTop}>
-
                 <span style={styles.toolNumber}>
                   {ferramenta.numero}
                 </span>
@@ -163,11 +149,9 @@ export default function HomePage() {
                 <span style={styles.toolArrow}>
                   ↗
                 </span>
-
               </div>
 
               <div>
-
                 <h3 style={styles.toolTitle}>
                   {ferramenta.titulo}
                 </h3>
@@ -175,25 +159,19 @@ export default function HomePage() {
                 <p style={styles.toolDescription}>
                   {ferramenta.descricao}
                 </p>
-
               </div>
 
               <span style={styles.toolAction}>
                 Abrir ferramenta →
               </span>
-
             </Link>
           ))}
-
         </div>
-
       </section>
 
       {/* TECNOLOGIA */}
       <section style={styles.technologySection}>
-
         <div style={styles.techCard}>
-
           <div style={styles.techBadge}>
             IA LUCRATIVA
           </div>
@@ -216,14 +194,11 @@ export default function HomePage() {
           >
             Conhecer meu painel →
           </Link>
-
         </div>
-
       </section>
 
       {/* ROADMAP */}
       <section style={styles.futureSection}>
-
         <div style={styles.futureBadge}>
           ROADMAP
         </div>
@@ -239,7 +214,6 @@ export default function HomePage() {
         </p>
 
         <div style={styles.futureGrid}>
-
           <div style={styles.futureItem}>
             <strong>IA Automática</strong>
             <span>
@@ -267,14 +241,11 @@ export default function HomePage() {
               Mais recursos para quem quiser evoluir.
             </span>
           </div>
-
         </div>
-
       </section>
 
       {/* FOOTER */}
       <footer style={styles.footer}>
-
         <div style={styles.footerBrand}>
           IA LUCRATIVA
         </div>
@@ -286,9 +257,7 @@ export default function HomePage() {
         <span style={styles.footerInstagram}>
           @ia.lucrativa1
         </span>
-
       </footer>
-
     </div>
   );
 }
