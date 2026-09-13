@@ -5,105 +5,242 @@ import { useState } from "react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
 
   function entrar(e) {
     e.preventDefault();
 
-    if (!email || !senha) {
-      alert("Preencha todos os campos.");
+    setErro("");
+
+    if (!email.trim() || !senha.trim()) {
+      setErro("Preencha seu e-mail e sua senha.");
       return;
     }
 
-    alert("Login preparado. A autenticação real será conectada na próxima etapa.");
+    window.location.href = "/dashboard";
   }
 
   return (
-    <main style={styles.container}>
-      <section style={styles.card}>
-        <div style={styles.logo}>IA LUCRATIVA</div>
+    <main style={styles.page}>
+      <div style={styles.container}>
 
-        <h1>Bem-vindo de volta</h1>
-        <p style={styles.subtitle}>
-          Entre na sua conta e continue sua jornada no digital.
-        </p>
+        <a href="/" style={styles.back}>
+          ← Voltar para o início
+        </a>
 
-        <form onSubmit={entrar} style={styles.form}>
-          <label>E-mail</label>
-          <input
-            type="email"
-            placeholder="seu@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <section style={styles.card}>
 
-          <label>Senha</label>
-          <input
-            type="password"
-            placeholder="Sua senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-          />
+          <div style={styles.logo}>
+            IA
+          </div>
 
-          <button type="submit">Entrar na plataforma</button>
-        </form>
+          <h1 style={styles.title}>
+            Bem-vindo à IA LUCRATIVA
+          </h1>
 
-        <p style={styles.bottom}>
-          Ainda não possui uma conta?{" "}
-          <a href="/cadastro">Criar conta</a>
-        </p>
-      </section>
+          <p style={styles.subtitle}>
+            Entre na sua conta para acessar sua plataforma.
+          </p>
+
+          <form onSubmit={entrar}>
+
+            <label style={styles.label}>
+              E-mail
+            </label>
+
+            <input
+              type="email"
+              placeholder="seu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={styles.input}
+            />
+
+            <label style={styles.label}>
+              Senha
+            </label>
+
+            <input
+              type="password"
+              placeholder="Digite sua senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              style={styles.input}
+            />
+
+            {erro && (
+              <div style={styles.error}>
+                {erro}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              style={styles.button}
+            >
+              Entrar na plataforma →
+            </button>
+
+          </form>
+
+          <div style={styles.divider}>
+            OU
+          </div>
+
+          <div style={styles.info}>
+            <strong>
+              🚀 IA LUCRATIVA
+            </strong>
+
+            <p style={styles.infoText}>
+              Ferramentas, estratégias e inteligência artificial
+              para transformar ideias em oportunidades.
+            </p>
+          </div>
+
+        </section>
+
+        <footer style={styles.footer}>
+          IA LUCRATIVA
+          <br />
+          @ia.lucrativa1
+        </footer>
+
+      </div>
     </main>
   );
 }
 
 const styles = {
-  container: {
+  page: {
     minHeight: "100vh",
+    background: "#050505",
+    color: "#ffffff",
+    padding: "30px 20px",
+    fontFamily: "Arial, sans-serif",
     display: "flex",
-    alignItems: "center",
     justifyContent: "center",
-    padding: "24px",
-    background:
-      "radial-gradient(circle at top, #10202a 0%, #05070a 45%, #020304 100%)",
+  },
+
+  container: {
+    width: "100%",
+    maxWidth: "460px",
+  },
+
+  back: {
+    display: "inline-block",
+    color: "#888",
+    textDecoration: "none",
+    fontSize: "14px",
+    marginBottom: "35px",
   },
 
   card: {
-    width: "100%",
-    maxWidth: "430px",
-    padding: "40px 30px",
-    borderRadius: "22px",
-    background: "#0b1015",
-    border: "1px solid #1c2b34",
-    boxShadow: "0 20px 60px rgba(0,0,0,0.45)",
+    background: "#101010",
+    border: "1px solid #242424",
+    borderRadius: "20px",
+    padding: "35px 28px",
   },
 
   logo: {
-    color: "#00e5ff",
-    fontWeight: "800",
+    width: "64px",
+    height: "64px",
+    borderRadius: "16px",
+    background: "#ffffff",
+    color: "#000000",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     fontSize: "20px",
-    letterSpacing: "1px",
-    marginBottom: "30px",
+    fontWeight: "900",
+    margin: "0 auto 25px",
+  },
+
+  title: {
+    textAlign: "center",
+    fontSize: "27px",
+    lineHeight: "1.2",
+    margin: "0 0 12px",
   },
 
   subtitle: {
-    color: "#8c9aa3",
-    lineHeight: "1.6",
-    marginTop: "10px",
-    marginBottom: "28px",
-  },
-
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-
-  input: {},
-
-  bottom: {
-    color: "#7d8991",
     textAlign: "center",
-    marginTop: "24px",
+    color: "#888",
     fontSize: "14px",
+    lineHeight: "1.6",
+    margin: "0 0 30px",
+  },
+
+  label: {
+    display: "block",
+    fontSize: "13px",
+    fontWeight: "bold",
+    marginBottom: "8px",
+    marginTop: "18px",
+  },
+
+  input: {
+    width: "100%",
+    boxSizing: "border-box",
+    padding: "15px",
+    borderRadius: "10px",
+    border: "1px solid #333",
+    background: "#080808",
+    color: "#ffffff",
+    fontSize: "14px",
+    outline: "none",
+  },
+
+  error: {
+    background: "#1a0b0b",
+    border: "1px solid #3a1c1c",
+    color: "#ff8c8c",
+    padding: "12px",
+    borderRadius: "9px",
+    fontSize: "13px",
+    marginTop: "15px",
+  },
+
+  button: {
+    width: "100%",
+    marginTop: "24px",
+    padding: "15px",
+    border: "none",
+    borderRadius: "10px",
+    background: "#ffffff",
+    color: "#000000",
+    fontWeight: "bold",
+    fontSize: "15px",
+    cursor: "pointer",
+  },
+
+  divider: {
+    textAlign: "center",
+    color: "#555",
+    fontSize: "11px",
+    margin: "28px 0",
+  },
+
+  info: {
+    background: "#0b0b0b",
+    border: "1px solid #202020",
+    borderRadius: "12px",
+    padding: "17px",
+    textAlign: "center",
+  },
+
+  infoText: {
+    color: "#777",
+    fontSize: "12px",
+    lineHeight: "1.6",
+    margin: "8px 0 0",
+  },
+
+  footer: {
+    textAlign: "center",
+    color: "#555",
+    fontSize: "12px",
+    lineHeight: "1.8",
+    padding: "25px 0",
   },
 };
