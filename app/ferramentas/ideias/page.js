@@ -131,6 +131,7 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
 
     try {
       await navigator.clipboard.writeText(resultado);
+
       setCopiado(true);
 
       setTimeout(() => {
@@ -154,10 +155,17 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
     return (
       <main style={styles.loadingPage}>
         <div style={styles.loadingBox}>
-          <div style={styles.loadingLogo}>IA LUCRATIVA</div>
-          <div style={styles.loadingText}>
-            Verificando acesso...
+          <div style={styles.loadingLogo}>
+            IA
           </div>
+
+          <h1 style={styles.loadingTitle}>
+            IA LUCRATIVA
+          </h1>
+
+          <p style={styles.loadingText}>
+            Verificando acesso...
+          </p>
         </div>
       </main>
     );
@@ -165,21 +173,9 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
 
   return (
     <main style={styles.page}>
-      <header style={styles.header}>
-        <div>
-          <div style={styles.logo}>IA LUCRATIVA</div>
-
-          <div style={styles.subtitle}>
-            Gerador de Ideias com IA
-          </div>
-        </div>
-
-        <a href="/dashboard" style={styles.backButton}>
-          Dashboard
-        </a>
-      </header>
-
       <section style={styles.container}>
+
+        {/* HERO */}
         <div style={styles.hero}>
           <div style={styles.badge}>
             💡 IA AUTOMÁTICA
@@ -194,12 +190,35 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
           </h1>
 
           <p style={styles.description}>
-            Descubra ideias de negócios, serviços e produtos que
-            podem ser criados utilizando inteligência artificial.
+            Descubra ideias de negócios, serviços e produtos
+            que podem ser criados utilizando inteligência
+            artificial.
           </p>
         </div>
 
+        {/* FORMULÁRIO */}
         <section style={styles.card}>
+          <div style={styles.cardHeader}>
+            <div>
+              <div style={styles.cardBadge}>
+                FERRAMENTA DE IA
+              </div>
+
+              <h2 style={styles.cardTitle}>
+                Gerador de Ideias
+              </h2>
+
+              <p style={styles.cardDescription}>
+                Encontre oportunidades personalizadas para
+                transformar seu conhecimento em novas possibilidades.
+              </p>
+            </div>
+
+            <div style={styles.cardIcon}>
+              💡
+            </div>
+          </div>
+
           <label style={styles.label}>
             Seu nicho
           </label>
@@ -256,19 +275,24 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
 
           <div style={styles.actions}>
             <button
+              type="button"
               onClick={gerarIdeias}
               disabled={carregando}
               style={{
                 ...styles.generateButton,
                 opacity: carregando ? 0.7 : 1,
+                cursor: carregando
+                  ? "not-allowed"
+                  : "pointer",
               }}
             >
               {carregando
-                ? "Gerando ideias..."
+                ? "⏳ Gerando oportunidades..."
                 : "✨ Gerar oportunidades"}
             </button>
 
             <button
+              type="button"
               onClick={limpar}
               style={styles.clearButton}
             >
@@ -277,6 +301,7 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
           </div>
         </section>
 
+        {/* RESULTADO */}
         {resultado && (
           <section style={styles.resultCard}>
             <div style={styles.resultHeader}>
@@ -288,15 +313,21 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
                 <h2 style={styles.resultTitle}>
                   Suas oportunidades
                 </h2>
+
+                <p style={styles.resultDescription}>
+                  Analise as oportunidades e escolha aquela
+                  que faz mais sentido para o seu momento.
+                </p>
               </div>
 
               <button
+                type="button"
                 onClick={copiarResultado}
                 style={styles.copyButton}
               >
                 {copiado
                   ? "✓ Copiado"
-                  : "📋 Copiar"}
+                  : "📋 Copiar resultado"}
               </button>
             </div>
 
@@ -306,6 +337,7 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
           </section>
         )}
 
+        {/* DICA */}
         <section style={styles.tipCard}>
           <div style={styles.tipIcon}>
             🚀
@@ -323,20 +355,8 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
             </p>
           </div>
         </section>
+
       </section>
-
-      <footer style={styles.footer}>
-        <strong>IA LUCRATIVA</strong>
-
-        <span>
-          Transformando inteligência artificial em
-          oportunidades.
-        </span>
-
-        <span>
-          @ia.lucrativa1
-        </span>
-      </footer>
     </main>
   );
 }
@@ -344,7 +364,7 @@ Entregue diretamente o resultado, sem explicar o processo de criação.
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "#050505",
+    background: "transparent",
     color: "#ffffff",
     fontFamily: "Arial, sans-serif",
   },
@@ -356,6 +376,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    padding: "20px",
     fontFamily: "Arial, sans-serif",
   },
 
@@ -364,78 +385,65 @@ const styles = {
   },
 
   loadingLogo: {
-    fontSize: "22px",
+    width: "60px",
+    height: "60px",
+    borderRadius: "16px",
+    background: "#ffffff",
+    color: "#000000",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "20px",
     fontWeight: "900",
-    letterSpacing: "1px",
+    margin: "0 auto 20px",
+  },
+
+  loadingTitle: {
+    fontSize: "24px",
+    margin: "0 0 8px",
   },
 
   loadingText: {
-    marginTop: "10px",
     color: "#888888",
+    margin: 0,
     fontSize: "14px",
   },
 
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "20px 6%",
-    borderBottom: "1px solid #222222",
-    gap: "20px",
-  },
-
-  logo: {
-    fontSize: "20px",
-    fontWeight: "900",
-    letterSpacing: "1px",
-  },
-
-  subtitle: {
-    color: "#888888",
-    fontSize: "12px",
-    marginTop: "5px",
-  },
-
-  backButton: {
-    color: "#ffffff",
-    textDecoration: "none",
-    border: "1px solid #333333",
-    borderRadius: "10px",
-    padding: "10px 15px",
-    fontSize: "13px",
-  },
-
   container: {
-    width: "min(920px, 90%)",
+    width: "min(920px, 100%)",
     margin: "0 auto",
-    padding: "70px 0",
+    padding: "45px 20px 60px",
+    boxSizing: "border-box",
   },
 
   hero: {
     textAlign: "center",
-    marginBottom: "45px",
+    marginBottom: "40px",
   },
 
   badge: {
     display: "inline-block",
-    border: "1px solid #333333",
+    border: "1px solid #26352f",
+    background: "#07100c",
     borderRadius: "30px",
     padding: "8px 14px",
     fontSize: "11px",
     letterSpacing: "1px",
-    color: "#cccccc",
+    color: "#00ffaa",
     marginBottom: "20px",
+    fontWeight: "800",
   },
 
   title: {
-    fontSize: "clamp(38px, 7vw, 70px)",
+    fontSize: "clamp(38px, 7vw, 68px)",
     lineHeight: "1.05",
-    margin: "0",
+    margin: 0,
     fontWeight: "900",
+    letterSpacing: "-2px",
   },
 
   highlight: {
-    color: "#888888",
+    color: "#00ffaa",
   },
 
   description: {
@@ -451,6 +459,51 @@ const styles = {
     border: "1px solid #242424",
     borderRadius: "20px",
     padding: "30px",
+    boxSizing: "border-box",
+    boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+  },
+
+  cardHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: "20px",
+    marginBottom: "30px",
+  },
+
+  cardBadge: {
+    color: "#00ffaa",
+    fontSize: "10px",
+    letterSpacing: "1.5px",
+    fontWeight: "900",
+    marginBottom: "7px",
+  },
+
+  cardTitle: {
+    margin: 0,
+    fontSize: "24px",
+    fontWeight: "800",
+  },
+
+  cardDescription: {
+    margin: "8px 0 0",
+    color: "#777777",
+    fontSize: "13px",
+    lineHeight: "1.5",
+    maxWidth: "620px",
+  },
+
+  cardIcon: {
+    width: "48px",
+    height: "48px",
+    borderRadius: "14px",
+    background: "#07100c",
+    border: "1px solid #17352a",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "20px",
+    flexShrink: 0,
   },
 
   label: {
@@ -478,19 +531,19 @@ const styles = {
     display: "flex",
     gap: "12px",
     flexWrap: "wrap",
+    marginTop: "5px",
   },
 
   generateButton: {
     flex: "1",
-    minWidth: "200px",
+    minWidth: "210px",
     border: "none",
     borderRadius: "10px",
     padding: "15px 20px",
-    background: "#ffffff",
+    background: "#00ffaa",
     color: "#000000",
+    fontWeight: "900",
     fontSize: "14px",
-    fontWeight: "800",
-    cursor: "pointer",
   },
 
   clearButton: {
@@ -499,19 +552,20 @@ const styles = {
     padding: "15px 20px",
     background: "transparent",
     color: "#ffffff",
+    cursor: "pointer",
     fontSize: "14px",
     fontWeight: "700",
-    cursor: "pointer",
   },
 
   error: {
-    background: "#1a0b0b",
-    border: "1px solid #542222",
-    color: "#ffb0b0",
+    background: "#1a0d0d",
+    border: "1px solid #4a2222",
+    color: "#ff9b9b",
     borderRadius: "10px",
     padding: "12px",
-    marginBottom: "18px",
+    marginBottom: "20px",
     fontSize: "13px",
+    lineHeight: "1.5",
   },
 
   resultCard: {
@@ -520,6 +574,7 @@ const styles = {
     border: "1px solid #242424",
     borderRadius: "20px",
     padding: "30px",
+    boxSizing: "border-box",
   },
 
   resultHeader: {
@@ -527,82 +582,80 @@ const styles = {
     justifyContent: "space-between",
     alignItems: "flex-start",
     gap: "20px",
-    marginBottom: "25px",
     flexWrap: "wrap",
+    marginBottom: "25px",
   },
 
   resultBadge: {
+    color: "#00ffaa",
     fontSize: "10px",
-    letterSpacing: "1px",
-    color: "#888888",
-    fontWeight: "800",
+    letterSpacing: "1.5px",
+    fontWeight: "900",
   },
 
   resultTitle: {
     margin: "7px 0 0",
-    fontSize: "25px",
+    fontSize: "22px",
     fontWeight: "900",
   },
 
-  copyButton: {
-    border: "1px solid #333333",
-    borderRadius: "10px",
-    padding: "10px 15px",
-    background: "#111111",
-    color: "#ffffff",
+  resultDescription: {
+    margin: "7px 0 0",
+    color: "#777777",
     fontSize: "13px",
-    fontWeight: "700",
+    lineHeight: "1.5",
+  },
+
+  copyButton: {
+    border: "1px solid #1d4436",
+    background: "#07100c",
+    color: "#00ffaa",
+    borderRadius: "10px",
+    padding: "11px 15px",
     cursor: "pointer",
+    fontWeight: "800",
   },
 
   result: {
     whiteSpace: "pre-wrap",
-    lineHeight: "1.8",
-    color: "#dddddd",
-    fontSize: "14px",
     background: "#050505",
     border: "1px solid #222222",
     borderRadius: "12px",
-    padding: "20px",
-    overflowX: "auto",
+    padding: "22px",
+    color: "#dddddd",
+    lineHeight: "1.7",
+    fontSize: "14px",
+    boxSizing: "border-box",
+    overflowWrap: "break-word",
   },
 
   tipCard: {
-    marginTop: "25px",
     display: "flex",
-    alignItems: "flex-start",
     gap: "15px",
-    background: "#0d0d0d",
-    border: "1px solid #242424",
-    borderRadius: "18px",
+    alignItems: "flex-start",
+    marginTop: "25px",
     padding: "22px",
+    border: "1px solid #222222",
+    borderRadius: "15px",
+    background: "#090909",
+    boxSizing: "border-box",
   },
 
   tipIcon: {
-    fontSize: "25px",
+    fontSize: "22px",
+    flexShrink: 0,
   },
 
   tipTitle: {
-    fontSize: "14px",
+    display: "block",
+    marginBottom: "5px",
+    color: "#ffffff",
   },
 
   tipText: {
-    color: "#999999",
+    margin: 0,
+    color: "#888888",
     fontSize: "13px",
     lineHeight: "1.6",
-    margin: "7px 0 0",
-  },
-
-  footer: {
-    borderTop: "1px solid #222222",
-    padding: "25px 6%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "15px",
-    flexWrap: "wrap",
-    color: "#777777",
-    fontSize: "12px",
-    textAlign: "center",
   },
 };
