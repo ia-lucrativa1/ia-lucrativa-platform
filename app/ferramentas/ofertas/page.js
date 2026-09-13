@@ -46,7 +46,9 @@ export default function GeradorOfertas() {
 
   async function gerarOferta() {
     if (!produto.trim() || !publico.trim() || !problema.trim()) {
-      setErro("Preencha produto, público e problema antes de gerar.");
+      setErro(
+        "Preencha produto, público e problema antes de gerar."
+      );
       return;
     }
 
@@ -56,7 +58,7 @@ export default function GeradorOfertas() {
     setCopiado(false);
 
     const prompt = `
-Você é um especialista em criação de ofertas e vendas digitais.
+Você é um especialista em criação de ofertas, posicionamento e vendas digitais.
 
 Crie uma oferta estratégica para:
 
@@ -72,15 +74,15 @@ ${problema}
 Objetivo:
 ${objetivo}
 
-Crie uma oferta completa e persuasiva.
+Crie uma oferta completa, clara, estratégica e persuasiva.
 
 Estruture exatamente assim:
 
 1. POSICIONAMENTO DA OFERTA
-Explique como o produto ou serviço deve ser apresentado.
+Explique como o produto ou serviço deve ser apresentado ao público.
 
 2. GRANDE PROMESSA
-Crie uma promessa clara e realista.
+Crie uma promessa clara, específica e realista.
 
 3. GANCHO PRINCIPAL
 Crie uma frase forte para chamar atenção.
@@ -89,27 +91,33 @@ Crie uma frase forte para chamar atenção.
 Liste pelo menos 5 benefícios percebidos pelo cliente.
 
 5. ESTRUTURA DA OFERTA
-Explique o que o cliente recebe.
+Explique claramente o que o cliente recebe.
 
 6. DIFERENCIAL
 Mostre por que essa oferta pode ser escolhida em vez de alternativas comuns.
 
 7. OBJEÇÕES
-Liste 5 possíveis objeções do cliente e como respondê-las.
+Liste 5 possíveis objeções do cliente e explique como respondê-las.
 
 8. CTA
-Crie uma chamada para ação direta.
+Crie uma chamada para ação direta e adequada ao objetivo informado.
 
 9. VERSÃO PARA INSTAGRAM
-Crie um texto curto pronto para divulgar a oferta.
+Crie um texto curto e pronto para divulgar a oferta no Instagram.
 
 10. PRÓXIMO PASSO
 Dê uma ação prática para colocar a oferta em circulação.
 
-Use português do Brasil.
-Seja específico para o público informado.
-Evite promessas financeiras garantidas.
-Entregue diretamente o resultado pronto.
+REGRAS:
+
+- Use português do Brasil.
+- Seja específico para o público informado.
+- Evite respostas genéricas.
+- Não invente características que não foram informadas.
+- Evite promessas financeiras garantidas.
+- Não garanta resultados.
+- Priorize clareza, valor percebido e aplicação prática.
+- Entregue diretamente o resultado pronto.
 `;
 
     try {
@@ -184,23 +192,9 @@ Entregue diretamente o resultado pronto.
 
   return (
     <main style={styles.page}>
-      <header style={styles.header}>
-        <div>
-          <div style={styles.logo}>
-            IA LUCRATIVA
-          </div>
-
-          <div style={styles.subtitle}>
-            Gerador de Ofertas com IA
-          </div>
-        </div>
-
-        <a href="/dashboard" style={styles.backButton}>
-          Dashboard
-        </a>
-      </header>
-
       <section style={styles.container}>
+
+        {/* HERO */}
         <div style={styles.hero}>
           <div style={styles.badge}>
             💰 IA AUTOMÁTICA
@@ -215,12 +209,31 @@ Entregue diretamente o resultado pronto.
           </h1>
 
           <p style={styles.description}>
-            Transforme seu produto ou serviço em uma oferta clara,
-            estratégica e preparada para apresentar ao seu público.
+            Transforme seu produto ou serviço em uma oferta
+            clara, estratégica e preparada para apresentar
+            ao seu público.
           </p>
         </div>
 
+        {/* FORMULÁRIO */}
         <section style={styles.card}>
+          <div style={styles.cardHeader}>
+            <div>
+              <span style={styles.cardLabel}>
+                GERADOR DE OFERTAS
+              </span>
+
+              <h2 style={styles.cardTitle}>
+                Configure sua oferta
+              </h2>
+
+              <p style={styles.cardDescription}>
+                Quanto mais informações você fornecer,
+                mais específica será a estratégia criada pela IA.
+              </p>
+            </div>
+          </div>
+
           <label style={styles.label}>
             Produto ou serviço
           </label>
@@ -289,6 +302,7 @@ Entregue diretamente o resultado pronto.
 
           <div style={styles.actions}>
             <button
+              type="button"
               onClick={gerarOferta}
               disabled={carregando}
               style={{
@@ -302,6 +316,7 @@ Entregue diretamente o resultado pronto.
             </button>
 
             <button
+              type="button"
               onClick={limpar}
               style={styles.clearButton}
             >
@@ -310,6 +325,7 @@ Entregue diretamente o resultado pronto.
           </div>
         </section>
 
+        {/* RESULTADO */}
         {resultado && (
           <section style={styles.resultCard}>
             <div style={styles.resultHeader}>
@@ -324,6 +340,7 @@ Entregue diretamente o resultado pronto.
               </div>
 
               <button
+                type="button"
                 onClick={copiarResultado}
                 style={styles.copyButton}
               >
@@ -339,6 +356,7 @@ Entregue diretamente o resultado pronto.
           </section>
         )}
 
+        {/* DICA */}
         <section style={styles.tipCard}>
           <div style={styles.tipIcon}>
             🎯
@@ -356,21 +374,8 @@ Entregue diretamente o resultado pronto.
             </p>
           </div>
         </section>
+
       </section>
-
-      <footer style={styles.footer}>
-        <strong>
-          IA LUCRATIVA
-        </strong>
-
-        <span>
-          Transformando inteligência artificial em oportunidades.
-        </span>
-
-        <span>
-          @ia.lucrativa1
-        </span>
-      </footer>
     </main>
   );
 }
@@ -378,7 +383,7 @@ Entregue diretamente o resultado pronto.
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "#050505",
+    background: "transparent",
     color: "#ffffff",
     fontFamily: "Arial, sans-serif",
   },
@@ -401,6 +406,7 @@ const styles = {
     fontSize: "22px",
     fontWeight: "900",
     letterSpacing: "1px",
+    color: "#ffffff",
   },
 
   loadingText: {
@@ -409,67 +415,40 @@ const styles = {
     fontSize: "14px",
   },
 
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "20px 6%",
-    borderBottom: "1px solid #222222",
-    gap: "20px",
-  },
-
-  logo: {
-    fontSize: "20px",
-    fontWeight: "900",
-    letterSpacing: "1px",
-  },
-
-  subtitle: {
-    color: "#888888",
-    fontSize: "12px",
-    marginTop: "5px",
-  },
-
-  backButton: {
-    color: "#ffffff",
-    textDecoration: "none",
-    border: "1px solid #333333",
-    borderRadius: "10px",
-    padding: "10px 15px",
-    fontSize: "13px",
-  },
-
   container: {
-    width: "min(920px, 90%)",
+    width: "min(920px, 100%)",
     margin: "0 auto",
-    padding: "70px 0",
+    padding: "20px 0 60px",
+    boxSizing: "border-box",
   },
 
   hero: {
     textAlign: "center",
-    marginBottom: "45px",
+    marginBottom: "35px",
   },
 
   badge: {
     display: "inline-block",
-    border: "1px solid #333333",
+    border: "1px solid rgba(0, 255, 170, 0.35)",
     borderRadius: "30px",
     padding: "8px 14px",
     fontSize: "11px",
     letterSpacing: "1px",
-    color: "#cccccc",
+    color: "#00ffaa",
     marginBottom: "20px",
+    background: "rgba(0, 255, 170, 0.05)",
   },
 
   title: {
-    fontSize: "clamp(38px, 7vw, 70px)",
+    fontSize: "clamp(38px, 7vw, 64px)",
     lineHeight: "1.05",
     margin: "0",
     fontWeight: "900",
+    letterSpacing: "-1.5px",
   },
 
   highlight: {
-    color: "#888888",
+    color: "#00ffaa",
   },
 
   description: {
@@ -477,7 +456,7 @@ const styles = {
     margin: "22px auto 0",
     color: "#999999",
     lineHeight: "1.7",
-    fontSize: "16px",
+    fontSize: "15px",
   },
 
   card: {
@@ -485,6 +464,34 @@ const styles = {
     border: "1px solid #242424",
     borderRadius: "20px",
     padding: "30px",
+    boxSizing: "border-box",
+    boxShadow: "0 15px 50px rgba(0, 0, 0, 0.2)",
+  },
+
+  cardHeader: {
+    marginBottom: "28px",
+    paddingBottom: "22px",
+    borderBottom: "1px solid #222222",
+  },
+
+  cardLabel: {
+    color: "#00ffaa",
+    fontSize: "10px",
+    fontWeight: "900",
+    letterSpacing: "1.5px",
+  },
+
+  cardTitle: {
+    margin: "8px 0 6px",
+    fontSize: "23px",
+    fontWeight: "800",
+  },
+
+  cardDescription: {
+    margin: "0",
+    color: "#777777",
+    fontSize: "13px",
+    lineHeight: "1.6",
   },
 
   label: {
@@ -512,19 +519,21 @@ const styles = {
     display: "flex",
     gap: "12px",
     flexWrap: "wrap",
+    marginTop: "3px",
   },
 
   generateButton: {
     flex: "1",
     minWidth: "200px",
-    border: "none",
+    border: "1px solid #00ffaa",
     borderRadius: "10px",
     padding: "15px 20px",
-    background: "#ffffff",
+    background: "#00ffaa",
     color: "#000000",
-    fontWeight: "800",
+    fontWeight: "900",
     cursor: "pointer",
     fontSize: "14px",
+    transition: "0.2s",
   },
 
   clearButton: {
@@ -550,9 +559,10 @@ const styles = {
   resultCard: {
     marginTop: "25px",
     background: "#0d0d0d",
-    border: "1px solid #242424",
+    border: "1px solid rgba(0, 255, 170, 0.25)",
     borderRadius: "20px",
     padding: "30px",
+    boxSizing: "border-box",
   },
 
   resultHeader: {
@@ -565,10 +575,10 @@ const styles = {
   },
 
   resultBadge: {
-    color: "#888888",
-    fontSize: "11px",
-    letterSpacing: "1px",
-    fontWeight: "800",
+    color: "#00ffaa",
+    fontSize: "10px",
+    letterSpacing: "1.5px",
+    fontWeight: "900",
   },
 
   resultTitle: {
@@ -583,6 +593,7 @@ const styles = {
     borderRadius: "10px",
     padding: "11px 15px",
     cursor: "pointer",
+    fontSize: "13px",
   },
 
   result: {
@@ -594,6 +605,7 @@ const styles = {
     color: "#dddddd",
     lineHeight: "1.7",
     fontSize: "14px",
+    overflowX: "auto",
   },
 
   tipCard: {
@@ -605,15 +617,18 @@ const styles = {
     border: "1px solid #222222",
     borderRadius: "15px",
     background: "#090909",
+    boxSizing: "border-box",
   },
 
   tipIcon: {
     fontSize: "22px",
+    flexShrink: 0,
   },
 
   tipTitle: {
     display: "block",
     marginBottom: "5px",
+    color: "#00ffaa",
   },
 
   tipText: {
@@ -621,18 +636,5 @@ const styles = {
     color: "#888888",
     fontSize: "13px",
     lineHeight: "1.6",
-  },
-
-  footer: {
-    borderTop: "1px solid #222222",
-    padding: "30px 6%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "15px",
-    flexWrap: "wrap",
-    color: "#777777",
-    fontSize: "12px",
-    textAlign: "center",
   },
 };
