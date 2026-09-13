@@ -49,37 +49,11 @@ export default function HomePage() {
   ];
 
   return (
-    <main style={styles.page}>
-      <nav style={styles.navbar}>
-        <div style={styles.logoArea}>
-          <div style={styles.logoMark}>IA</div>
+    <div style={styles.page}>
 
-          <div>
-            <div style={styles.logoText}>IA LUCRATIVA</div>
-            <div style={styles.logoSubtext}>INTELIGÊNCIA • ESTRATÉGIA • OPORTUNIDADE</div>
-          </div>
-        </div>
-
-        <div style={styles.navLinks}>
-          <Link href="#ferramentas" style={styles.navLink}>
-            Ferramentas
-          </Link>
-
-          <Link href="/prompts" style={styles.navLink}>
-            Prompts
-          </Link>
-
-          <Link href="/estrategias" style={styles.navLink}>
-            Estratégias
-          </Link>
-
-          <Link href="/login" style={styles.loginButton}>
-            Entrar
-          </Link>
-        </div>
-      </nav>
-
+      {/* HERO */}
       <section style={styles.hero}>
+
         <div style={styles.heroBadge}>
           <span style={styles.statusDot}></span>
           PLATAFORMA DE INTELIGÊNCIA ARTIFICIAL
@@ -88,7 +62,9 @@ export default function HomePage() {
         <h1 style={styles.heroTitle}>
           Transforme
           <br />
-          <span style={styles.heroHighlight}>IA em oportunidades.</span>
+          <span style={styles.heroHighlight}>
+            IA em oportunidades.
+          </span>
         </h1>
 
         <p style={styles.heroDescription}>
@@ -102,9 +78,9 @@ export default function HomePage() {
             Começar agora →
           </Link>
 
-          <Link href="#ferramentas" style={styles.secondaryButton}>
+          <a href="#ferramentas" style={styles.secondaryButton}>
             Explorar plataforma
-          </Link>
+          </a>
         </div>
 
         <div style={styles.heroInfo}>
@@ -112,9 +88,12 @@ export default function HomePage() {
           <span>✓ Estratégias práticas</span>
           <span>✓ Feito para começar do zero</span>
         </div>
+
       </section>
 
+      {/* ESTATÍSTICAS */}
       <section style={styles.statsSection}>
+
         <div style={styles.stat}>
           <strong style={styles.statNumber}>06</strong>
           <span style={styles.statLabel}>Ferramentas IA</span>
@@ -134,17 +113,28 @@ export default function HomePage() {
           <strong style={styles.statNumber}>24/7</strong>
           <span style={styles.statLabel}>Disponibilidade</span>
         </div>
+
       </section>
 
-      <section id="ferramentas" style={styles.toolsSection}>
+      {/* FERRAMENTAS */}
+      <section
+        id="ferramentas"
+        style={styles.toolsSection}
+      >
+
         <div style={styles.sectionHeader}>
+
           <div>
-            <span style={styles.sectionLabel}>PLATAFORMA</span>
+            <span style={styles.sectionLabel}>
+              PLATAFORMA
+            </span>
 
             <h2 style={styles.sectionTitle}>
               Ferramentas para
               <br />
-              <span style={styles.sectionHighlight}>colocar a IA para trabalhar.</span>
+              <span style={styles.sectionHighlight}>
+                colocar a IA para trabalhar.
+              </span>
             </h2>
           </div>
 
@@ -152,24 +142,32 @@ export default function HomePage() {
             Escolha uma ferramenta, informe o que você precisa
             e deixe a inteligência artificial ajudar na execução.
           </p>
+
         </div>
 
         <div style={styles.toolsGrid}>
+
           {ferramentas.map((ferramenta) => (
             <Link
               key={ferramenta.numero}
               href={ferramenta.link}
               style={styles.toolCard}
             >
+
               <div style={styles.toolTop}>
+
                 <span style={styles.toolNumber}>
                   {ferramenta.numero}
                 </span>
 
-                <span style={styles.toolArrow}>↗</span>
+                <span style={styles.toolArrow}>
+                  ↗
+                </span>
+
               </div>
 
               <div>
+
                 <h3 style={styles.toolTitle}>
                   {ferramenta.titulo}
                 </h3>
@@ -177,19 +175,28 @@ export default function HomePage() {
                 <p style={styles.toolDescription}>
                   {ferramenta.descricao}
                 </p>
+
               </div>
 
               <span style={styles.toolAction}>
                 Abrir ferramenta →
               </span>
+
             </Link>
           ))}
+
         </div>
+
       </section>
 
+      {/* TECNOLOGIA */}
       <section style={styles.technologySection}>
+
         <div style={styles.techCard}>
-          <div style={styles.techBadge}>IA LUCRATIVA</div>
+
+          <div style={styles.techBadge}>
+            IA LUCRATIVA
+          </div>
 
           <h2 style={styles.techTitle}>
             Não é apenas uma ferramenta.
@@ -203,14 +210,23 @@ export default function HomePage() {
             vender e evoluir.
           </p>
 
-          <Link href="/dashboard" style={styles.techButton}>
+          <Link
+            href="/dashboard"
+            style={styles.techButton}
+          >
             Conhecer meu painel →
           </Link>
+
         </div>
+
       </section>
 
+      {/* ROADMAP */}
       <section style={styles.futureSection}>
-        <div style={styles.futureBadge}>ROADMAP</div>
+
+        <div style={styles.futureBadge}>
+          ROADMAP
+        </div>
 
         <h2 style={styles.futureTitle}>
           A plataforma está apenas começando.
@@ -223,30 +239,45 @@ export default function HomePage() {
         </p>
 
         <div style={styles.futureGrid}>
+
           <div style={styles.futureItem}>
             <strong>IA Automática</strong>
-            <span>Assistência inteligente dentro da plataforma.</span>
+            <span>
+              Assistência inteligente dentro da plataforma.
+            </span>
           </div>
 
           <div style={styles.futureItem}>
             <strong>Automações</strong>
-            <span>Processos mais rápidos e inteligentes.</span>
+            <span>
+              Processos mais rápidos e inteligentes.
+            </span>
           </div>
 
           <div style={styles.futureItem}>
             <strong>Área do Cliente</strong>
-            <span>Seu espaço para acessar todos os recursos.</span>
+            <span>
+              Seu espaço para acessar todos os recursos.
+            </span>
           </div>
 
           <div style={styles.futureItem}>
             <strong>Planos Premium</strong>
-            <span>Mais recursos para quem quiser evoluir.</span>
+            <span>
+              Mais recursos para quem quiser evoluir.
+            </span>
           </div>
+
         </div>
+
       </section>
 
+      {/* FOOTER */}
       <footer style={styles.footer}>
-        <div style={styles.footerBrand}>IA LUCRATIVA</div>
+
+        <div style={styles.footerBrand}>
+          IA LUCRATIVA
+        </div>
 
         <p style={styles.footerText}>
           Transforme inteligência artificial em oportunidades.
@@ -255,93 +286,25 @@ export default function HomePage() {
         <span style={styles.footerInstagram}>
           @ia.lucrativa1
         </span>
+
       </footer>
-    </main>
+
+    </div>
   );
 }
 
 const styles = {
   page: {
-    minHeight: "100vh",
-    background: "#050505",
-    color: "#ffffff",
-    fontFamily: "Arial, Helvetica, sans-serif",
-  },
-
-  navbar: {
     width: "100%",
-    maxWidth: "1250px",
-    margin: "0 auto",
-    padding: "20px 24px",
-    boxSizing: "border-box",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: "25px",
-    borderBottom: "1px solid #181818",
-  },
-
-  logoArea: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-  },
-
-  logoMark: {
-    width: "42px",
-    height: "42px",
-    borderRadius: "11px",
-    background: "#ffffff",
-    color: "#050505",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "17px",
-    fontWeight: "900",
-  },
-
-  logoText: {
-    fontSize: "16px",
-    fontWeight: "900",
-    letterSpacing: "1px",
-  },
-
-  logoSubtext: {
-    marginTop: "3px",
-    color: "#666666",
-    fontSize: "8px",
-    letterSpacing: "0.8px",
-  },
-
-  navLinks: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    gap: "22px",
-    flexWrap: "wrap",
-  },
-
-  navLink: {
-    color: "#999999",
-    textDecoration: "none",
-    fontSize: "13px",
-    fontWeight: "600",
-  },
-
-  loginButton: {
-    color: "#050505",
-    background: "#ffffff",
-    textDecoration: "none",
-    padding: "11px 18px",
-    borderRadius: "10px",
-    fontSize: "13px",
-    fontWeight: "800",
+    minHeight: "100%",
+    background: "transparent",
+    color: "#ffffff",
   },
 
   hero: {
     maxWidth: "1000px",
     margin: "0 auto",
-    padding: "110px 24px 85px",
+    padding: "65px 24px 70px",
     textAlign: "center",
   },
 
@@ -349,10 +312,11 @@ const styles = {
     display: "inline-flex",
     alignItems: "center",
     gap: "8px",
-    border: "1px solid #292929",
+    border: "1px solid rgba(0, 255, 170, 0.15)",
     borderRadius: "999px",
     padding: "9px 15px",
-    color: "#969696",
+    background: "rgba(0, 255, 170, 0.035)",
+    color: "#7d8783",
     fontSize: "10px",
     fontWeight: "800",
     letterSpacing: "1px",
@@ -362,7 +326,8 @@ const styles = {
     width: "6px",
     height: "6px",
     borderRadius: "50%",
-    background: "#ffffff",
+    background: "#00ffaa",
+    boxShadow: "0 0 10px rgba(0, 255, 170, 0.6)",
   },
 
   heroTitle: {
@@ -374,13 +339,13 @@ const styles = {
   },
 
   heroHighlight: {
-    color: "#777777",
+    color: "#00ffaa",
   },
 
   heroDescription: {
     maxWidth: "690px",
     margin: "0 auto",
-    color: "#929292",
+    color: "#929a96",
     fontSize: "17px",
     lineHeight: "1.7",
   },
@@ -395,20 +360,21 @@ const styles = {
   },
 
   primaryButton: {
-    background: "#ffffff",
-    color: "#050505",
+    background: "#00ffaa",
+    color: "#03100b",
     textDecoration: "none",
     padding: "15px 24px",
     borderRadius: "11px",
     fontSize: "14px",
     fontWeight: "900",
+    boxShadow: "0 0 25px rgba(0, 255, 170, 0.12)",
   },
 
   secondaryButton: {
-    background: "#111111",
+    background: "#0b1110",
     color: "#ffffff",
     textDecoration: "none",
-    border: "1px solid #292929",
+    border: "1px solid rgba(0, 255, 170, 0.14)",
     padding: "14px 23px",
     borderRadius: "11px",
     fontSize: "14px",
@@ -421,23 +387,24 @@ const styles = {
     justifyContent: "center",
     gap: "20px",
     flexWrap: "wrap",
-    color: "#656565",
+    color: "#65706b",
     fontSize: "12px",
   },
 
   statsSection: {
     maxWidth: "1050px",
     margin: "0 auto",
-    padding: "0 24px 90px",
+    padding: "0 24px 70px",
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(180px, 1fr))",
     gap: "1px",
-    background: "#202020",
+    background: "rgba(0, 255, 170, 0.08)",
   },
 
   stat: {
     minHeight: "125px",
-    background: "#050505",
+    background: "#080d0b",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -446,20 +413,21 @@ const styles = {
   },
 
   statNumber: {
+    color: "#00ffaa",
     fontSize: "30px",
     fontWeight: "900",
   },
 
   statLabel: {
     marginTop: "7px",
-    color: "#6f6f6f",
+    color: "#6f7874",
     fontSize: "12px",
   },
 
   toolsSection: {
     maxWidth: "1150px",
     margin: "0 auto",
-    padding: "90px 24px",
+    padding: "70px 24px 80px",
     boxSizing: "border-box",
   },
 
@@ -473,7 +441,7 @@ const styles = {
   },
 
   sectionLabel: {
-    color: "#707070",
+    color: "#00ffaa",
     fontSize: "10px",
     fontWeight: "900",
     letterSpacing: "1.5px",
@@ -487,12 +455,12 @@ const styles = {
   },
 
   sectionHighlight: {
-    color: "#707070",
+    color: "#7b8580",
   },
 
   sectionDescription: {
     maxWidth: "390px",
-    color: "#7c7c7c",
+    color: "#7c8581",
     fontSize: "14px",
     lineHeight: "1.7",
     margin: 0,
@@ -509,8 +477,9 @@ const styles = {
     minHeight: "270px",
     padding: "25px",
     boxSizing: "border-box",
-    background: "#0b0b0b",
-    border: "1px solid #202020",
+    background:
+      "linear-gradient(145deg, #0b1110, #080c0b)",
+    border: "1px solid rgba(0, 255, 170, 0.1)",
     borderRadius: "17px",
     color: "#ffffff",
     textDecoration: "none",
@@ -527,13 +496,13 @@ const styles = {
   },
 
   toolNumber: {
-    color: "#5e5e5e",
+    color: "#00a879",
     fontSize: "12px",
     fontWeight: "900",
   },
 
   toolArrow: {
-    color: "#777777",
+    color: "#00ffaa",
     fontSize: "20px",
   },
 
@@ -545,14 +514,14 @@ const styles = {
 
   toolDescription: {
     margin: 0,
-    color: "#777777",
+    color: "#777f7b",
     fontSize: "13px",
     lineHeight: "1.7",
   },
 
   toolAction: {
     marginTop: "25px",
-    color: "#bcbcbc",
+    color: "#00ffaa",
     fontSize: "12px",
     fontWeight: "800",
   },
@@ -560,19 +529,20 @@ const styles = {
   technologySection: {
     maxWidth: "1150px",
     margin: "0 auto",
-    padding: "30px 24px 100px",
+    padding: "20px 24px 80px",
     boxSizing: "border-box",
   },
 
   techCard: {
-    border: "1px solid #222222",
+    border: "1px solid rgba(0, 255, 170, 0.12)",
     borderRadius: "22px",
     padding: "55px",
-    background: "#0a0a0a",
+    background:
+      "radial-gradient(circle at 80% 20%, rgba(0, 255, 170, 0.08), transparent 35%), #080d0b",
   },
 
   techBadge: {
-    color: "#777777",
+    color: "#00ffaa",
     fontSize: "10px",
     fontWeight: "900",
     letterSpacing: "1.5px",
@@ -587,7 +557,7 @@ const styles = {
 
   techDescription: {
     maxWidth: "620px",
-    color: "#7d7d7d",
+    color: "#7d8581",
     fontSize: "15px",
     lineHeight: "1.7",
   },
@@ -595,8 +565,8 @@ const styles = {
   techButton: {
     display: "inline-block",
     marginTop: "20px",
-    background: "#ffffff",
-    color: "#050505",
+    background: "#00ffaa",
+    color: "#03100b",
     textDecoration: "none",
     padding: "14px 20px",
     borderRadius: "10px",
@@ -607,13 +577,13 @@ const styles = {
   futureSection: {
     maxWidth: "1000px",
     margin: "0 auto",
-    padding: "30px 24px 100px",
+    padding: "20px 24px 80px",
     textAlign: "center",
     boxSizing: "border-box",
   },
 
   futureBadge: {
-    color: "#666666",
+    color: "#00ffaa",
     fontSize: "10px",
     fontWeight: "900",
     letterSpacing: "1.5px",
@@ -628,7 +598,7 @@ const styles = {
   futureDescription: {
     maxWidth: "650px",
     margin: "0 auto",
-    color: "#777777",
+    color: "#777f7b",
     fontSize: "14px",
     lineHeight: "1.7",
   },
@@ -643,8 +613,8 @@ const styles = {
 
   futureItem: {
     padding: "22px",
-    background: "#0b0b0b",
-    border: "1px solid #1e1e1e",
+    background: "#080d0b",
+    border: "1px solid rgba(0, 255, 170, 0.09)",
     borderRadius: "14px",
     display: "flex",
     flexDirection: "column",
@@ -653,7 +623,7 @@ const styles = {
   },
 
   footer: {
-    borderTop: "1px solid #1b1b1b",
+    borderTop: "1px solid rgba(0, 255, 170, 0.08)",
     padding: "35px 24px",
     display: "flex",
     alignItems: "center",
@@ -664,6 +634,7 @@ const styles = {
   },
 
   footerBrand: {
+    color: "#00ffaa",
     fontSize: "14px",
     fontWeight: "900",
     letterSpacing: "1px",
@@ -671,12 +642,12 @@ const styles = {
 
   footerText: {
     margin: 0,
-    color: "#606060",
+    color: "#606a65",
     fontSize: "12px",
   },
 
   footerInstagram: {
-    color: "#808080",
+    color: "#808a85",
     fontSize: "12px",
     fontWeight: "700",
   },
